@@ -1,11 +1,16 @@
-// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
+/*
+ * Package : dartivity
+ * Author : S. Hamblett <steve.hamblett@linux.com>
+ * Date   : 28/09/2015
+ * Copyright :  S.Hamblett 2015
+ */
 
-/// The dartivity library.
-///
-/// This is an awesome library. More dartdocs go here.
 library dartivity;
 
-// TODO: Export any libraries intended for clients of this package.
+import 'package:gcloud/pubsub.dart';
 
-export 'src/dartivity_base.dart';
+
+part 'src/Dartivity.dart';
+part 'src/DartivityClient.dart';
+part 'src/DartivityMessaging.dart';
+part 'src/DartivityException.dart';
