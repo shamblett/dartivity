@@ -18,11 +18,17 @@ class DartivityMessaging {
   /// Ready, as in for use
   bool get ready => _authenticated && _initialised;
 
+  /// PubSub client
+  pubsub.PubSub _pubsub;
+
   DartivityMessaging();
 
   /// Initialises the messaging class.
   ///
   /// Must be called before class usage
   ///
+  void initialise(String credentialsFile) {
 
+
+  }
 }
