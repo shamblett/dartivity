@@ -10,7 +10,7 @@ library dartivity;
 import 'package:gcloud/pubsub.dart' as pubsub;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 
-part 'src/Dartivity.dart';
-part 'src/DartivityClient.dart';
-part 'src/DartivityMessaging.dart';
-part 'src/DartivityException.dart';
+part 'src/dartivity.dart';
+part 'src/dartivity_client.dart';
+part 'src/dartivity_messaging.dart';
+part 'src/dartivity_exception.dart';

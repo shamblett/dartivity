@@ -10,4 +10,8 @@ part of  dartivity;
 class DartivityMessaging {
 
 
+  DartivityMessaging();
+
+
+
 }
