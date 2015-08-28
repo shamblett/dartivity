@@ -9,6 +9,7 @@ environment:
 
 dependencies:
  gcloud: '>0.2.0'
+ googleapis_auth: 'any'
 
 dev_dependencies:
   test: '>=0.12.0 <0.13.0'

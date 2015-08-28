@@ -7,8 +7,8 @@
 
 library dartivity;
 
-import 'package:gcloud/pubsub.dart';
-
+import 'package:gcloud/pubsub.dart' as pubsub;
+import 'package:googleapis_auth/auth_io.dart' as auth;
 
 part 'src/Dartivity.dart';
 part 'src/DartivityClient.dart';
