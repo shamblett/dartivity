@@ -14,3 +14,4 @@ part 'src/dartivity.dart';
 part 'src/dartivity_client.dart';
 part 'src/dartivity_messaging.dart';
 part 'src/dartivity_exception.dart';
+part 'src/dartivity_message.dart';
