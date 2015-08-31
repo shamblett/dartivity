@@ -11,10 +11,12 @@ class Dartivity {
 
   /// Mode
   Mode _mode = Mode.both;
+
   Mode get supports => _mode;
 
   /// Initialised
   bool _initialised = false;
+
   bool get initialised => _initialised;
 
   /// Iotivity client
@@ -37,7 +39,8 @@ class Dartivity {
         throw new DartivityException(DartivityException.NO_CREDPATH_SPECIFIED);
       }
       _messager = new DartivityMessaging();
-      _messager.initialise(credentialsPath, projectName)..then((bool state) {
+      _messager.initialise(credentialsPath, projectName)
+        ..then((bool state) {
         if (!_messager.ready) {
           throw new DartivityException(
               DartivityException.FAILED_TO_INITIALISE_MESSAGER);

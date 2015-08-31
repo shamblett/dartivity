@@ -22,7 +22,5 @@ part 'src/dartivity_message.dart';
 /// Mode enumeration
 /// Supports only iotivity server, messaging or both
 enum Mode {
-  iotOnly,
-  messagingOnly,
-  both
+  iotOnly, messagingOnly, both
 }

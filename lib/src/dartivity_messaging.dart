@@ -33,11 +33,12 @@ class DartivityMessaging {
   Future<bool> initialise(String credentialsFile, String projectName) async {
     String jsonCredentials = new File(credentialsFile).readAsStringSync();
     auth.ServiceAccountCredentials credentials =
-        new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
+    new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
     _authenticated = true;
-    List<String> scopes = []..addAll(pubsub.PubSub.SCOPES);
+    List<String> scopes = []
+      ..addAll(pubsub.PubSub.SCOPES);
     auth.AutoRefreshingAuthClient client =
-        await auth.clientViaServiceAccount(credentials, scopes);
+    await auth.clientViaServiceAccount(credentials, scopes);
     _pubsub = new pubsub.PubSub(client, projectName);
     _initialised = true;
     return _initialised;

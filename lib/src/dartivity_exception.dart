@@ -12,7 +12,7 @@ class DartivityException implements Exception {
   // Exception message strings
   static const HEADER = 'DartivityException: ';
   static const NO_CREDPATH_SPECIFIED =
-      'You must specify a credentials path for messaging';
+  'You must specify a credentials path for messaging';
   static const FAILED_TO_INITIALISE_MESSAGER =
   'The messaging client has failed to initialise';
   static const FAILED_TO_INITIALISE_IOTCLIENT =

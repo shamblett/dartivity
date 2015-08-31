@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett 2015
  */
 
-part of  dartivity;
+part of dartivity;
 
 class DartivityMessage {
 

@@ -5,12 +5,13 @@
  * Copyright :  S.Hamblett 2015
  */
 
-part of  dartivity;
+part of dartivity;
 
 class DartivityClient {
 
   /// Ready, as in to use
   bool _ready = false;
+
   bool get ready => _ready;
 
   DartivityClient();
