@@ -11,7 +11,7 @@ class Dartivity {
 
   /// Mode
   Mode _mode = Mode.both;
-  Mode get mode => _mode;
+  Mode get supports => _mode;
 
   /// Initialised
   bool _initialised = false;
@@ -30,7 +30,28 @@ class Dartivity {
     _mode = mode;
 
     // Initialise depending on mode
+    if (_mode == Mode.both || _mode == Mode.messagingOnly) {
 
+      // Must have a credentials path for messaging
+      if (credentialsPath == null) {
+        throw new DartivityException(DartivityException.NO_CREDPATH_SPECIFIED);
+      }
+      _messager = new DartivityMessaging();
+      _messager.initialise(credentialsPath);
+      if (!_messager.ready) {
+        throw new DartivityException(
+            DartivityException.FAILED_TO_INITIALISE_MESSAGER);
+      }
+    }
 
+    if (_mode == Mode.both || _mode == Mode.iotOnly) {
+      _client = new DartivityClient();
+      if (!_client.ready) {
+        throw new DartivityException(
+            DartivityException.FAILED_TO_INITIALISE_IOTCLIENT);
+      }
+    }
+
+    _initialised = true;
   }
 }
