@@ -9,5 +9,6 @@ part of  dartivity;
 
 class DartivityClient {
 
+  DartivityClient();
 
 }
