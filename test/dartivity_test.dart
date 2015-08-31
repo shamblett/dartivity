@@ -1,5 +1,9 @@
-// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
+/*
+ * Package : dartivity
+ * Author : S. Hamblett <steve.hamblett@linux.com>
+ * Date   : 28/09/2015
+ * Copyright :  S.Hamblett 2015
+ */
 
 library dartivity.test;
 
@@ -7,15 +11,11 @@ import 'package:dartivity/dartivity.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    Awesome awesome;
 
-    setUp(() {
-      awesome = new Awesome();
-    });
-
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
-    });
-  });
+  // Instantiate a Dartivity client and initialise for
+  // messaging only
+  Dartivity dartivity = new Dartivity(Mode.messagingOnly,
+      '/home/steve/Development/google/dart/projects/dartivity/credentials/Development-87fde7970997.json',
+      'Development');
+  print("Initialse Status is ${dartivity.initialised}");
 }

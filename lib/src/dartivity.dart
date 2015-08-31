@@ -26,7 +26,7 @@ class Dartivity {
   /// Dartivity client
   /// mode - the operational mode of the client
   /// credentialsPath - path to a valid credentials file for messaging
-  Dartivity(Mode mode, [String credentialsPath]) {
+  Dartivity(Mode mode, [String credentialsPath, String projectName]) {
     _mode = mode;
 
     // Initialise depending on mode
@@ -37,11 +37,12 @@ class Dartivity {
         throw new DartivityException(DartivityException.NO_CREDPATH_SPECIFIED);
       }
       _messager = new DartivityMessaging();
-      _messager.initialise(credentialsPath);
-      if (!_messager.ready) {
-        throw new DartivityException(
-            DartivityException.FAILED_TO_INITIALISE_MESSAGER);
-      }
+      _messager.initialise(credentialsPath, projectName)..then((bool state) {
+        if (!_messager.ready) {
+          throw new DartivityException(
+              DartivityException.FAILED_TO_INITIALISE_MESSAGER);
+        }
+      });
     }
 
     if (_mode == Mode.both || _mode == Mode.iotOnly) {

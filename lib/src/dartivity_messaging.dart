@@ -30,15 +30,16 @@ class DartivityMessaging {
   /// credentialsFile - Path to the credentials file
   /// which should be in JSON format
   /// projectName - The project name
-  void initialise(String credentialsFile, String projectName) async {
+  Future<bool> initialise(String credentialsFile, String projectName) async {
     String jsonCredentials = new File(credentialsFile).readAsStringSync();
-    ServiceAccountCredentials credentials =
+    auth.ServiceAccountCredentials credentials =
         new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
     _authenticated = true;
-    List<String> scopes = []..addAll(PubSub.SCOPES);
-    AutoRefreshingAuthClient client =
+    List<String> scopes = []..addAll(pubsub.PubSub.SCOPES);
+    auth.AutoRefreshingAuthClient client =
         await auth.clientViaServiceAccount(credentials, scopes);
     _pubsub = new pubsub.PubSub(client, projectName);
     _initialised = true;
+    return _initialised;
   }
 }

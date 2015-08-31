@@ -8,6 +8,7 @@
 library dartivity;
 
 import 'dart:io';
+import 'dart:async';
 
 import 'package:gcloud/pubsub.dart' as pubsub;
 import 'package:googleapis_auth/auth_io.dart' as auth;
