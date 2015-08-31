@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett 2015
  */
 
-part of  dartivity;
+part of dartivity;
 
 class DartivityMessaging {
 
@@ -27,8 +27,18 @@ class DartivityMessaging {
   ///
   /// Must be called before class usage
   ///
-  void initialise(String credentialsFile) {
-
-
+  /// credentialsFile - Path to the credentials file
+  /// which should be in JSON format
+  /// projectName - The project name
+  void initialise(String credentialsFile, String projectName) async {
+    String jsonCredentials = new File(credentialsFile).readAsStringSync();
+    ServiceAccountCredentials credentials =
+        new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
+    _authenticated = true;
+    List<String> scopes = []..addAll(PubSub.SCOPES);
+    AutoRefreshingAuthClient client =
+        await auth.clientViaServiceAccount(credentials, scopes);
+    _pubsub = new pubsub.PubSub(client, projectName);
+    _initialised = true;
   }
 }
