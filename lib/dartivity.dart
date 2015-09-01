@@ -12,6 +12,7 @@ import 'dart:async';
 
 import 'package:gcloud/pubsub.dart' as pubsub;
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:uuid/uuid.dart' as uuid;
 
 part 'src/dartivity.dart';
 part 'src/dartivity_client.dart';

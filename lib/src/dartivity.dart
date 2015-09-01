@@ -13,6 +13,7 @@ class Dartivity {
 
   Mode get supports => _mode;
 
+  // State
   bool _messagerInitialised = false;
   bool _clientInitialised = false;
 
@@ -31,6 +32,10 @@ class Dartivity {
     }
   }
 
+  /// Uuid
+  String _uuid;
+  String get id => _uuid;
+
   /// Iotivity client
   DartivityClient _client;
 
@@ -41,6 +46,10 @@ class Dartivity {
   /// mode - the operational mode of the client
   Dartivity(Mode mode) {
     _mode = mode;
+
+    // Generate our namespaced uuid
+    uuid.Uuid myUuid = new uuid.Uuid();
+    _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, 'dartivity.com');
   }
 
   /// initialise
