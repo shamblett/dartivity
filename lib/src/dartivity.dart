@@ -50,6 +50,10 @@ class Dartivity {
   /// Receive timer duration
   const Duration rxDuration = const Duration(seconds: 10);
 
+  /// Received message stream
+  final _messageRxed = new StreamController.broadcast();
+  get nextMessage => _messageRxed.stream;
+
   /// Dartivity
   /// mode - the operational mode of the client
   Dartivity(Mode mode) {
@@ -110,7 +114,7 @@ class Dartivity {
     _messager.send(jsonMessage);
   }
 
-  /// _recieve
+  /// _receive
   ///
   /// Message receive method
   Future _receive(Timer timer) async {
@@ -118,5 +122,6 @@ class Dartivity {
     String messageString = message.asString;
     DartivityMessage dartivityMessage =
         new DartivityMessage.fromJSON(messageString);
+    _messageRxed.add(dartivityMessage);
   }
 }
