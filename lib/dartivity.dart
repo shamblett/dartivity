@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:gcloud/pubsub.dart' as pubsub;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:uuid/uuid.dart' as uuid;
+import 'package:json_object/json_object.dart' as jsonobject;
 
 part 'src/dartivity.dart';
 part 'src/dartivity_client.dart';
@@ -31,6 +32,7 @@ enum Type {
   whoHas,
   iHave,
   resourceInfo,
-  clientInfo
+  clientInfo,
+  unknown
 }
 

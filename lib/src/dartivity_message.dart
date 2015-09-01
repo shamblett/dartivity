@@ -22,4 +22,29 @@ class DartivityMessage {
 
   /// Iotivity resource details
   Map<String, String> resourceDetails;
+
+  DartivityMessage();
+
+  DartivityMessage.fromJSON(String input) {
+    if (input == null) {
+      type = Type.unknown;
+    } else {
+      jsonobject.JsonObject jsonobj =
+          new jsonobject.JsonObject.fromJsonString(input);
+      type = jsonobj.type;
+      source = jsonobj.source;
+      destination = jsonobj.destination;
+      resourceDetails = jsonobj.resourceDetails;
+    }
+  }
+
+  /// toJSON
+  String toJSON() {
+    jsonobject.JsonObject output = new jsonobject.JsonObject();
+    output.type = type;
+    output.source = source;
+    output.destination = destination;
+    output.resourceDetails = resourceDetails;
+    return output.toString();
+  }
 }

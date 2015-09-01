@@ -47,6 +47,9 @@ class Dartivity {
   /// Messaging client
   DartivityMessaging _messager;
 
+  /// Receive timer duration
+  const Duration rxDuration = const Duration(seconds: 10);
+
   /// Dartivity
   /// mode - the operational mode of the client
   Dartivity(Mode mode) {
@@ -79,6 +82,10 @@ class Dartivity {
         throw new DartivityException(
             DartivityException.FAILED_TO_INITIALISE_MESSAGER);
       }
+
+      // Start our recieve timer
+      Timer timer = new Timer.periodic(rxDuration, _receive);
+
       _messagerInitialised = true;
       return _messagerInitialised;
     }
@@ -92,5 +99,24 @@ class Dartivity {
       _clientInitialised = true;
       return _clientInitialised;
     }
+  }
+
+  /// send
+  ///
+  /// Send a Dartivity Message
+  void send(DartivityMessage message) {
+    if (message == null) return;
+    String jsonMessage = message.toJSON();
+    _messager.send(jsonMessage);
+  }
+
+  /// _recieve
+  ///
+  /// Message receive method
+  Future _receive(Timer timer) async {
+    pubsub.Message message = await _messager.receive();
+    String messageString = message.asString;
+    DartivityMessage dartivityMessage =
+        new DartivityMessage.fromJSON(messageString);
   }
 }

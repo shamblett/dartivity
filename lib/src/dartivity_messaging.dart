@@ -61,4 +61,24 @@ class DartivityMessaging {
     _initialised = true;
     return _initialised;
   }
+
+  /// recieve
+  ///
+  /// Recieve a message from our subscription
+  ///
+  /// wait - whether to wait for a message or not, default is not
+  Future<pubsub.Message> receive({wait: true}) async {
+    var pullEvent = await _subscription.pull();
+    await pullEvent.acknowledge();
+    return pullEvent.message;
+  }
+
+  /// send
+  ///
+  /// Send a message to our subscription
+  ///
+  /// message - the message string to send
+  Future send(String message) async {
+    await _subscription.topic.publishString(message);
+  }
 }
