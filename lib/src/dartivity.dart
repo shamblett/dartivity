@@ -13,7 +13,7 @@ class Dartivity {
 
   Mode get supports => _mode;
 
-  // State
+  /// State
   bool _messagerInitialised = false;
   bool _clientInitialised = false;
 
@@ -42,7 +42,7 @@ class Dartivity {
   /// Messaging client
   DartivityMessaging _messager;
 
-  /// Dartivity client
+  /// Dartivity
   /// mode - the operational mode of the client
   Dartivity(Mode mode) {
     _mode = mode;

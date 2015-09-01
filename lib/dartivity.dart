@@ -25,3 +25,11 @@ part 'src/dartivity_message.dart';
 enum Mode {
   iotOnly, messagingOnly, both
 }
+
+/// Message types
+enum Type {
+  whoHas,
+  iHave,
+  resourceInfo
+}
+
