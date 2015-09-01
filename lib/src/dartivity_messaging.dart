@@ -8,7 +8,6 @@
 part of dartivity;
 
 class DartivityMessaging {
-
   /// Authenticated
   bool _authenticated = false;
 
@@ -23,6 +22,7 @@ class DartivityMessaging {
 
   DartivityMessaging();
 
+  /// initialise
   /// Initialises the messaging class.
   ///
   /// Must be called before class usage
@@ -31,15 +31,18 @@ class DartivityMessaging {
   /// which should be in JSON format
   /// projectName - The project name
   Future<bool> initialise(String credentialsFile, String projectName) async {
+    // Get the credenttials file as a string and create a credentials class
     String jsonCredentials = new File(credentialsFile).readAsStringSync();
     auth.ServiceAccountCredentials credentials =
-    new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
+        new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
     _authenticated = true;
-    List<String> scopes = []
-      ..addAll(pubsub.PubSub.SCOPES);
+
+    // Create a scoped pubsub client with our authenticated credentials
+    List<String> scopes = []..addAll(pubsub.PubSub.SCOPES);
     auth.AutoRefreshingAuthClient client =
-    await auth.clientViaServiceAccount(credentials, scopes);
+        await auth.clientViaServiceAccount(credentials, scopes);
     _pubsub = new pubsub.PubSub(client, projectName);
+
     _initialised = true;
     return _initialised;
   }

@@ -8,7 +8,6 @@
 part of dartivity;
 
 class DartivityClient {
-
   /// Ready, as in to use
   bool _ready = false;
 
@@ -16,10 +15,12 @@ class DartivityClient {
 
   DartivityClient();
 
-  /// Initialise
-  void initialise() {
-
-
+  /// initialise
+  /// Initialises the messaging class.
+  ///
+  /// Must be called before class usage
+  Future<bool> initialise() async {
+    _ready = true;
+    return true;
   }
-
 }
