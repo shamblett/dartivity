@@ -8,10 +8,6 @@
 part of dartivity;
 
 class DartivityMessage {
-  /// Pubsub topic
-  String _topic = 'projects/warm-actor-356/topics/dartivity';
-  String get topic => _topic;
-
   /// Type
   Type type;
 

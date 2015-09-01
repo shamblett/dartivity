@@ -34,7 +34,12 @@ class Dartivity {
 
   /// Uuid
   String _uuid;
-  String get id => _uuid;
+
+  /// Hostname for subscription id
+  final String hostname = Platform.localHostname;
+
+  /// Id of this dartivity client
+  String get id => hostname + '-' + _uuid;
 
   /// Iotivity client
   DartivityClient _client;
@@ -68,7 +73,7 @@ class Dartivity {
         throw new DartivityException(
             DartivityException.NO_PROJECTNAME_SPECIFIED);
       }
-      _messager = new DartivityMessaging();
+      _messager = new DartivityMessaging(id);
       await _messager.initialise(credentialsPath, projectName);
       if (!_messager.ready) {
         throw new DartivityException(

@@ -17,10 +17,22 @@ class DartivityMessaging {
   /// Ready, as in for use
   bool get ready => _authenticated && _initialised;
 
+  /// Pubsub topic
+  final String _topic = 'projects/warm-actor-356/topics/dartivity';
+  String get topic => _topic;
+
+  /// Pubsub subscription
+  pubsub.Subscription _subscription;
+
   /// PubSub client
   pubsub.PubSub _pubsub;
 
-  DartivityMessaging();
+  /// Dartivity client id
+  String _dartivityId;
+
+  DartivityMessaging(String dartivityId) {
+    _dartivityId = dartivityId;
+  }
 
   /// initialise
   /// Initialises the messaging class.
@@ -29,7 +41,7 @@ class DartivityMessaging {
   ///
   /// credentialsFile - Path to the credentials file
   /// which should be in JSON format
-  /// projectName - The project name
+  /// projectName - The project name(actually the google project id)
   Future<bool> initialise(String credentialsFile, String projectName) async {
     // Get the credenttials file as a string and create a credentials class
     String jsonCredentials = new File(credentialsFile).readAsStringSync();
@@ -42,6 +54,9 @@ class DartivityMessaging {
     auth.AutoRefreshingAuthClient client =
         await auth.clientViaServiceAccount(credentials, scopes);
     _pubsub = new pubsub.PubSub(client, projectName);
+
+    // Subscribe to our topic
+    _subscription = await _pubsub.createSubscription(_dartivityId, topic);
 
     _initialised = true;
     return _initialised;

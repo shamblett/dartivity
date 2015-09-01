@@ -30,6 +30,7 @@ enum Mode {
 enum Type {
   whoHas,
   iHave,
-  resourceInfo
+  resourceInfo,
+  clientInfo
 }
 
