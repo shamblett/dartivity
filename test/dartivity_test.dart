@@ -23,13 +23,19 @@ Future main() async {
 
   // Send a whoHas message
   Map resourceDetails = {"resourceId": "/light"};
-  DartivityMessage whoHas =
+  DartivityMessage whoHas1 =
       new DartivityMessage.whoHas(dartivity.id, resourceDetails);
-  dartivity.send(whoHas);
+  dartivity.send(whoHas1);
+  resourceDetails['resourceId'] = '/thermostat';
+  DartivityMessage whoHas2 =
+  new DartivityMessage.whoHas(dartivity.id, resourceDetails);
+  dartivity.send(whoHas2);
 
   // Listen for a message
+  int messCount = 0;
   dartivity.nextMessage.listen((DartivityMessage message) {
     print("Message received ${message.toString()}");
-    dartivity.close();
+    messCount++;
+    if (messCount == 2) dartivity.close();
   });
 }
