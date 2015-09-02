@@ -48,7 +48,7 @@ class Dartivity {
   DartivityMessaging _messager;
 
   /// Receive timer duration
-  const Duration rxDuration = const Duration(seconds: 10);
+  final Duration rxDuration = const Duration(seconds: 10);
 
   /// Receive timer
   Timer _rxTimer;
@@ -91,7 +91,7 @@ class Dartivity {
       }
 
       // Start our recieve timer
-      Timer _rxTimer = new Timer.periodic(rxDuration, _receive);
+      _rxTimer = new Timer.periodic(rxDuration, _receive);
 
       _messagerInitialised = true;
       return _messagerInitialised;

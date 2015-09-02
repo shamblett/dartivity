@@ -28,6 +28,7 @@ class DartivityMessage {
     if ((source == null) || (resourceDetails == null)) {
       throw new DartivityException(DartivityException.INVALID_WHOHAS_MESSAGE);
     }
+    this.type = Type.whoHas;
     this.source = source;
     this.resourceDetails = resourceDetails;
   }
@@ -68,6 +69,6 @@ class DartivityMessage {
 
   /// toString
   String toString() {
-    return "Type : ${type}, Source : ${source}";
+    return "Type : ${type}, Source : ${source}, Resource : ${resourceDetails.toString()}";
   }
 }

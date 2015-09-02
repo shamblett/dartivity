@@ -22,13 +22,14 @@ Future main() async {
   print("Initialse Status is ${dartivity.initialised}");
 
   // Send a whoHas message
-  Map resourceDetails = { "resourceId" : "/light"};
-  DartivityMessage whoHas = new DartivityMessage.whoHas(dartivity.id, resourceDetails);
+  Map resourceDetails = {"resourceId": "/light"};
+  DartivityMessage whoHas =
+      new DartivityMessage.whoHas(dartivity.id, resourceDetails);
   dartivity.send(whoHas);
 
   // Listen for a message
-  DartivityMessage message = await dartivity.nextMessage.single();
-  print("Message received ${message.toString()}");
-  dartivity.close();
-
+  dartivity.nextMessage.listen((DartivityMessage message) {
+    print("Message received ${message.toString()}");
+    dartivity.close();
+  });
 }

@@ -57,9 +57,16 @@ class DartivityMessaging {
     _pubsub = new pubsub.PubSub(_client, projectName);
     _authenticated = true;
 
-    // Subscribe to our topic
-    _subscription = await _pubsub.createSubscription(_dartivityId, topic);
-
+    // Subscribe to our topic, 409 means already subscribed from this client
+    try {
+      _subscription = await _pubsub.createSubscription(_dartivityId, topic);
+    } catch (e) {
+      if (e.status != 409) {
+        throw new DartivityException(DartivityException.SUBSCRIPTION_FAILED);
+      } else {
+        _subscription = await _pubsub.lookupSubscription(_dartivityId);
+      }
+    }
     _initialised = true;
     return _initialised;
   }
