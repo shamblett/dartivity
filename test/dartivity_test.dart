@@ -31,11 +31,19 @@ Future main() async {
   new DartivityMessage.whoHas(dartivity.id, resourceDetails);
   dartivity.send(whoHas2);
 
-  // Listen for a message
-  int messCount = 0;
-  dartivity.nextMessage.listen((DartivityMessage message) {
+  // Listen for a message until our timer pops
+  var subscription;
+
+  void timerCallback() {
+    print("Closing the client");
+    subscription.cancel();
+    try {
+      dartivity.close();
+    } catch (e) {
+    }
+  }
+  Timer timer = new Timer(new Duration(seconds: 45), timerCallback);
+  subscription = dartivity.nextMessage.listen((DartivityMessage message) {
     print("Message received ${message.toString()}");
-    messCount++;
-    if (messCount == 2) dartivity.close();
   });
 }
