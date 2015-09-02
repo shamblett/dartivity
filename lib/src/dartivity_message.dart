@@ -24,6 +24,13 @@ class DartivityMessage {
   Map<String, String> resourceDetails;
 
   DartivityMessage();
+  DartivityMessage.whoHas(String source, Map resourceDetails) {
+    if ((source == null) || (resourceDetails == null)) {
+      throw new DartivityException(DartivityException.INVALID_WHOHAS_MESSAGE);
+    }
+    this.source = source;
+    this.resourceDetails = resourceDetails;
+  }
 
   DartivityMessage.fromJSON(String input) {
     if (input == null) {
@@ -38,6 +45,17 @@ class DartivityMessage {
     }
   }
 
+  DartivityMessage.fromJSONObject(jsonobject.JsonObject input) {
+    if (input == null) {
+      type = Type.unknown;
+    } else {
+      type = input.type;
+      source = input.source;
+      destination = input.destination;
+      resourceDetails = input.resourceDetails;
+    }
+  }
+
   /// toJSON
   String toJSON() {
     jsonobject.JsonObject output = new jsonobject.JsonObject();
@@ -46,5 +64,10 @@ class DartivityMessage {
     output.destination = destination;
     output.resourceDetails = resourceDetails;
     return output.toString();
+  }
+
+  /// toString
+  String toString() {
+    return "Type : ${type}, Source : ${source}";
   }
 }

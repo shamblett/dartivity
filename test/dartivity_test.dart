@@ -20,4 +20,11 @@ Future main() async {
       '/home/steve/Development/google/dart/projects/dartivity/credentials/Development-87fde7970997.json',
       'warm-actor-356');
   print("Initialse Status is ${dartivity.initialised}");
+
+  // Listen for messages
+  dartivity.nextMessage.listen((DartivityMessage message){
+
+    print("Message received ${message.toString()}");
+
+  });
 }

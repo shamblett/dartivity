@@ -18,7 +18,8 @@ class DartivityException implements Exception {
       'The messaging client has failed to initialise';
   static const FAILED_TO_INITIALISE_IOTCLIENT =
       'The iotivity client has failed to initialise';
-
+  static const INVALID_WHOHAS_MESSAGE =
+      'A whoHas message must have a source and resource details';
   String _message = 'No Message Supplied';
 
   /**

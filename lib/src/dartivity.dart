@@ -119,9 +119,19 @@ class Dartivity {
   /// Message receive method
   Future _receive(Timer timer) async {
     pubsub.Message message = await _messager.receive();
-    String messageString = message.asString;
-    DartivityMessage dartivityMessage =
-        new DartivityMessage.fromJSON(messageString);
-    _messageRxed.add(dartivityMessage);
+    if (message != null) {
+      String messageString = message.asString;
+      DartivityMessage dartivityMessage =
+          new DartivityMessage.fromJSON(messageString);
+      _messageRxed.add(dartivityMessage);
+    }
+  }
+
+  /// close
+  ///
+  /// Close the client
+  void close() {
+    // Messaging
+    if (_messagerInitialised) _messager.close();
   }
 }

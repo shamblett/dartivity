@@ -30,6 +30,9 @@ class DartivityMessaging {
   /// Dartivity client id
   String _dartivityId;
 
+  /// Auth client, needed for closing
+  auth.AutoRefreshingAuthClient _client;
+
   DartivityMessaging(String dartivityId) {
     _dartivityId = dartivityId;
   }
@@ -47,13 +50,12 @@ class DartivityMessaging {
     String jsonCredentials = new File(credentialsFile).readAsStringSync();
     auth.ServiceAccountCredentials credentials =
         new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
-    _authenticated = true;
 
     // Create a scoped pubsub client with our authenticated credentials
     List<String> scopes = []..addAll(pubsub.PubSub.SCOPES);
-    auth.AutoRefreshingAuthClient client =
-        await auth.clientViaServiceAccount(credentials, scopes);
-    _pubsub = new pubsub.PubSub(client, projectName);
+    _client = await auth.clientViaServiceAccount(credentials, scopes);
+    _pubsub = new pubsub.PubSub(_client, projectName);
+    _authenticated = true;
 
     // Subscribe to our topic
     _subscription = await _pubsub.createSubscription(_dartivityId, topic);
@@ -68,9 +70,13 @@ class DartivityMessaging {
   ///
   /// wait - whether to wait for a message or not, default is not
   Future<pubsub.Message> receive({wait: true}) async {
-    var pullEvent = await _subscription.pull();
-    await pullEvent.acknowledge();
-    return pullEvent.message;
+    if (ready) {
+      var pullEvent = await _subscription.pull(wait: false);
+      if (pullEvent != null) {
+        await pullEvent.acknowledge();
+        return pullEvent.message;
+      }
+    }
   }
 
   /// send
@@ -79,6 +85,19 @@ class DartivityMessaging {
   ///
   /// message - the message string to send
   Future send(String message) async {
-    await _subscription.topic.publishString(message);
+    if (ready) await _subscription.topic.publishString(message);
+  }
+
+  /// close
+  ///
+  /// Close the messager
+  void close() {
+    // We don't need to wait, just assume pubsub will do this
+    _subscription.delete();
+    _initialised = false;
+
+    // Close the auth client
+    _client.close();
+    _authenticated = false;
   }
 }
