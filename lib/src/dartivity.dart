@@ -50,6 +50,9 @@ class Dartivity {
   /// Receive timer duration
   const Duration rxDuration = const Duration(seconds: 10);
 
+  /// Receive timer
+  Timer _rxTimer;
+
   /// Received message stream
   final _messageRxed = new StreamController.broadcast();
   get nextMessage => _messageRxed.stream;
@@ -88,7 +91,7 @@ class Dartivity {
       }
 
       // Start our recieve timer
-      Timer timer = new Timer.periodic(rxDuration, _receive);
+      Timer _rxTimer = new Timer.periodic(rxDuration, _receive);
 
       _messagerInitialised = true;
       return _messagerInitialised;
@@ -132,6 +135,13 @@ class Dartivity {
   /// Close the client
   void close() {
     // Messaging
-    if (_messagerInitialised) _messager.close();
+    if (_messagerInitialised) {
+      _rxTimer.cancel();
+      _messager.close();
+    }
+
+    if ( _clientInitialised ) {
+      _client.close();
+    }
   }
 }

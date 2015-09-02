@@ -23,4 +23,10 @@ class DartivityClient {
     _ready = true;
     return true;
   }
+
+  /// close
+  void close() {
+
+
+  }
 }

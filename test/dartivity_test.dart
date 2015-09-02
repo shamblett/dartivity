@@ -21,10 +21,14 @@ Future main() async {
       'warm-actor-356');
   print("Initialse Status is ${dartivity.initialised}");
 
-  // Listen for messages
-  dartivity.nextMessage.listen((DartivityMessage message){
+  // Send a whoHas message
+  Map resourceDetails = { "resourceId" : "/light"};
+  DartivityMessage whoHas = new DartivityMessage.whoHas(dartivity.id, resourceDetails);
+  dartivity.send(whoHas);
 
-    print("Message received ${message.toString()}");
+  // Listen for a message
+  DartivityMessage message = await dartivity.nextMessage.single();
+  print("Message received ${message.toString()}");
+  dartivity.close();
 
-  });
 }
