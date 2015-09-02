@@ -25,8 +25,5 @@ class DartivityClient {
   }
 
   /// close
-  void close() {
-
-
-  }
+  void close() {}
 }

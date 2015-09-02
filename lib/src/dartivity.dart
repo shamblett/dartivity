@@ -140,7 +140,7 @@ class Dartivity {
       _messager.close();
     }
 
-    if ( _clientInitialised ) {
+    if (_clientInitialised) {
       _client.close();
     }
   }

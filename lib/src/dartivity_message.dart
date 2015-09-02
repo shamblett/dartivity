@@ -67,42 +67,9 @@ class DartivityMessage {
   String toJSON() {
     jsonobject.JsonObject output = new jsonobject.JsonObject();
     output.type = type.index;
-    output.source = source
-
-  ?
-
-  ?
-
-  "
-
-  ";
-
-  output.destination
-
-  =
-
-  destination
-
-  ?
-
-  ?
-
-  "
-
-  ";
-
-  output.resourceDetails
-
-  =
-
-  resourceDetails
-
-  ?
-
-  ?
-
-  {
-  };
+    source != null ? output.source = source : null;
+    destination != null ? output.destination = destination : null;
+    resourceDetails != null ? output.resourceDetails = resourceDetails : null;
     return output.toString();
   }
 
