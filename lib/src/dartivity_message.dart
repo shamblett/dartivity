@@ -39,10 +39,14 @@ class DartivityMessage {
     } else {
       jsonobject.JsonObject jsonobj =
           new jsonobject.JsonObject.fromJsonString(input);
-      type = jsonobj.type;
-      source = jsonobj.source;
-      destination = jsonobj.destination;
-      resourceDetails = jsonobj.resourceDetails;
+      List<Type> types = Type.values;
+      type = jsonobj.containsKey('type') ? types[jsonobj.type] : Type.unknown;
+      source = jsonobj.containsKey('source') ? jsonobj.source : null;
+      destination =
+      jsonobj.containsKey('destination') ? jsonobj.destination : null;
+      resourceDetails = jsonobj.containsKey('resourceDetails')
+      ? jsonobj.resourceDetails
+      : null;
     }
   }
 
@@ -50,20 +54,55 @@ class DartivityMessage {
     if (input == null) {
       type = Type.unknown;
     } else {
-      type = input.type;
-      source = input.source;
-      destination = input.destination;
-      resourceDetails = input.resourceDetails;
+      List<Type> types = Type.values;
+      type = input.containsKey('type') ? types[input.type] : Type.unknown;
+      source = input.containsKey('source') ? input.source : null;
+      destination = input.containsKey('destination') ? input.destination : null;
+      resourceDetails =
+      input.containsKey('resourceDetails') ? input.resourceDetails : null;
     }
   }
 
   /// toJSON
   String toJSON() {
     jsonobject.JsonObject output = new jsonobject.JsonObject();
-    output.type = type;
-    output.source = source;
-    output.destination = destination;
-    output.resourceDetails = resourceDetails;
+    output.type = type.index;
+    output.source = source
+
+  ?
+
+  ?
+
+  "
+
+  ";
+
+  output.destination
+
+  =
+
+  destination
+
+  ?
+
+  ?
+
+  "
+
+  ";
+
+  output.resourceDetails
+
+  =
+
+  resourceDetails
+
+  ?
+
+  ?
+
+  {
+  };
     return output.toString();
   }
 
