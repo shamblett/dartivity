@@ -26,7 +26,7 @@ Future main() async {
   new DartivityMessage.whoHas(dartivity.id, '/core/light');
   dartivity.send(whoHas1);
   DartivityMessage whoHas2 =
-  new DartivityMessage.whoHas(dartivity.id, '/core/thrmostat');
+  new DartivityMessage.whoHas(dartivity.id, '/core/thermostat');
   dartivity.send(whoHas2);
 
   // Listen for a message until our timer pops

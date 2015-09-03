@@ -22,13 +22,10 @@ class Dartivity {
     switch (_mode) {
       case Mode.both:
         return _messagerInitialised && _clientInitialised;
-        break;
       case Mode.messagingOnly:
         return _messagerInitialised;
-        break;
       case Mode.iotOnly:
         return _clientInitialised;
-        break;
     }
   }
 
