@@ -70,7 +70,7 @@ class DartivityMessage {
       type = Type.unknown;
     } else {
       jsonobject.JsonObject jsonobj =
-          new jsonobject.JsonObject.fromJsonString(input);
+      new jsonobject.JsonObject.fromJsonString(input);
       List<Type> types = Type.values;
       type = jsonobj.containsKey('type') ? types[jsonobj.type] : Type.unknown;
       source = jsonobj.containsKey('source') ? jsonobj.source : null;

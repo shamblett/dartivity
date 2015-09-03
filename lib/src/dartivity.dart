@@ -53,6 +53,7 @@ class Dartivity {
 
   /// Received message stream
   final _messageRxed = new StreamController.broadcast();
+
   get nextMessage => _messageRxed.stream;
 
   /// Dartivity
@@ -113,6 +114,7 @@ class Dartivity {
   ///
   /// Send a Dartivity Message
   void send(DartivityMessage message) {
+    if (!initialised) return;
     if (message == null) return;
     String jsonMessage = message.toJSON();
     _messager.send(jsonMessage);
@@ -126,7 +128,7 @@ class Dartivity {
     if (message != null) {
       String messageString = message.asString;
       DartivityMessage dartivityMessage =
-          new DartivityMessage.fromJSON(messageString);
+      new DartivityMessage.fromJSON(messageString);
       DartivityMessage filteredMessage = _filter(dartivityMessage);
       if (filteredMessage != null) _messageRxed.add(filteredMessage);
     }

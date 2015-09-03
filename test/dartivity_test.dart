@@ -20,6 +20,26 @@ void main() {
       expect(dartivity.supports, Mode.both);
     });
 
+    test("Both mode", () {
+      Dartivity dartivity = new Dartivity(Mode.both);
+      expect(dartivity.supports, Mode.both);
+    });
+
+    test("Messaging only mode", () {
+      Dartivity dartivity = new Dartivity(Mode.messagingOnly);
+      expect(dartivity.supports, Mode.messagingOnly);
+    });
+
+    test("IOT only mode", () {
+      Dartivity dartivity = new Dartivity(Mode.iotOnly);
+      expect(dartivity.supports, Mode.iotOnly);
+    });
+
+    test("Hostname", () {
+      Dartivity dartivity = new Dartivity(Mode.both);
+      expect(dartivity.hostname, Platform.localHostname);
+    });
+
     test("Id generation check", () {
       Dartivity dartivity = new Dartivity(Mode.both);
       uuid.Uuid myUuid = new uuid.Uuid();
@@ -28,9 +48,19 @@ void main() {
       expect(dartivity.id, "${Platform.localHostname}" + '-' + "${uuid1}");
     });
 
+
+  });
+
+  group("Initialisation", () {
     test("Initialise state", () {
       Dartivity dartivity = new Dartivity(null);
       expect(dartivity.initialised, false);
     });
+
+    test("No send until initialised", () {
+      Dartivity dartivity = new Dartivity(Mode.both);
+      expect(dartivity.send(null), null);
+    });
+
   });
 }

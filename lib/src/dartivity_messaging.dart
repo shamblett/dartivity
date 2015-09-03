@@ -19,6 +19,7 @@ class DartivityMessaging {
 
   /// Pubsub topic
   final String _topic = DartivityCfg.MESS_TOPIC;
+
   String get topic => _topic;
 
   /// Pubsub subscription
@@ -49,10 +50,11 @@ class DartivityMessaging {
     // Get the credenttials file as a string and create a credentials class
     String jsonCredentials = new File(credentialsFile).readAsStringSync();
     auth.ServiceAccountCredentials credentials =
-        new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
+    new auth.ServiceAccountCredentials.fromJson(jsonCredentials);
 
     // Create a scoped pubsub client with our authenticated credentials
-    List<String> scopes = []..addAll(pubsub.PubSub.SCOPES);
+    List<String> scopes = []
+      ..addAll(pubsub.PubSub.SCOPES);
     _client = await auth.clientViaServiceAccount(credentials, scopes);
     _pubsub = new pubsub.PubSub(_client, projectName);
     _authenticated = true;

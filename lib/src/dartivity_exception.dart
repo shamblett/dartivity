@@ -11,13 +11,13 @@ class DartivityException implements Exception {
   // Exception message strings
   static const HEADER = 'DartivityException: ';
   static const NO_CREDPATH_SPECIFIED =
-      'You must specify a credentials path for messaging';
+  'You must specify a credentials path for messaging';
   static const NO_PROJECTNAME_SPECIFIED =
-      'You must specify a project name for messaging';
+  'You must specify a project name for messaging';
   static const FAILED_TO_INITIALISE_MESSAGER =
-      'The messaging client has failed to initialise';
+  'The messaging client has failed to initialise';
   static const FAILED_TO_INITIALISE_IOTCLIENT =
-      'The iotivity client has failed to initialise';
+  'The iotivity client has failed to initialise';
   static const INVALID_WHOHAS_MESSAGE =
   'A whoHas message must have a source and resource id';
   static const INVALID_IHAVE_MESSAGE =
@@ -25,7 +25,7 @@ class DartivityException implements Exception {
   static const INVALID_RESOURCE_DETAILS_MESSAGE =
   'A resource details message must have a source, destination, resource id and resource details';
   static const SUBSCRIPTION_FAILED =
-      'Failed to create the messging subscription';
+  'Failed to create the messging subscription';
   String _message = 'No Message Supplied';
 
   /**
