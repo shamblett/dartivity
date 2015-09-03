@@ -17,8 +17,8 @@ Future main() async {
   // messaging only
   Dartivity dartivity = new Dartivity(Mode.messagingOnly);
   await dartivity.initialise(
-      '/home/steve/Development/google/dart/projects/dartivity/credentials/Development-87fde7970997.json',
-      'warm-actor-356');
+      DartivityCfg.MESS_CRED_PATH,
+      DartivityCfg.MESS_PROJECT_ID);
   print("Initialse Status is ${dartivity.initialised}");
 
   // Send a whoHas message

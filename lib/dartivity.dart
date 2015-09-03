@@ -20,6 +20,7 @@ part 'src/dartivity_client.dart';
 part 'src/dartivity_messaging.dart';
 part 'src/dartivity_exception.dart';
 part 'src/dartivity_message.dart';
+part 'src/dartivity_cfg.dart';
 
 /// Mode enumeration
 /// Supports only iotivity server, messaging or both

@@ -18,7 +18,7 @@ class DartivityMessaging {
   bool get ready => _authenticated && _initialised;
 
   /// Pubsub topic
-  final String _topic = 'projects/warm-actor-356/topics/dartivity';
+  final String _topic = DartivityCfg.MESS_TOPIC;
   String get topic => _topic;
 
   /// Pubsub subscription

@@ -64,7 +64,7 @@ class Dartivity {
 
     // Generate our namespaced uuid
     uuid.Uuid myUuid = new uuid.Uuid();
-    _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, 'dartivity.com');
+    _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
   }
 
   /// initialise
