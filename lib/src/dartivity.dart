@@ -45,7 +45,7 @@ class Dartivity {
   DartivityMessaging _messager;
 
   /// Receive timer duration
-  final Duration rxDuration =
+  final Duration _rxDuration =
   const Duration(seconds: DartivityCfg.MESS_PULL_TIME_INTERVAL);
 
   /// Receive timer
@@ -56,10 +56,13 @@ class Dartivity {
   get nextMessage => _messageRxed.stream;
 
   /// Dartivity
-  /// mode - the operational mode of the client
+  /// mode - the operational mode of the client, defaults to both
   Dartivity(Mode mode) {
-    _mode = mode;
-
+    if (mode == null) {
+      _mode = Mode.both;
+    } else {
+      _mode = mode;
+    }
     // Generate our namespaced uuid
     uuid.Uuid myUuid = new uuid.Uuid();
     _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
@@ -89,7 +92,7 @@ class Dartivity {
       }
 
       // Start our recieve timer
-      _rxTimer = new Timer.periodic(rxDuration, _receive);
+      _rxTimer = new Timer.periodic(_rxDuration, _receive);
 
       _messagerInitialised = true;
       return _messagerInitialised;
