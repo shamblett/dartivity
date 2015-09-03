@@ -48,7 +48,8 @@ class Dartivity {
   DartivityMessaging _messager;
 
   /// Receive timer duration
-  final Duration rxDuration = const Duration(seconds: 10);
+  final Duration rxDuration =
+  const Duration(seconds: DartivityCfg.MESS_PULL_TIME_INTERVAL);
 
   /// Receive timer
   Timer _rxTimer;
@@ -126,7 +127,8 @@ class Dartivity {
       String messageString = message.asString;
       DartivityMessage dartivityMessage =
           new DartivityMessage.fromJSON(messageString);
-      _messageRxed.add(dartivityMessage);
+      DartivityMessage filteredMessage = _filter(dartivityMessage);
+      if (filteredMessage != null) _messageRxed.add(filteredMessage);
     }
   }
 
@@ -142,6 +144,20 @@ class Dartivity {
 
     if (_clientInitialised) {
       _client.close();
+    }
+  }
+
+  ///_filter
+  ///
+  /// Filter out messages that are not for us
+  DartivityMessage _filter(DartivityMessage message) {
+    // Who has is for all, the others we only respond to if we are
+    // the destination.
+    if (message.type == Type.whoHas) return message;
+    if (message.destination != id) {
+      return null;
+    } else {
+      return message;
     }
   }
 }

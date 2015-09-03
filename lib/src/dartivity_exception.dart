@@ -19,7 +19,11 @@ class DartivityException implements Exception {
   static const FAILED_TO_INITIALISE_IOTCLIENT =
       'The iotivity client has failed to initialise';
   static const INVALID_WHOHAS_MESSAGE =
-      'A whoHas message must have a source and resource details';
+  'A whoHas message must have a source and resource id';
+  static const INVALID_IHAVE_MESSAGE =
+  'A iHave message must have a source, destination, resource id and resource details';
+  static const INVALID_RESOURCE_INFO_MESSAGE =
+  'A iHave message must have a source, destination, resource id and resource details';
   static const SUBSCRIPTION_FAILED =
       'Failed to create the messging subscription';
   String _message = 'No Message Supplied';

@@ -25,5 +25,7 @@ class DartivityCfg {
   static const String MESS_CRED_PATH =
   '/home/steve/Development/google/dart/projects/${MESS_PACKAGE_NAME}/credentials/Development-87fde7970997.json';
 
-
+  // Time between message pull requests
+  static const int MESS_PULL_TIME_INTERVAL = 10;
+// seconds
 }

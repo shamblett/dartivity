@@ -24,14 +24,38 @@ class DartivityMessage {
   Map<String, String> resourceDetails;
 
   DartivityMessage();
-  DartivityMessage.whoHas(String source, Map resourceDetails) {
-    if ((source == null) || (resourceDetails == null)) {
+
+  DartivityMessage.whoHas(String source, String resourceId) {
+    if ((source == null) || (resourceId == null)) {
       throw new DartivityException(DartivityException.INVALID_WHOHAS_MESSAGE);
     }
     this.type = Type.whoHas;
     this.source = source;
+    this.resourceId = resourceId;
+  }
+
+  DartivityMessage.iHave(String source, String destination, String resourceId, Map resourceDetails) {
+    if ((source == null) || (resourceDetails == null) || (destination == null) || (resourceId == null)) {
+      throw new DartivityException(DartivityException.INVALID_IHAVE_MESSAGE);
+    }
+    this.type = Type.iHave;
+    this.source = source;
+    this.destination = destination;
+    this.resourceId = resourceId;
     this.resourceDetails = resourceDetails;
   }
+
+  DartivityMessage.resourceInfo(String source, String destination, String resourceId, Map resourceDetails) {
+    if ((source == null) || (resourceDetails == null) || (destination == null) || (resourceId == null)) {
+      throw new DartivityException(DartivityException.INVALID_RESOURCE_INFO_MESSAGE);
+    }
+    this.type = Type.resourceInfo;
+    this.source = source;
+    this.destination = destination;
+    this.resourceId = resourceId;
+    this.resourceDetails = resourceDetails;
+  }
+
 
   DartivityMessage.fromJSON(String input) {
     if (input == null) {

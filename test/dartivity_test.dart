@@ -21,14 +21,12 @@ Future main() async {
       DartivityCfg.MESS_PROJECT_ID);
   print("Initialse Status is ${dartivity.initialised}");
 
-  // Send a whoHas message
-  Map resourceDetails = {"resourceId": "/light"};
+  // Send a couple of whoHas messages
   DartivityMessage whoHas1 =
-      new DartivityMessage.whoHas(dartivity.id, resourceDetails);
+  new DartivityMessage.whoHas(dartivity.id, '/core/light');
   dartivity.send(whoHas1);
-  resourceDetails['resourceId'] = '/thermostat';
   DartivityMessage whoHas2 =
-  new DartivityMessage.whoHas(dartivity.id, resourceDetails);
+  new DartivityMessage.whoHas(dartivity.id, '/core/thrmostat');
   dartivity.send(whoHas2);
 
   // Listen for a message until our timer pops
