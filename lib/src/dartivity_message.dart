@@ -34,8 +34,12 @@ class DartivityMessage {
     this.resourceId = resourceId;
   }
 
-  DartivityMessage.iHave(String source, String destination, String resourceId, Map resourceDetails) {
-    if ((source == null) || (resourceDetails == null) || (destination == null) || (resourceId == null)) {
+  DartivityMessage.iHave(String source, String destination, String resourceId,
+                         Map resourceDetails) {
+    if ((source == null) ||
+    (resourceDetails == null) ||
+    (destination == null) ||
+    (resourceId == null)) {
       throw new DartivityException(DartivityException.INVALID_IHAVE_MESSAGE);
     }
     this.type = Type.iHave;
@@ -45,17 +49,21 @@ class DartivityMessage {
     this.resourceDetails = resourceDetails;
   }
 
-  DartivityMessage.resourceInfo(String source, String destination, String resourceId, Map resourceDetails) {
-    if ((source == null) || (resourceDetails == null) || (destination == null) || (resourceId == null)) {
-      throw new DartivityException(DartivityException.INVALID_RESOURCE_INFO_MESSAGE);
+  DartivityMessage.details(String source, String destination, String resourceId,
+                           Map resourceDetails) {
+    if ((source == null) ||
+    (resourceDetails == null) ||
+    (destination == null) ||
+    (resourceId == null)) {
+      throw new DartivityException(
+          DartivityException.INVALID_RESOURCE_DETAILS_MESSAGE);
     }
-    this.type = Type.resourceInfo;
+    this.type = Type.resourceDetails;
     this.source = source;
     this.destination = destination;
     this.resourceId = resourceId;
     this.resourceDetails = resourceDetails;
   }
-
 
   DartivityMessage.fromJSON(String input) {
     if (input == null) {
@@ -68,6 +76,7 @@ class DartivityMessage {
       source = jsonobj.containsKey('source') ? jsonobj.source : null;
       destination =
       jsonobj.containsKey('destination') ? jsonobj.destination : null;
+      resourceId = jsonobj.containsKey('resourceId') ? jsonobj.resourceId : null;
       resourceDetails = jsonobj.containsKey('resourceDetails')
       ? jsonobj.resourceDetails
       : null;
@@ -82,6 +91,7 @@ class DartivityMessage {
       type = input.containsKey('type') ? types[input.type] : Type.unknown;
       source = input.containsKey('source') ? input.source : null;
       destination = input.containsKey('destination') ? input.destination : null;
+      resourceId = input.containsKey('resourceId') ? input.resourceId : null;
       resourceDetails =
       input.containsKey('resourceDetails') ? input.resourceDetails : null;
     }
@@ -93,12 +103,13 @@ class DartivityMessage {
     output.type = type.index;
     source != null ? output.source = source : null;
     destination != null ? output.destination = destination : null;
+    resourceId != null ? output.resourceId = resourceId : null;
     resourceDetails != null ? output.resourceDetails = resourceDetails : null;
     return output.toString();
   }
 
   /// toString
   String toString() {
-    return "Type : ${type}, Source : ${source}, Resource : ${resourceDetails.toString()}";
+    return "Type : ${type}, Source : ${source}, Destination : ${destination}, Resource Id : ${resourceId}, Resource : ${resourceDetails.toString()}";
   }
 }
