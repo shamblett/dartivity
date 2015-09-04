@@ -14,6 +14,7 @@ import 'package:gcloud/pubsub.dart' as pubsub;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:uuid/uuid.dart' as uuid;
 import 'package:json_object/json_object.dart' as jsonobject;
+import 'dart-ext:native/dartivity_extension';
 
 part 'src/dartivity.dart';
 part 'src/dartivity_client.dart';
