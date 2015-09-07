@@ -17,11 +17,12 @@ import 'package:json_object/json_object.dart' as jsonobject;
 import 'dart-ext:native/dartivity_extension';
 
 part 'src/dartivity.dart';
-part 'src/dartivity_client.dart';
+part 'src/dartivity_iotivity.dart';
 part 'src/dartivity_messaging.dart';
 part 'src/dartivity_exception.dart';
 part 'src/dartivity_message.dart';
 part 'src/dartivity_cfg.dart';
+part 'src/dartivity_iotivity_cfg.dart';
 
 /// Mode enumeration
 /// Supports only iotivity server, messaging or both

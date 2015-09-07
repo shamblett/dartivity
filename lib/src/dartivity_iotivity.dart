@@ -7,13 +7,13 @@
 
 part of dartivity;
 
-class DartivityClient {
+class DartivityIotivity {
   /// Ready, as in to use
   bool _ready = false;
 
   bool get ready => _ready;
 
-  DartivityClient();
+  DartivityIotivity();
 
   /// initialise
   /// Initialises the messaging class.
