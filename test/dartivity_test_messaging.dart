@@ -8,10 +8,13 @@
 library dartivity.test;
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
 
 Future main() async {
+  final int badExitCode = -1;
+
   // Instantiate a Dartivity client and initialise for
   // messaging only
   Dartivity dartivity = new Dartivity(Mode.messagingOnly);
@@ -23,6 +26,7 @@ Future main() async {
     print("Message not sent not ready - OK");
   } else {
     print("Oops message sent when not ready- ERROR");
+    exit(badExitCode);
   }
 
   // Initialise
@@ -33,6 +37,7 @@ Future main() async {
     print("Initialse Status is true - OK");
   } else {
     print("Oops Initialse Status is false - ERROR");
+    exit(badExitCode);
   }
 
   // Send a null message
@@ -41,6 +46,7 @@ Future main() async {
     print("Null message not sent - OK");
   } else {
     print("Oops null message sent - ERROR");
+    exit(badExitCode);
   }
 
   // Send a couple of whoHas messages
@@ -78,12 +84,15 @@ Future main() async {
       print("Message count is 4 - OK");
     } else {
       print("Message count is ${messCount} - ERROR, should be 4");
+      exit(badExitCode);
     }
     subscription.cancel();
     try {
       dartivity.close();
     } catch (e) {
     }
+    // Good exit
+    exit(0);
   }
   Timer timer = new Timer(
       new Duration(seconds: (DartivityCfg.MESS_PULL_TIME_INTERVAL * 7 + 2)),
