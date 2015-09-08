@@ -26,6 +26,8 @@ class DartivityException implements Exception {
   'A resource details message must have a source, destination, resource id and resource details';
   static const SUBSCRIPTION_FAILED =
   'Failed to create the messging subscription';
+  static const IOT_PLATFORM_CFG_FAILED =
+  'Failed to configure the Iotivity platform';
   String _message = 'No Message Supplied';
 
   /**
