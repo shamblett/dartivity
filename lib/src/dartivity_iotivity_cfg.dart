@@ -24,18 +24,18 @@ class DartivityIotivityCfg {
   /// implementation. In descriptions below are for the current implementation and may changed
   /// over time.
   int QualityOfService = QualityOfService_LowQos;
+
+  // Best effort
   final int QualityOfService_LowQos = 0;
 
   // Best effort
   final int QualityOfService_MidQos = 1;
 
-  // Best effort
+  // Ack confirmation
   final int QualityOfService_HighQos = 2;
 
-  // Ack confirmation
-  final int QualityOfService_NaQos = 3;
-
   // Let the stack decide
+  final int QualityOfService_NaQos = 3;
 
   /// Connectivity type
   int ServerConnectivity = OCConnectivityType_Ct_Default;
