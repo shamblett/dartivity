@@ -8,16 +8,6 @@
 part of dartivity;
 
 class DartivityIotivityCfg {
-
-  /// Platform status
-  int OCPlatformStatus = OCPlatformStatus_PlatformUp;
-  final int OCPlatformStatus_PlatformUp = 0;
-  final int OCPlatformStatus_PlatformDown = 1;
-
-  /// Advertisement status
-  int OCAdvertisementStatus = OCAdvertisementStatus_None;
-  final int OCAdvertisementStatus_None = 0;
-
   /// Service type
   int ServiceType = ServiceType_InProc;
   final int ServiceType_InProc = 0;
@@ -67,12 +57,28 @@ class DartivityIotivityCfg {
   final int OCConnectivityType_Ct_Scope_Global = 0xE;
 
   /// IP address
-  String ip;
+  String ip = "0.0.0.0";
 
   /// Port
-  int port;
+  int port = 0;
 
   /// Database file
-  String dbFile;
+  String dbFile = "";
 
+  DartivityIotivityCfg(int serviceType, int mode,
+                       {int qos: QualityOfService_NaQos,
+                       int serverConnectivity: OCConnectivityType_Ct_Default,
+                       clientConnectivity: OCConnectivityType_Ct_Default,
+                       String ipAddress: "0.0.0.0",
+                       int port: 0,
+                       String dbFile: ""}) {
+    this.ServiceType = serviceType;
+    this.mode = mode;
+    this.qos = qos;
+    this.serverConnectivity = serverConnectivity;
+    this.clientConnectivity = clientConnectivity;
+    this.ip = ipAddress;
+    this.port = port;
+    this.dbFile = dbFile;
+  }
 }
