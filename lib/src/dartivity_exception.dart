@@ -28,6 +28,8 @@ class DartivityException implements Exception {
   'Failed to create the messging subscription';
   static const IOT_PLATFORM_CFG_FAILED =
   'Failed to configure the Iotivity platform';
+  static const NO_IOT_CFG_SPECIFIED =
+  'You must specify a configuration object for iotivity';
   String _message = 'No Message Supplied';
 
   /**

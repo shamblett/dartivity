@@ -13,15 +13,28 @@ class DartivityIotivity {
 
   bool get ready => _ready;
 
-  DartivityIotivity();
+  /// Platform
+  DartivityIotivityPlatform _platform;
+
+  DartivityIotivity() {
+
+    _platform = new DartivityIotivityPlatform();
+  }
 
   /// initialise
   /// Initialises the messaging class.
   ///
   /// Must be called before class usage
-  Future<bool> initialise() async {
-    _ready = true;
-    return true;
+  Future<bool> initialise(DartivityIotivityCfg cfg) async {
+
+    try {
+      await _platform.configure(cfg);
+      _ready = true;
+    } catch (e) {
+      _ready = false;
+    }
+
+    return _ready;
   }
 
   /// close

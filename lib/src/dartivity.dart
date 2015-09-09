@@ -15,17 +15,17 @@ class Dartivity {
 
   /// State
   bool _messagerInitialised = false;
-  bool _clientInitialised = false;
+  bool _iotClientInitialised = false;
 
   /// Initialised
   bool get initialised {
     switch (_mode) {
       case Mode.both:
-        return _messagerInitialised && _clientInitialised;
+        return _messagerInitialised && _iotClientInitialised;
       case Mode.messagingOnly:
         return _messagerInitialised;
       case Mode.iotOnly:
-        return _clientInitialised;
+        return _iotClientInitialised;
     }
   }
 
@@ -39,7 +39,7 @@ class Dartivity {
   String get id => hostname + '-' + _uuid;
 
   /// Iotivity client
-  DartivityClient _client;
+  DartivityIotivity _iotClient;
 
   /// Messaging client
   DartivityMessaging _messager;
@@ -73,7 +73,7 @@ class Dartivity {
   ///
   /// credentialsPath - path to a valid credentials file for messaging
   /// projectName - project name for messaging.
-  Future<bool> initialise([String credentialsPath, String projectName]) async {
+  Future<bool> initialise([String credentialsPath, String projectName, DartivityIotivityCfg iotCfg]) async {
     // Initialise depending on mode
     if (_mode == Mode.both || _mode == Mode.messagingOnly) {
       // Must have a credentials path for messaging
@@ -100,13 +100,18 @@ class Dartivity {
     }
 
     if (_mode == Mode.both || _mode == Mode.iotOnly) {
-      _client = new DartivityClient();
-      if (!_client.ready) {
+      // Must have a configuration for iotivity
+      if (iotCfg == null) {
+        throw new DartivityException(DartivityException.NO_IOT_CFG_SPECIFIED);
+      }
+      _iotClient = new DartivityIotivity();
+      await _iotClient.initialise(iotCfg);
+      if (!_iotClient.ready) {
         throw new DartivityException(
             DartivityException.FAILED_TO_INITIALISE_IOTCLIENT);
       }
-      _clientInitialised = true;
-      return _clientInitialised;
+      _iotClientInitialised = true;
+      return _iotClientInitialised;
     }
   }
 
@@ -144,8 +149,8 @@ class Dartivity {
       _messager.close();
     }
 
-    if (_clientInitialised) {
-      _client.close();
+    if (_iotClientInitialised) {
+      _iotClient.close();
     }
   }
 
