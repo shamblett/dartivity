@@ -8,6 +8,11 @@
 part of dartivity;
 
 class DartivityIotivityPlatform {
+
+  /// Function identifiers
+  static const int CFG = 1;
+  static const int FIND_RESOURCE = 2;
+
   /// Send port
   static SendPort _port;
 
@@ -21,16 +26,18 @@ class DartivityIotivityPlatform {
   Future configure(DartivityIotivityCfg cfg) {
     var completer = new Completer();
     var replyPort = new RawReceivePort();
-    var args = new List(9);
-    args[0] = cfg.serviceType;
-    args[1] = cfg.mode;
-    args[2] = cfg.qualityOfService;
-    args[3] = cfg.clientConnectivity;
-    args[4] = cfg.serverConnectivity;
-    args[5] = cfg.ip;
-    args[6] = cfg.port;
-    args[7] = cfg.dbFile;
-    args[8] = replyPort.sendPort;
+    var args = new List(10);
+    args[0] = CFG;
+    args[1] = replyPort.sendPort;
+    args[2] = cfg.serviceType;
+    args[3] = cfg.mode;
+    args[4] = cfg.qualityOfService;
+    args[5] = cfg.clientConnectivity;
+    args[6] = cfg.serverConnectivity;
+    args[7] = cfg.ip;
+    args[8] = cfg.port;
+    args[9] = cfg.dbFile;
+
 
     _servicePort.send(args);
     replyPort.handler = (result) {
