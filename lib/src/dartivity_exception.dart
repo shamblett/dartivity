@@ -30,6 +30,7 @@ class DartivityException implements Exception {
   'Failed to configure the Iotivity platform';
   static const NO_IOT_CFG_SPECIFIED =
   'You must specify a configuration object for iotivity';
+  static const IOT_FIND_RESOURCE_FAILED = 'Could not invoke find resource';
   String _message = 'No Message Supplied';
 
   /**

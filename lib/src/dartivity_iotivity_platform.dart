@@ -45,4 +45,31 @@ class DartivityIotivityPlatform {
 
     return completer.future;
   }
+
+  /// findResource
+  DartivityIotivityResource findResource(String host, String resourceName,
+                                         [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
+
+    var completer = new Completer();
+    var replyPort = new RawReceivePort();
+    var args = new List(4);
+    args[0] = host;
+    args[1] = resourceName;
+    args[2] = connectivity;
+    args[3] = replyPort.sendPort;
+
+    _servicePort.send(args);
+    replyPort.handler = (result) {
+      replyPort.close();
+      if (result != null) {
+        //TODO get the returned values and build a resource class
+        completer.complete(result);
+      } else {
+        completer.completeError(
+            new DartivityException(DartivityException.IOT_FIND_RESOURCE_FAILED));
+      }
+    };
+
+    return completer.future;
+  }
 }
