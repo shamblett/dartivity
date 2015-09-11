@@ -59,11 +59,12 @@ class DartivityIotivityPlatform {
 
     var completer = new Completer();
     var replyPort = new RawReceivePort();
-    var args = new List(4);
-    args[0] = host;
-    args[1] = resourceName;
-    args[2] = connectivity;
-    args[3] = replyPort.sendPort;
+    var args = new List(5);
+    args[0] = FIND_RESOURCE;
+    args[1] = replyPort.sendPort;
+    args[2] = host;
+    args[3] = resourceName;
+    args[4] = connectivity;
 
     _servicePort.send(args);
     replyPort.handler = (result) {

@@ -8,28 +8,35 @@
 part of dartivity;
 
 class DartivityIotivityResource {
+  /// Native pointer
+  int _ptr;
+
   /// Resource identifier
   ///
   /// This will be guaranteed unique for every resource-per-server
   /// independent of how this was discovered.
-  String identifier;
+  String identifier() {
+  }
 
   /// Host
-  String host;
+  String host() {
+  }
 
   /// Uri
-  String uri;
+  String uri() {
+  }
 
   /// Server identifier
   ///
   /// a string representation of the resource's server ID.
   /// This is unique per- server independent on how it was discovered.
-  String sid;
+  String sid() {
+  }
 
-  DartivityIotivityResource(String id, String host, String Uri, String sid) {
-    this.identifier = id;
-    this.host = host;
-    this.uri = uri;
-    this.sid = sid;
+  DartivityIotivityResource(int ptr) {
+    if (ptr ==
+    null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
+
+    this._ptr = ptr;
   }
 }
