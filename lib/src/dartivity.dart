@@ -139,6 +139,15 @@ class Dartivity {
     }
   }
 
+  /// findResource
+  Future<DartivityIotivityResource> findResource(String host, String resourceName,
+                                                 [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
+
+    return _iotClient.findResource(host, resourceName, connectivity);
+
+  }
+
+
   /// close
   ///
   /// Close the client

@@ -39,4 +39,10 @@ class DartivityIotivityResource {
 
     this._ptr = ptr;
   }
+
+  /// toString
+  String toString() {
+
+    return " A found resource";
+  }
 }

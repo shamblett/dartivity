@@ -35,4 +35,9 @@ Future main() async {
     print("Oops Initialse Status is false - ERROR");
     exit(badExitCode);
   }
+
+  // Find a resource
+  String requestUri = "/oic/res";
+  DartivityIotivityResource foundResource = await dartivity.findResource("", requestUri);
+  print(foundResource.toString());
 }

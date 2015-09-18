@@ -37,6 +37,14 @@ class DartivityIotivity {
     return _ready;
   }
 
+  /// findResource
+  Future<DartivityIotivityResource> findResource(String host, String resourceName,
+                                                 [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
+
+    return _platform.findResource(host, resourceName, connectivity);
+
+  }
+
   /// close
   void close() {
   }

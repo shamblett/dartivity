@@ -54,7 +54,7 @@ class DartivityIotivityPlatform {
   }
 
   /// findResource
-  DartivityIotivityResource findResource(String host, String resourceName,
+  Future<DartivityIotivityResource> findResource(String host, String resourceName,
                                          [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
 
     var completer = new Completer();
