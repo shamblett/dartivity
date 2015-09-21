@@ -45,11 +45,14 @@ class Dartivity {
   DartivityMessaging _messager;
 
   /// Receive timer duration
-  final Duration _rxDuration =
-  const Duration(seconds: DartivityCfg.MESS_PULL_TIME_INTERVAL);
+  final Duration _housekeepDuration =
+  const Duration(seconds: DartivityCfg.HOUSEKEEPING_TIME_INTERVAL);
 
-  /// Receive timer
-  Timer _rxTimer;
+  /// Housekeep timer
+  Timer _housekeepTimer;
+
+  /// Housekeep pulse;
+  int _housekeepPulse = 1;
 
   /// Received message stream
   final _messageRxed = new StreamController.broadcast();
@@ -73,7 +76,10 @@ class Dartivity {
   ///
   /// credentialsPath - path to a valid credentials file for messaging
   /// projectName - project name for messaging.
-  Future<bool> initialise([String credentialsPath, String projectName, DartivityIotivityCfg iotCfg]) async {
+  Future<bool> initialise(
+      [String credentialsPath,
+      String projectName,
+      DartivityIotivityCfg iotCfg]) async {
     // Initialise depending on mode
     if (_mode == Mode.both || _mode == Mode.messagingOnly) {
       // Must have a credentials path for messaging
@@ -92,11 +98,7 @@ class Dartivity {
             DartivityException.FAILED_TO_INITIALISE_MESSAGER);
       }
 
-      // Start our recieve timer
-      _rxTimer = new Timer.periodic(_rxDuration, _receive);
-
       _messagerInitialised = true;
-      return _messagerInitialised;
     }
 
     if (_mode == Mode.both || _mode == Mode.iotOnly) {
@@ -111,8 +113,12 @@ class Dartivity {
             DartivityException.FAILED_TO_INITIALISE_IOTCLIENT);
       }
       _iotClientInitialised = true;
-      return _iotClientInitialised;
     }
+
+    // Start our housekeeping timer
+    _housekeepTimer = new Timer.periodic(_housekeepDuration, _houseKeep);
+    return initialised;
+
   }
 
   /// send
@@ -128,7 +134,7 @@ class Dartivity {
   /// _receive
   ///
   /// Message receive method
-  Future _receive(Timer timer) async {
+  Future _receive() async {
     pubsub.Message message = await _messager.receive();
     if (message != null) {
       String messageString = message.asString;
@@ -140,13 +146,26 @@ class Dartivity {
   }
 
   /// findResource
-  Future<DartivityIotivityResource> findResource(String host, String resourceName,
-                                                 [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
-
-    return _iotClient.findResource(host, resourceName, connectivity);
-
+  Future<DartivityIotivityResource> findResource(
+      String host, String resourceName,
+      [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
+    if (initialised) {
+      return _iotClient.findResource(host, resourceName, connectivity);
+    }
+    return null;
   }
 
+  /// House keeping
+  Future _houseKeep(Timer timer) async {
+    if (!initialised) return;
+    if (_mode == Mode.both || _mode == Mode.messagingOnly) {
+      // Check for message rx time
+      if (_housekeepPulse % DartivityCfg.MESS_PULL_TIME_INTERVAL == 0) {
+        await _receive();
+      }
+    }
+    _housekeepPulse++;
+  }
 
   /// close
   ///
@@ -154,7 +173,7 @@ class Dartivity {
   void close() {
     // Messaging
     if (_messagerInitialised) {
-      _rxTimer.cancel();
+      _housekeepTimer.cancel();
       _messager.close();
     }
 

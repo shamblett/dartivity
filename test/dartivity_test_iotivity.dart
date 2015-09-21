@@ -37,7 +37,14 @@ Future main() async {
   }
 
   // Find a resource
+
+  // None found
   String requestUri = "/oic/res";
-  DartivityIotivityResource foundResource = await dartivity.findResource("", requestUri);
-  print(foundResource.toString());
+  DartivityIotivityResource foundResource =
+  await dartivity.findResource("", requestUri);
+  if (foundResource != null) {
+    print(foundResource.toString());
+  } else {
+    print("<< Dartivity Test Harness >> - No resource found");
+  }
 }

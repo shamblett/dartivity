@@ -70,7 +70,10 @@ class DartivityIotivityPlatform {
     replyPort.handler = (result) {
       replyPort.close();
       if (result != null) {
-        //TODO get the returned values and build a resource class
+        if (result is bool) {
+          // No resource found, return null
+          return null;
+        }
         completer.complete(result);
       } else {
         completer.completeError(
