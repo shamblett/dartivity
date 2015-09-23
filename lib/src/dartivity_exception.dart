@@ -33,6 +33,8 @@ class DartivityException implements Exception {
   static const IOT_FIND_RESOURCE_FAILED = 'Could not invoke find resource';
   static const NULL_NATIVE_PTR =
   'You must supply a native pointer for this class';
+  static const IOT_RESOURCE_ID_FAILED =
+  'Failed to get the resource idetntifier';
   String _message = 'No Message Supplied';
 
   /**

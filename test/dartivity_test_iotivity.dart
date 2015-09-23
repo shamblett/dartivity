@@ -55,4 +55,9 @@ Future main() async {
   } else {
     print("Dartivity - Dartivity Test Harness >> - No resource found");
   }
+
+  // Unique Id
+  print("Dartivity - Dartivity Test Harness >> doing unique id");
+  String id = await foundResource.identifier();
+  print("Dartivity - Dartivity Test Harness >> Resource unique id is ${id} ");
 }
