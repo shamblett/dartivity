@@ -8,13 +8,17 @@
 part of dartivity;
 
 class DartivityIotivityCfg {
-  /// Service type
-  int serviceType = ServiceType_InProc;
+  /// Service type, always ServiceType_InProc
+  int _serviceType = ServiceType_InProc;
+
+  int get serviceType => _serviceType;
   static const int ServiceType_InProc = 0;
   static const int ServiceType_OutOfProc = 1;
 
-  /// Host Mode of Operation
-  int mode = ModeType_Client;
+  /// Host Mode of Operation, always ModeType_Client
+  int _mode = ModeType_Client;
+
+  int get mode => _mode;
   static const int ModeType_Server = 0;
   static const int ModeType_Client = 1;
   static const int ModeType_Both = 2;
@@ -38,7 +42,6 @@ class DartivityIotivityCfg {
   static const int QualityOfService_NaQos = 3;
 
   /// Connectivity type
-  int serverConnectivity = OCConnectivityType_Ct_Default;
   int clientConnectivity = OCConnectivityType_Ct_Default;
   static const int OCConnectivityType_Ct_Default = 0;
   static const int OCConnectivityType_Ct_Adapter_IP = 1 << 16;
@@ -62,23 +65,14 @@ class DartivityIotivityCfg {
   /// Port
   int port = 0;
 
-  /// Database file
-  String dbFile = "";
-
-  DartivityIotivityCfg(int serviceType, int mode,
-                       {int qos: QualityOfService_NaQos,
-                       int serverConnectivity: OCConnectivityType_Ct_Default,
+  DartivityIotivityCfg({int qos: QualityOfService_NaQos,
                        clientConnectivity: OCConnectivityType_Ct_Default,
                        String ipAddress: "0.0.0.0",
-                       int port: 0,
-                       String dbFile: ""}) {
-    this.serviceType = serviceType;
-    this.mode = mode;
+                       int port: 0}) {
+
     this.qualityOfService = qos;
-    this.serverConnectivity = serverConnectivity;
     this.clientConnectivity = clientConnectivity;
     this.ip = ipAddress;
     this.port = port;
-    this.dbFile = dbFile;
   }
 }

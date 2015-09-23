@@ -8,7 +8,6 @@
 part of dartivity;
 
 class DartivityIotivityPlatform {
-
   /// Function identifiers
   static const int CFG = 1;
   static const int FIND_RESOURCE = 2;
@@ -33,11 +32,8 @@ class DartivityIotivityPlatform {
     args[3] = cfg.mode;
     args[4] = cfg.qualityOfService;
     args[5] = cfg.clientConnectivity;
-    args[6] = cfg.serverConnectivity;
-    args[7] = cfg.ip;
-    args[8] = cfg.port;
-    args[9] = cfg.dbFile;
-
+    args[6] = cfg.ip;
+    args[7] = cfg.port;
 
     _servicePort.send(args);
     replyPort.handler = (result) {
@@ -54,9 +50,9 @@ class DartivityIotivityPlatform {
   }
 
   /// findResource
-  Future<DartivityIotivityResource> findResource(String host, String resourceName,
-                                         [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
-
+  Future<DartivityIotivityResource> findResource(
+      String host, String resourceName,
+      [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
     var completer = new Completer();
     var replyPort = new RawReceivePort();
     var args = new List(5);
@@ -72,12 +68,15 @@ class DartivityIotivityPlatform {
       if (result != null) {
         if (result is bool) {
           // No resource found, return null
-          return null;
+          completer.complete(null);
         }
-        completer.complete(result);
+        if (result is int) {
+          DartivityIotivityResource resource = new DartivityIotivityResource(result);
+          completer.complete(resource);
+        }
       } else {
-        completer.completeError(
-            new DartivityException(DartivityException.IOT_FIND_RESOURCE_FAILED));
+        completer.completeError(new DartivityException(
+            DartivityException.IOT_FIND_RESOURCE_FAILED));
       }
     };
 

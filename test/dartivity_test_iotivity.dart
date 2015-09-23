@@ -21,11 +21,7 @@ Future main() async {
 
   // Initialise
   DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
-      DartivityIotivityCfg.ServiceType_InProc,
-      DartivityIotivityCfg.ModeType_Both,
-      qos: DartivityIotivityCfg.QualityOfService_LowQos,
-      dbFile:
-      "/home/steve/Development/iot/iotivity/sources/git/resource/examples/oic_svr_db_client.json");
+      qos: DartivityIotivityCfg.QualityOfService_LowQos);
 
   await dartivity.initialise("", "", iotCfg);
 
@@ -45,6 +41,8 @@ Future main() async {
   if (foundResource != null) {
     print(foundResource.toString());
   } else {
-    print("<< Dartivity Test Harness >> - No resource found");
+    print("Dartivity - Dartivity Test Harness >> - No resource found");
   }
+
+
 }
