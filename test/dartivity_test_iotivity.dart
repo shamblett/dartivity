@@ -32,10 +32,13 @@ Future main() async {
     exit(badExitCode);
   }
 
+  // At this point we need an iotivity server, see thhe simpleserver in
+  // resource/examples from the iotivity code and start it.
+
   // Find a resource
 
   // None found
-  String requestUri = "/oic/res";
+  String requestUri = "/oic11/res";
   DartivityIotivityResource foundResource =
   await dartivity.findResource("", requestUri);
   if (foundResource != null) {
@@ -44,5 +47,12 @@ Future main() async {
     print("Dartivity - Dartivity Test Harness >> - No resource found");
   }
 
-
+  // Should find one
+  requestUri = "/oic/res";
+  foundResource = await dartivity.findResource("", requestUri);
+  if (foundResource != null) {
+    print(foundResource.toString());
+  } else {
+    print("Dartivity - Dartivity Test Harness >> - No resource found");
+  }
 }
