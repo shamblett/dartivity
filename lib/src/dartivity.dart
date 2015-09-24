@@ -173,13 +173,14 @@ class Dartivity {
   void close() {
     // Messaging
     if (_messagerInitialised) {
-      _housekeepTimer.cancel();
       _messager.close();
     }
 
     if (_iotClientInitialised) {
       _iotClient.close();
     }
+
+    _housekeepTimer.cancel();
   }
 
   ///_filter

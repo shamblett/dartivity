@@ -66,20 +66,20 @@ class DartivityIotivityPlatform {
     replyPort.handler = (result) {
       replyPort.close();
       if (result != null) {
-        if (result is bool) {
-          // No resource found, return null
+        if (result is List) {
+          // A resource, passed back are ptr and unique id
+          DartivityIotivityResource resource =
+          new DartivityIotivityResource(result[0], result[1]);
+          completer.complete(resource);
+        } else {
+          // Anything else means not found
           completer.complete(null);
         }
-        if (result is int) {
-          DartivityIotivityResource resource = new DartivityIotivityResource(result);
-          completer.complete(resource);
-        }
       } else {
-        completer.completeError(new DartivityException(
-            DartivityException.IOT_FIND_RESOURCE_FAILED));
+        // Null resource passed by iotivity, treat as not found.
+        completer.complete(null);
       }
     };
-
     return completer.future;
   }
 }

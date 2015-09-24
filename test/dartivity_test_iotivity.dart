@@ -44,20 +44,24 @@ Future main() async {
   if (foundResource != null) {
     print(foundResource.toString());
   } else {
-    print("Dartivity - Dartivity Test Harness >> - No resource found");
+    print("Dartivity - Dartivity Test Harness >> - No resource found OK PASS");
   }
 
   // Should find one
   requestUri = "/oic/res";
   foundResource = await dartivity.findResource("", requestUri);
-  if (foundResource != null) {
-    print(foundResource.toString());
-  } else {
-    print("Dartivity - Dartivity Test Harness >> - No resource found");
+  if (foundResource = null) {
+    print("Dartivity - Dartivity Test Harness >> - No resource found FAIL");
   }
 
   // Unique Id
-  print("Dartivity - Dartivity Test Harness >> doing unique id");
-  String id = await foundResource.identifier();
+  String id = foundResource.identifier;
   print("Dartivity - Dartivity Test Harness >> Resource unique id is ${id} ");
+
+  // Sid
+  String sid = foundResource.sid;
+  print("Dartivity - Dartivity Test Harness >> Resource sid is ${sid} ");
+
+  // Close down
+  dartivity.close();
 }

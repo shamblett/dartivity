@@ -30,11 +30,9 @@ class DartivityException implements Exception {
   'Failed to configure the Iotivity platform';
   static const NO_IOT_CFG_SPECIFIED =
   'You must specify a configuration object for iotivity';
-  static const IOT_FIND_RESOURCE_FAILED = 'Could not invoke find resource';
   static const NULL_NATIVE_PTR =
   'You must supply a native pointer for this class';
-  static const IOT_RESOURCE_ID_FAILED =
-  'Failed to get the resource idetntifier';
+  static const IOT_RESOURCE_CALL_FAILED = 'Failed to get resource data';
   String _message = 'No Message Supplied';
 
   /**

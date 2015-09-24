@@ -25,7 +25,12 @@ class DartivityIotivityResource {
   ///
   /// This will be guaranteed unique for every resource-per-server
   /// independent of how this was discovered.
-  Future<String> identifier() {
+  String _identifier;
+
+  String get identifier => _identifier;
+
+  /// Host
+  String host() {
 
     var completer = new Completer();
     var replyPort = new RawReceivePort();
@@ -41,15 +46,11 @@ class DartivityIotivityResource {
         completer.complete(result);
       } else {
         completer.completeError(
-            new DartivityException(DartivityException.IOT_RESOURCE_ID_FAILED));
+            new DartivityException(DartivityException.IOT_RESOURCE_CALL_FAILED));
       }
     };
 
     return completer.future;
-  }
-
-  /// Host
-  String host() {
   }
 
   /// Uri
@@ -60,19 +61,26 @@ class DartivityIotivityResource {
   ///
   /// a string representation of the resource's server ID.
   /// This is unique per- server independent on how it was discovered.
-  String sid() {
-  }
+  String _sid;
 
-  DartivityIotivityResource(int ptr) {
+  String get sid => _sid;
+
+  DartivityIotivityResource(int ptr, String id) {
     if (ptr ==
     null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
     this._ptr = ptr;
+    this._identifier = id;
+
+    // Create the sid from the id
+    var tmp = _identifier.split("/");
+    this._sid = tmp[0];
+
   }
 
   /// toString
   String toString() {
 
-    return " DartivityIotivityResource:: A found resource";
+    return _identifier;
   }
 }
