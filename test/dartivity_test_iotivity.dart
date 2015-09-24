@@ -50,7 +50,7 @@ Future main() async {
   // Should find one
   requestUri = "/oic/res";
   foundResource = await dartivity.findResource("", requestUri);
-  if (foundResource = null) {
+  if (foundResource == null) {
     print("Dartivity - Dartivity Test Harness >> - No resource found FAIL");
   }
 
