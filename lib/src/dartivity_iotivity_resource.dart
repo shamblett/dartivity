@@ -12,7 +12,8 @@ class DartivityIotivityResource {
   int _ptr;
 
   /// Function identifiers
-  static const int ID = 1;
+  static const int _HOST = 1;
+  static const int _URI = 2;
 
   /// Send port
   static SendPort _port;
@@ -30,12 +31,12 @@ class DartivityIotivityResource {
   String get identifier => _identifier;
 
   /// Host
-  String host() {
+  Future<String> host() {
 
     var completer = new Completer();
     var replyPort = new RawReceivePort();
     var args = new List(3);
-    args[0] = ID;
+    args[0] = _HOST;
     args[1] = replyPort.sendPort;
     args[2] = _ptr;
 
@@ -54,8 +55,33 @@ class DartivityIotivityResource {
   }
 
   /// Uri
-  String uri() {
-  }
+  String _uri;
+
+  String get uri => _uri;
+
+  /*Future<String> uri() {
+
+    var completer = new Completer();
+    var replyPort = new RawReceivePort();
+    var args = new List(3);
+    args[0] = _URI;
+    args[1] = replyPort.sendPort;
+    args[2] = _ptr;
+
+    _servicePort.send(args);
+    replyPort.handler = (result) {
+      replyPort.close();
+      if (result != null) {
+        completer.complete(result);
+      } else {
+        completer.completeError(
+            new DartivityException(DartivityException.IOT_RESOURCE_CALL_FAILED));
+      }
+    };
+
+    return completer.future;
+
+  }*/
 
   /// Server identifier
   ///
@@ -65,12 +91,13 @@ class DartivityIotivityResource {
 
   String get sid => _sid;
 
-  DartivityIotivityResource(int ptr, String id) {
+  DartivityIotivityResource(int ptr, String id, String uri) {
     if (ptr ==
     null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
     this._ptr = ptr;
     this._identifier = id;
+    this._uri = uri;
 
     // Create the sid from the id
     var tmp = _identifier.split("/");

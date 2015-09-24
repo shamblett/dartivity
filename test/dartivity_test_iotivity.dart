@@ -62,6 +62,14 @@ Future main() async {
   String sid = foundResource.sid;
   print("Dartivity - Dartivity Test Harness >> Resource sid is ${sid} ");
 
+  // Host
+  String host = await foundResource.host();
+  print("Dartivity - Dartivity Test Harness >> Resource host is ${host} ");
+
+  // URI
+  String uri = foundResource.uri;
+  print("Dartivity - Dartivity Test Harness >> Resource uri is ${uri} ");
+
   // Close down
   dartivity.close();
 }

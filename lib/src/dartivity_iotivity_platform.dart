@@ -9,8 +9,8 @@ part of dartivity;
 
 class DartivityIotivityPlatform {
   /// Function identifiers
-  static const int CFG = 1;
-  static const int FIND_RESOURCE = 2;
+  static const int _CFG = 1;
+  static const int _FIND_RESOURCE = 2;
 
   /// Send port
   static SendPort _port;
@@ -26,7 +26,7 @@ class DartivityIotivityPlatform {
     var completer = new Completer();
     var replyPort = new RawReceivePort();
     var args = new List(10);
-    args[0] = CFG;
+    args[0] = _CFG;
     args[1] = replyPort.sendPort;
     args[2] = cfg.serviceType;
     args[3] = cfg.mode;
@@ -56,7 +56,7 @@ class DartivityIotivityPlatform {
     var completer = new Completer();
     var replyPort = new RawReceivePort();
     var args = new List(5);
-    args[0] = FIND_RESOURCE;
+    args[0] = _FIND_RESOURCE;
     args[1] = replyPort.sendPort;
     args[2] = host;
     args[3] = resourceName;
@@ -67,9 +67,9 @@ class DartivityIotivityPlatform {
       replyPort.close();
       if (result != null) {
         if (result is List) {
-          // A resource, passed back are ptr and unique id
+          // A resource, passed back are ptr, unique id and uri
           DartivityIotivityResource resource =
-          new DartivityIotivityResource(result[0], result[1]);
+          new DartivityIotivityResource(result[0], result[1], result[2]);
           completer.complete(resource);
         } else {
           // Anything else means not found
