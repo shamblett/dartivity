@@ -71,7 +71,19 @@ Future main() async {
   print("Dartivity - Dartivity Test Harness >> Resource uri is ${uri} ");
 
   // Resource types
-  //List<String> types =foundResource.resourceTypes();
+  List<String> resTypes = foundResource.resourceTypes;
+  print(
+      "Dartivity - Dartivity Test Harness >> Resource Types are ${resTypes.toString()} ");
+
+  // Interface types
+  List<String> intTypes = foundResource.interfaceTypes;
+  print(
+      "Dartivity - Dartivity Test Harness >> Interface Types are ${intTypes.toString()} ");
+
+  // Observable
+  bool observable = foundResource.observable;
+  print(
+      "Dartivity - Dartivity Test Harness >> is resource observable ${observable.toString()}");
 
   // Close down
   dartivity.close();

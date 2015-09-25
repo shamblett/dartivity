@@ -44,36 +44,26 @@ class DartivityIotivityResource {
   /// a string representation of the resource's server ID.
   /// This is unique per- server independent on how it was discovered.
   String _sid;
-
   String get sid => _sid;
 
   /// Resource types
-  Future<List<String>> resourceTypes() {
+  List<String> _resourceTypes;
 
-    var completer = new Completer();
-    var replyPort = new RawReceivePort();
-    var args = new List(3);
-    args[0] = _TYPES;
-    args[1] = replyPort.sendPort;
-    args[2] = _ptr;
+  List<String> get resourceTypes => _resourceTypes;
 
-    _servicePort.send(args);
-    replyPort.handler = (result) {
-      replyPort.close();
-      if (result != null) {
-        completer.complete(result);
-      } else {
-        completer.completeError(
-            new DartivityException(DartivityException.IOT_RESOURCE_CALL_FAILED));
-      }
-    };
+  /// Interface types
+  List<String> _interfaceTypes;
 
-    return completer.future;
+  List<String> get interfaceTypes => _interfaceTypes;
 
-  }
+  /// Observable
+  bool _observable = false;
+
+  bool get observable => _observable;
 
   /// Construction
-  DartivityIotivityResource(int ptr, String id, String uri, String host) {
+  DartivityIotivityResource(int ptr, String id, String uri, String host,
+                            String resTypes, String intTypes, bool observable) {
     if (ptr ==
     null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
@@ -81,16 +71,23 @@ class DartivityIotivityResource {
     this._identifier = id;
     this._uri = uri;
     this._host = host;
+    this._observable = observable;
 
     // Create the sid from the id
     var tmp = _identifier.split("/");
     this._sid = tmp[0];
 
+    // Resource types
+    _resourceTypes = resTypes.split("??");
+    _resourceTypes.removeLast();
+
+    // Interface types
+    _interfaceTypes = intTypes.split("??");
+    _interfaceTypes.removeLast();
   }
 
   /// toString
   String toString() {
-
     return _identifier;
   }
 

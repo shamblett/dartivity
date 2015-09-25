@@ -67,9 +67,16 @@ class DartivityIotivityPlatform {
       replyPort.close();
       if (result != null) {
         if (result is List) {
-          // A resource, passed back are ptr, unique id, uri, host
+          // A resource, passed back are ptr, unique id, uri, host, resource types
+          // interface types and observable
           DartivityIotivityResource resource = new DartivityIotivityResource(
-              result[0], result[1], result[2], result[3]);
+              result[0],
+              result[1],
+              result[2],
+              result[3],
+              result[4],
+              result[5],
+              result[6]);
           completer.complete(resource);
         } else {
           // Anything else means not found
