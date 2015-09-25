@@ -13,7 +13,7 @@ class DartivityIotivityResource {
 
   /// Function identifiers
   static const int _HOST = 1;
-  static const int _URI = 2;
+  static const int _TYPES = 2;
 
   /// Send port
   static SendPort _port;
@@ -31,57 +31,13 @@ class DartivityIotivityResource {
   String get identifier => _identifier;
 
   /// Host
-  Future<String> host() {
+  String _host;
 
-    var completer = new Completer();
-    var replyPort = new RawReceivePort();
-    var args = new List(3);
-    args[0] = _HOST;
-    args[1] = replyPort.sendPort;
-    args[2] = _ptr;
-
-    _servicePort.send(args);
-    replyPort.handler = (result) {
-      replyPort.close();
-      if (result != null) {
-        completer.complete(result);
-      } else {
-        completer.completeError(
-            new DartivityException(DartivityException.IOT_RESOURCE_CALL_FAILED));
-      }
-    };
-
-    return completer.future;
-  }
+  String get host => _host;
 
   /// Uri
   String _uri;
-
   String get uri => _uri;
-
-  /*Future<String> uri() {
-
-    var completer = new Completer();
-    var replyPort = new RawReceivePort();
-    var args = new List(3);
-    args[0] = _URI;
-    args[1] = replyPort.sendPort;
-    args[2] = _ptr;
-
-    _servicePort.send(args);
-    replyPort.handler = (result) {
-      replyPort.close();
-      if (result != null) {
-        completer.complete(result);
-      } else {
-        completer.completeError(
-            new DartivityException(DartivityException.IOT_RESOURCE_CALL_FAILED));
-      }
-    };
-
-    return completer.future;
-
-  }*/
 
   /// Server identifier
   ///
@@ -91,13 +47,40 @@ class DartivityIotivityResource {
 
   String get sid => _sid;
 
-  DartivityIotivityResource(int ptr, String id, String uri) {
+  /// Resource types
+  Future<List<String>> resourceTypes() {
+
+    var completer = new Completer();
+    var replyPort = new RawReceivePort();
+    var args = new List(3);
+    args[0] = _TYPES;
+    args[1] = replyPort.sendPort;
+    args[2] = _ptr;
+
+    _servicePort.send(args);
+    replyPort.handler = (result) {
+      replyPort.close();
+      if (result != null) {
+        completer.complete(result);
+      } else {
+        completer.completeError(
+            new DartivityException(DartivityException.IOT_RESOURCE_CALL_FAILED));
+      }
+    };
+
+    return completer.future;
+
+  }
+
+  /// Construction
+  DartivityIotivityResource(int ptr, String id, String uri, String host) {
     if (ptr ==
     null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
     this._ptr = ptr;
     this._identifier = id;
     this._uri = uri;
+    this._host = host;
 
     // Create the sid from the id
     var tmp = _identifier.split("/");
@@ -109,5 +92,10 @@ class DartivityIotivityResource {
   String toString() {
 
     return _identifier;
+  }
+
+  /// Equality
+  bool operator ==(String other) {
+    return (other.identifier == _identifier);
   }
 }
