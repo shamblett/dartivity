@@ -63,7 +63,7 @@ class DartivityIotivityResource {
 
   /// Construction
   DartivityIotivityResource(int ptr, String id, String uri, String host,
-                            String resTypes, String intTypes, bool observable) {
+                            List<String> resTypes, List<String> intTypes, bool observable) {
     if (ptr ==
     null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
@@ -72,18 +72,12 @@ class DartivityIotivityResource {
     this._uri = uri;
     this._host = host;
     this._observable = observable;
+    this._resourceTypes = resTypes;
+    this._interfaceTypes = intTypes;
 
     // Create the sid from the id
     var tmp = _identifier.split("/");
     this._sid = tmp[0];
-
-    // Resource types
-    _resourceTypes = resTypes.split("??");
-    _resourceTypes.removeLast();
-
-    // Interface types
-    _interfaceTypes = intTypes.split("??");
-    _interfaceTypes.removeLast();
   }
 
   /// toString
