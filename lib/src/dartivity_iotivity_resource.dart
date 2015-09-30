@@ -89,4 +89,33 @@ class DartivityIotivityResource {
   bool operator ==(String other) {
     return (other.identifier == _identifier);
   }
+
+  static const String MAP_IDENTIFIER = "Identifier";
+  static const String MAP_URI = "Uri";
+  static const String MAP_HOST = "Host";
+  static const String MAP_OBSERVABLE = "Observeable";
+  static const String MAP_RESOURCE_TYPES = "ResTypes";
+  static const String MAP_INTERFACE_TYPES = "IntTypes";
+
+  /// toMap
+  Map<String, Dynamic> toMap() {
+    Map<String, Dynamic> returnMap = new Map<String, Dynamic>();
+
+    returnMap[MAP_IDENTIFIER] = this._identifier;
+    returnMap[MAP_URI] = this._uri;
+    returnMap[MAP_HOST] = this._host;
+    returnMap[MAP_OBSERVABLE] = this._observable;
+    returnMap[MAP_RESOURCE_TYPES] = this._resourceTypes;
+    returnMap[MAP_INTERFACE_TYPES] = this._interfaceTypes;
+
+    return returnMap;
+  }
+
+  /// toJson
+  String toJson() {
+
+    jsonobject.JsonObject temp = new jsonobject.JsonObject.fromMap(toMap());
+    return temp.toString();
+
+  }
 }

@@ -85,6 +85,11 @@ Future main() async {
   print(
       "Dartivity - Dartivity Test Harness >> is resource observable ${observable.toString()}");
 
+  // To Json
+  String json = foundResource.toJson();
+  print(
+      "Dartivity - Dartivity Test Harness >> As JSON ${json}");
+
   // Close down
   dartivity.close();
 }
