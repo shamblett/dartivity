@@ -86,7 +86,7 @@ class DartivityIotivityResource {
   }
 
   /// Equality
-  bool operator ==(String other) {
+  bool operator ==(DartivityIotivityResource other) {
     return (other.identifier == _identifier);
   }
 
@@ -98,8 +98,8 @@ class DartivityIotivityResource {
   static const String MAP_INTERFACE_TYPES = "IntTypes";
 
   /// toMap
-  Map<String, Dynamic> toMap() {
-    Map<String, Dynamic> returnMap = new Map<String, Dynamic>();
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> returnMap = new Map<String, dynamic>();
 
     returnMap[MAP_IDENTIFIER] = this._identifier;
     returnMap[MAP_URI] = this._uri;

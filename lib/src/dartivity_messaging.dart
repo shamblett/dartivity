@@ -86,6 +86,7 @@ class DartivityMessaging {
         return pullEvent.message;
       }
     }
+    return null;
   }
 
   /// send

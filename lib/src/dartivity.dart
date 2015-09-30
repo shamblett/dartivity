@@ -118,17 +118,17 @@ class Dartivity {
     // Start our housekeeping timer
     _housekeepTimer = new Timer.periodic(_housekeepDuration, _houseKeep);
     return initialised;
-
   }
 
   /// send
   ///
   /// Send a Dartivity Message
-  void send(DartivityMessage message) {
-    if (!initialised) return;
-    if (message == null) return;
+  DartivityMessage send(DartivityMessage message) {
+    if (!initialised) return null;
+    if (message == null) return null;
     String jsonMessage = message.toJSON();
     _messager.send(jsonMessage);
+    return message;
   }
 
   /// _receive
@@ -140,8 +140,24 @@ class Dartivity {
       String messageString = message.asString;
       DartivityMessage dartivityMessage =
       new DartivityMessage.fromJSON(messageString);
+
+      // Filter ones we don't want to process, always add to the message
+      // event stream for external listeners.
       DartivityMessage filteredMessage = _filter(dartivityMessage);
-      if (filteredMessage != null) _messageRxed.add(filteredMessage);
+      if (filteredMessage != null) {
+        _messageRxed.add(filteredMessage);
+
+        // Default processing for whoHas messages
+        if (filteredMessage.type == Type.whoHas) {
+          DartivityIotivityResource resource = await findResource(
+              filteredMessage.host, filteredMessage.resourceName);
+          if (resource != null) {
+            DartivityMessage iHave = new DartivityMessage.iHave(id,
+            filteredMessage.source, resource.identifier, resource.toMap());
+            await send(iHave);
+          }
+        }
+      }
     }
   }
 
@@ -149,7 +165,7 @@ class Dartivity {
   Future<DartivityIotivityResource> findResource(
       String host, String resourceName,
       [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
-    if (initialised) {
+    if (_iotClientInitialised) {
       return _iotClient.findResource(host, resourceName, connectivity);
     }
     return null;

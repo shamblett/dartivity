@@ -16,6 +16,7 @@ class DartivityMessage {
 
   /// Dartivity Destination
   String destination;
+  static const DESTINATION_GLOBAL = "global";
 
   /// Iotivity resource name, also known as the resource Uri
   /// example is oic/res
@@ -25,7 +26,7 @@ class DartivityMessage {
   String host;
 
   /// Iotivity resource details
-  Map<String, String> resourceDetails;
+  Map<String, dynamic> resourceDetails;
 
   DartivityMessage();
 
@@ -35,11 +36,12 @@ class DartivityMessage {
     }
     this.type = Type.whoHas;
     this.source = source;
+    this.destination = DESTINATION_GLOBAL;
     this.resourceName = resourceName;
   }
 
   DartivityMessage.iHave(String source, String destination, String resourceName,
-                         Map resourceDetails) {
+                         Map<String, dynamic> resourceDetails) {
     if ((source == null) ||
     (resourceDetails == null) ||
     (destination == null) ||
@@ -53,21 +55,6 @@ class DartivityMessage {
     this.resourceDetails = resourceDetails;
   }
 
-  DartivityMessage.details(String source, String destination, String resourceName,
-                           Map resourceDetails) {
-    if ((source == null) ||
-    (resourceDetails == null) ||
-    (destination == null) ||
-    (resourceName == null)) {
-      throw new DartivityException(
-          DartivityException.INVALID_RESOURCE_DETAILS_MESSAGE);
-    }
-    this.type = Type.resourceDetails;
-    this.source = source;
-    this.destination = destination;
-    this.resourceName = resourceName;
-    this.resourceDetails = resourceDetails;
-  }
 
   DartivityMessage.fromJSON(String input) {
     if (input == null) {

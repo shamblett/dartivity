@@ -52,6 +52,8 @@ Future main() async {
   // Send a couple of whoHas messages
   DartivityMessage whoHas1 =
   new DartivityMessage.whoHas(dartivity.id, '/core/light');
+  String whoHas1Json = whoHas1.toJSON();
+  print("Who Has 1 >> ${whoHas1Json}");
   dartivity.send(whoHas1);
   DartivityMessage whoHas2 =
   new DartivityMessage.whoHas(dartivity.id, '/core/thermostat');
@@ -69,21 +71,16 @@ Future main() async {
       dartivity.id, 'not us', '/core/therm/1', myDevice1);
   dartivity.send(iHave1);
 
-  // And a resource details
-  DartivityMessage details = new DartivityMessage.details(
-      dartivity.id, dartivity.id, '/core/therm/1', myDevice);
-  dartivity.send(details);
-
   // Listen for our messages until our timer pops
   var subscription;
   int messCount = 0;
 
   void timerCallback() {
     print("Closing the client");
-    if (messCount == 4) {
-      print("Message count is 4 - OK");
+    if (messCount == 3) {
+      print("Message count is 3 - OK");
     } else {
-      print("Message count is ${messCount} - ERROR, should be 4");
+      print("Message count is ${messCount} - ERROR, should be 3");
       exit(badExitCode);
     }
     subscription.cancel();
