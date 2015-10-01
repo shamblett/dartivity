@@ -154,7 +154,7 @@ class Dartivity {
               filteredMessage.host, filteredMessage.resourceName);
           if (resource != null) {
             DartivityMessage iHave = new DartivityMessage.iHave(id,
-            filteredMessage.source, resource.identifier, resource.toMap());
+            filteredMessage.source, resource.identifier, resource.toMap(), "");
             await send(iHave);
             return completer.complete();
           }

@@ -87,9 +87,8 @@ class DartivityMessage {
       jsonobj.containsKey('destination') ? jsonobj.destination : "";
       _resourceName =
       jsonobj.containsKey('resourceName') ? jsonobj.resourceName : "";
-      _resourceDetails = jsonobj.containsKey('resourceDetails')
-      ? jsonobj.resourceDetails
-      : {};
+      _resourceDetails =
+      jsonobj.containsKey('resourceDetails') ? jsonobj.resourceDetails : {};
     }
   }
 
