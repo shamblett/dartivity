@@ -8,12 +8,6 @@
 part of dartivity;
 
 class DartivityIotivityResource {
-  /// Native pointer
-  int _ptr;
-
-  /// Function identifiers
-  static const int _HOST = 1;
-  static const int _TYPES = 2;
 
   /// Send port
   static SendPort _port;
@@ -67,7 +61,6 @@ class DartivityIotivityResource {
     if (ptr ==
     null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
-    this._ptr = ptr;
     this._identifier = id;
     this._uri = uri;
     this._host = host;

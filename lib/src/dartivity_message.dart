@@ -9,83 +9,104 @@ part of dartivity;
 
 class DartivityMessage {
   /// Type
-  Type type;
+  Type _type = Type.unknown;
+
+  Type get type => _type;
 
   /// Dartivity source
-  String source;
+  String _source = "";
+
+  String get source => _source;
 
   /// Dartivity Destination
-  String destination;
-  static const DESTINATION_GLOBAL = "global";
+  String _destination = "";
+
+  String get destination => _destination;
+
+  // Source/destination constants
+  static const ADDRESS_GLOBAL = "global";
+  static const ADDRESS_WEB_SERVER = "web-server";
 
   /// Iotivity resource name, also known as the resource Uri
   /// example is oic/res
-  String resourceName;
+  String _resourceName = "";
+
+  String get resourceName => _resourceName;
 
   /// Iotivity resource host
-  String host;
+  String _host = "";
+
+  String get host => _host;
 
   /// Iotivity resource details
-  Map<String, dynamic> resourceDetails;
+  Map<String, dynamic> _resourceDetails = {};
 
-  DartivityMessage();
+  Map<String, dynamic> get resourceDetails => _resourceDetails;
 
-  DartivityMessage.whoHas(String source, String resourceName) {
-    if ((source == null) || (resourceName == null)) {
+  DartivityMessage.whoHas(String source, String resourceName,
+                          [String host = ""]) {
+    if ((source == null) || (resourceName == null) || (host == null)) {
       throw new DartivityException(DartivityException.INVALID_WHOHAS_MESSAGE);
     }
-    this.type = Type.whoHas;
-    this.source = source;
-    this.destination = DESTINATION_GLOBAL;
-    this.resourceName = resourceName;
+    _type = Type.whoHas;
+    _source = source;
+    _destination = ADDRESS_GLOBAL;
+    _resourceName = resourceName;
+    _host = host;
   }
 
   DartivityMessage.iHave(String source, String destination, String resourceName,
-                         Map<String, dynamic> resourceDetails) {
+                         Map<String, dynamic> resourceDetails, String host) {
     if ((source == null) ||
     (resourceDetails == null) ||
     (destination == null) ||
-    (resourceName == null)) {
+    (resourceName == null) ||
+    (host == null)) {
       throw new DartivityException(DartivityException.INVALID_IHAVE_MESSAGE);
     }
-    this.type = Type.iHave;
-    this.source = source;
-    this.destination = destination;
-    this.resourceName = resourceName;
-    this.resourceDetails = resourceDetails;
+    _type = Type.iHave;
+    _source = source;
+    _destination = destination;
+    _resourceName = resourceName;
+    _resourceDetails = resourceDetails;
+    _host = host;
   }
 
-
+  /// fromJson
   DartivityMessage.fromJSON(String input) {
     if (input == null) {
-      type = Type.unknown;
+      _type = Type.unknown;
     } else {
       jsonobject.JsonObject jsonobj =
       new jsonobject.JsonObject.fromJsonString(input);
       List<Type> types = Type.values;
-      type = jsonobj.containsKey('type') ? types[jsonobj.type] : Type.unknown;
-      host = jsonobj.containsKey('host') ? jsonobj.host : "";
-      source = jsonobj.containsKey('source') ? jsonobj.source : "";
-      destination =
+      _type = jsonobj.containsKey('type') ? types[jsonobj.type] : Type.unknown;
+      _host = jsonobj.containsKey('host') ? jsonobj.host : "";
+      _source = jsonobj.containsKey('source') ? jsonobj.source : "";
+      _destination =
       jsonobj.containsKey('destination') ? jsonobj.destination : "";
-      resourceName = jsonobj.containsKey('resourceName') ? jsonobj.resourceName : "";
-      resourceDetails = jsonobj.containsKey('resourceDetails')
+      _resourceName =
+      jsonobj.containsKey('resourceName') ? jsonobj.resourceName : "";
+      _resourceDetails = jsonobj.containsKey('resourceDetails')
       ? jsonobj.resourceDetails
-      : null;
+      : {};
     }
   }
 
+  /// fromJsonObject
   DartivityMessage.fromJSONObject(jsonobject.JsonObject input) {
     if (input == null) {
-      type = Type.unknown;
+      _type = Type.unknown;
     } else {
       List<Type> types = Type.values;
-      type = input.containsKey('type') ? types[input.type] : Type.unknown;
-      source = input.containsKey('source') ? input.source : null;
-      destination = input.containsKey('destination') ? input.destination : null;
-      resourceName = input.containsKey('resourceName') ? input.resourceName : null;
-      resourceDetails =
-      input.containsKey('resourceDetails') ? input.resourceDetails : null;
+      _type = input.containsKey('type') ? types[input.type] : Type.unknown;
+      _source = input.containsKey('source') ? input.source : "";
+      _destination = input.containsKey('destination') ? input.destination : "";
+      _resourceName =
+      input.containsKey('resourceName') ? input.resourceName : "";
+      _resourceDetails =
+      input.containsKey('resourceDetails') ? input.resourceDetails : "{}";
+      _host = input.containsKey('host') ? input.host : "";
     }
   }
 
@@ -93,15 +114,16 @@ class DartivityMessage {
   String toJSON() {
     jsonobject.JsonObject output = new jsonobject.JsonObject();
     output.type = type.index;
-    source != null ? output.source = source : null;
-    destination != null ? output.destination = destination : null;
-    resourceName != null ? output.resourceName = resourceName : null;
-    resourceDetails != null ? output.resourceDetails = resourceDetails : null;
+    output.source = _source;
+    output.destination = _destination;
+    output.resourceName = _resourceName;
+    output.resourceDetails = _resourceDetails;
+    output.host = _host;
     return output.toString();
   }
 
   /// toString
   String toString() {
-    return "Type : ${type}, Host : ${host}, Source : ${source}, Destination : ${destination}, Resource Name : ${resourceName}, Resource : ${resourceDetails.toString()}";
+    return "Type : ${type}, Host : ${host}, Source : ${source}, Destination : ${destination}, Resource Name : ${resourceName}, Resource Details : ${resourceDetails.toString()}";
   }
 }

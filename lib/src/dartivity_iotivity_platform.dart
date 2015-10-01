@@ -54,6 +54,10 @@ class DartivityIotivityPlatform {
       String host, String resourceName,
       [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
     var completer = new Completer();
+
+    // Check the arguments before calling the extension
+    if ((host == null) || (resourceName == null) || (connectivity == null)) return completer.complete(null);
+
     var replyPort = new RawReceivePort();
     var args = new List(5);
     args[0] = _FIND_RESOURCE;

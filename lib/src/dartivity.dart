@@ -160,7 +160,6 @@ class Dartivity {
           }
         }
       }
-
     }
     return completer.future;
   }
@@ -168,12 +167,11 @@ class Dartivity {
   /// findResource
   Future<DartivityIotivityResource> findResource(
       String host, String resourceName,
-      [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
+      [int connectivity =
+      DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     var completer = new Completer();
-    if (_iotClientInitialised) {
-      return await _iotClient.findResource(host, resourceName, connectivity);
-    }
-    return completer.future;
+    if (!_iotClientInitialised) return completer.complete(null);
+    return await _iotClient.findResource(host, resourceName, connectivity);
   }
 
   /// House keeping

@@ -37,8 +37,5 @@ Future main() async {
     print(" <<<< Message received ${message.toString()}");
   });
 
-  // Close down
-  //dartivity.close();
-
 
 }
