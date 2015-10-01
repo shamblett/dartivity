@@ -39,9 +39,10 @@ class DartivityIotivity {
 
   /// findResource
   Future<DartivityIotivityResource> findResource(String host, String resourceName,
-                                                 [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
-
-    return _platform.findResource(host, resourceName, connectivity);
+                                                 [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
+    Completer completer = new Completer();
+    return await _platform.findResource(host, resourceName, connectivity);
+    return completer.future;
 
   }
 

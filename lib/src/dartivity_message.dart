@@ -64,10 +64,11 @@ class DartivityMessage {
       new jsonobject.JsonObject.fromJsonString(input);
       List<Type> types = Type.values;
       type = jsonobj.containsKey('type') ? types[jsonobj.type] : Type.unknown;
-      source = jsonobj.containsKey('source') ? jsonobj.source : null;
+      host = jsonobj.containsKey('host') ? jsonobj.host : "";
+      source = jsonobj.containsKey('source') ? jsonobj.source : "";
       destination =
-      jsonobj.containsKey('destination') ? jsonobj.destination : null;
-      resourceName = jsonobj.containsKey('resourceName') ? jsonobj.resourceName : null;
+      jsonobj.containsKey('destination') ? jsonobj.destination : "";
+      resourceName = jsonobj.containsKey('resourceName') ? jsonobj.resourceName : "";
       resourceDetails = jsonobj.containsKey('resourceDetails')
       ? jsonobj.resourceDetails
       : null;
@@ -101,6 +102,6 @@ class DartivityMessage {
 
   /// toString
   String toString() {
-    return "Type : ${type}, Source : ${source}, Destination : ${destination}, Resource Name : ${resourceName}, Resource : ${resourceDetails.toString()}";
+    return "Type : ${type}, Host : ${host}, Source : ${source}, Destination : ${destination}, Resource Name : ${resourceName}, Resource : ${resourceDetails.toString()}";
   }
 }

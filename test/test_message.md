@@ -1,0 +1,1 @@
+{"type":0,"host":"localhost","source":"web-service","destination":"global","resourceName":"/oic/res"}

@@ -32,11 +32,9 @@ Future main() async {
     exit(badExitCode);
   }
 
-
   // Message monitoring
   var subscription = dartivity.nextMessage.listen((DartivityMessage message) {
-    print("Message received ${message.toString()}");
-
+    print(" <<<< Message received ${message.toString()}");
   });
 
   // Close down

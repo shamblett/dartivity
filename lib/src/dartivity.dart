@@ -135,6 +135,7 @@ class Dartivity {
   ///
   /// Message receive method
   Future _receive() async {
+    var completer = new Completer();
     pubsub.Message message = await _messager.receive();
     if (message != null) {
       String messageString = message.asString;
@@ -155,20 +156,24 @@ class Dartivity {
             DartivityMessage iHave = new DartivityMessage.iHave(id,
             filteredMessage.source, resource.identifier, resource.toMap());
             await send(iHave);
+            return completer.complete();
           }
         }
       }
+
     }
+    return completer.future;
   }
 
   /// findResource
   Future<DartivityIotivityResource> findResource(
       String host, String resourceName,
-      [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
+      [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
+    var completer = new Completer();
     if (_iotClientInitialised) {
-      return _iotClient.findResource(host, resourceName, connectivity);
+      return await _iotClient.findResource(host, resourceName, connectivity);
     }
-    return null;
+    return completer.future;
   }
 
   /// House keeping
