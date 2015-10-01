@@ -9,6 +9,9 @@ part of dartivity;
 
 class DartivityIotivityResource {
 
+  /// Native proxy object pointer
+  int _ptr;
+
   /// Send port
   static SendPort _port;
 
@@ -61,16 +64,17 @@ class DartivityIotivityResource {
     if (ptr ==
     null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
-    this._identifier = id;
-    this._uri = uri;
-    this._host = host;
-    this._observable = observable;
-    this._resourceTypes = resTypes;
-    this._interfaceTypes = intTypes;
+    _ptr = ptr;
+    _identifier = id;
+    _uri = uri;
+    _host = host;
+    _observable = observable;
+    _resourceTypes = resTypes;
+    _interfaceTypes = intTypes;
 
     // Create the sid from the id
     var tmp = _identifier.split("/");
-    this._sid = tmp[0];
+    _sid = tmp[0];
   }
 
   /// toString
