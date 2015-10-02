@@ -47,7 +47,7 @@ void main() {
       var uuid1 =
       myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
       if (DartivityCfg.tailedUuid) {
-        String newId = dartivity.id.split('*').first;
+        String newId = dartivity.id.split('%').first;
         expect(newId, "${Platform.localHostname}" + '-' + "${uuid1}");
       } else {
         expect(dartivity.id, "${Platform.localHostname}" + '-' + "${uuid1}");

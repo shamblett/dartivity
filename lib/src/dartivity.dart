@@ -73,7 +73,7 @@ class Dartivity {
     if (DartivityCfg.tailedUuid) {
       Random rnd = new Random();
       int rand = rnd.nextInt(1000);
-      _uuid += "*${rand.toString()}";
+      _uuid += "%${rand.toString()}";
     }
   }
 
