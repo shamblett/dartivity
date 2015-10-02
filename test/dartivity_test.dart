@@ -248,4 +248,46 @@ void main() {
       "Type : Type.iHave, Host : localhost, Source : web-server, Destination : global, Resource Name : oic/res, Resource Details : {}");
     });
   });
+
+  group("Iotivity Resource Tests", () {
+    test("Construction - null native pointer", () {
+      try {
+        DartivityIotivityResource resource =
+        new DartivityIotivityResource(null, "", "", "", [], [], true);
+      } catch (e) {
+        expect(e.runtimeType.toString(), 'DartivityException');
+        expect(e.toString(),
+        DartivityException.HEADER + DartivityException.NULL_NATIVE_PTR);
+      }
+    });
+
+    test("To String", () {
+      DartivityIotivityResource resource =
+      new DartivityIotivityResource(0, "theId", "", "", [], [], true);
+      expect(resource.toString(), "theId");
+    });
+
+    test("Equality", () {
+      DartivityIotivityResource resource1 =
+      new DartivityIotivityResource(0, "theId", "", "", [], [], true);
+      DartivityIotivityResource resource2 =
+      new DartivityIotivityResource(0, "theId", "", "", [], [], true);
+      expect(resource1 == resource2, true);
+      DartivityIotivityResource resource3 =
+      new DartivityIotivityResource(0, "theId3", "", "", [], [], true);
+      expect(resource1 == resource3, false);
+    });
+
+    test("To Map", () {
+      DartivityIotivityResource resource = new DartivityIotivityResource(
+          0, "theId", "/a/light", "localhost", ['bulb'], ['tcp'], true);
+      Map resMap = resource.toMap();
+      expect(resMap[DartivityIotivityResource.MAP_IDENTIFIER], "theId");
+      expect(resMap[DartivityIotivityResource.MAP_HOST], "localhost");
+      expect(resMap[DartivityIotivityResource.MAP_URI], "/a/light");
+      expect(resMap[DartivityIotivityResource.MAP_RESOURCE_TYPES], ['bulb']);
+      expect(resMap[DartivityIotivityResource.MAP_INTERFACE_TYPES], ['tcp']);
+      expect(resMap[DartivityIotivityResource.MAP_OBSERVABLE], true);
+    });
+  });
 }
