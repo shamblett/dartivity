@@ -32,5 +32,11 @@ class DartivityCfg {
 
   /// Housekeeping timer
   static const int HOUSEKEEPING_TIME_INTERVAL = 1;
-// seconds
+
+  // seconds
+
+  /// Use tailed uuid
+  /// Adds a unique prefix to a uuid to allow more than one client on the same
+  /// platform to generate different subscriptions.
+  static bool tailedUuid = true;
 }

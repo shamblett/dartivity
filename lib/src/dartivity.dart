@@ -70,6 +70,11 @@ class Dartivity {
     // Generate our namespaced uuid
     uuid.Uuid myUuid = new uuid.Uuid();
     _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
+    if (DartivityCfg.tailedUuid) {
+      Random rnd = new Random();
+      int rand = rnd.nextInt(1000);
+      _uuid += "*${rand.toString()}";
+    }
   }
 
   /// initialise
@@ -153,8 +158,12 @@ class Dartivity {
           DartivityIotivityResource resource = await findResource(
               filteredMessage.host, filteredMessage.resourceName);
           if (resource != null) {
-            DartivityMessage iHave = new DartivityMessage.iHave(id,
-            filteredMessage.source, resource.identifier, resource.toMap(), "");
+            DartivityMessage iHave = new DartivityMessage.iHave(
+                id,
+                filteredMessage.source,
+                resource.identifier,
+                resource.toMap(),
+                "");
             await send(iHave);
             return completer.complete();
           }

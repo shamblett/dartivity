@@ -46,7 +46,12 @@ void main() {
       uuid.Uuid myUuid = new uuid.Uuid();
       var uuid1 =
       myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
-      expect(dartivity.id, "${Platform.localHostname}" + '-' + "${uuid1}");
+      if (DartivityCfg.tailedUuid) {
+        String newId = dartivity.id.split('*').first;
+        expect(newId, "${Platform.localHostname}" + '-' + "${uuid1}");
+      } else {
+        expect(dartivity.id, "${Platform.localHostname}" + '-' + "${uuid1}");
+      }
     });
   });
 
