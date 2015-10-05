@@ -11,7 +11,7 @@ This information is garnered from the Dartivity clients using a simple ARP like 
 
 Currently the package supports the [Iotivity](https://www.iotivity.org/) IOT client, however other IOT clients
 will be supported, e.g MQTT support will be added in a later release. Also, currently only device discovery is
-supported, Device control(PUT/GET) will be added in a later release.
+supported, device control(PUT/GET) will be added in a later release.
 
 The package depends on an async native extension that binds to the C/C++ API's of these clients where needed, this
 extension is developed separatley and can be found [here](https://github.com/shamblett/dartivity_extension).
@@ -21,7 +21,7 @@ extension is developed separatley and can be found [here](https://github.com/sha
 The client is designed to run all the time, i.e. it is an active client with its own housekeeping heartbeat, the
 only interface to the outside world from the platform the client runs on is through the Google pub/sub service.
 This gives a system design whereby a(or many) web site(s) can listen to the pub/sub messages to provide control and
-monitoring facilities to operators. Clients can run on any supported platforms(multi-client per platform is also)
+monitoring facilities to operators. Clients can run on any supported platforms, multi-client per platform is also
 supported.
 
 The messaging protocol is as simple as possible, using an ARP like whohas/ihave protocol, a simple example would be
@@ -48,7 +48,7 @@ nor indeed do they require any web sites to be present.
 ## Testing
 
 The test directory provies unit tests and standalone test for messging only, client IOT device only and both modes.
-To run the IOT device tests suitable IOT servers need to be present sucha s the Iotovity projects 'simpleserver''
+To run the IOT device tests suitable IOT servers need to be present such as the Iotovity projects 'simpleserver''
 somewhere on your test network. Also, you need a working pub/sub 'pull' account.
 Please inspect the various files in the test directory for API usage and client configuration.
 
