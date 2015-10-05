@@ -1,5 +1,5 @@
 /credentials/Development-87fde7970997.json
-/lib/native/
+/lib/native/*.so
 # Don’t commit the following directories created by pub.
 .buildlog
 .pub/
