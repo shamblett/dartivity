@@ -17,7 +17,6 @@ class DartivityIotivity {
   DartivityIotivityPlatform _platform;
 
   DartivityIotivity() {
-
     _platform = new DartivityIotivityPlatform();
   }
 
@@ -26,7 +25,6 @@ class DartivityIotivity {
   ///
   /// Must be called before class usage
   Future<bool> initialise(DartivityIotivityCfg cfg) async {
-
     try {
       await _platform.configure(cfg);
       _ready = true;
@@ -38,12 +36,11 @@ class DartivityIotivity {
   }
 
   /// findResource
-  Future<DartivityIotivityResource> findResource(String host, String resourceName,
-                                                 [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
-
+  Future<DartivityIotivityResource> findResource(
+      String host, String resourceName,
+      [int connectivity =
+      DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     return await _platform.findResource(host, resourceName, connectivity);
-
-
   }
 
   /// close

@@ -87,8 +87,7 @@ Future main() async {
 
   // To Json
   String json = foundResource.toJson();
-  print(
-      "Dartivity - Dartivity Test Harness >> As JSON ${json}");
+  print("Dartivity - Dartivity Test Harness >> As JSON ${json}");
 
   // Close down
   dartivity.close();

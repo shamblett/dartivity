@@ -12,6 +12,7 @@ class DartivityIotivityCfg {
   int _serviceType = ServiceType_InProc;
 
   int get serviceType => _serviceType;
+
   static const int ServiceType_InProc = 0;
   static const int ServiceType_OutOfProc = 1;
 
@@ -19,6 +20,7 @@ class DartivityIotivityCfg {
   int _mode = ModeType_Client;
 
   int get mode => _mode;
+
   static const int ModeType_Server = 0;
   static const int ModeType_Client = 1;
   static const int ModeType_Both = 2;
@@ -65,11 +67,11 @@ class DartivityIotivityCfg {
   /// Port
   int port = 0;
 
-  DartivityIotivityCfg({int qos: QualityOfService_NaQos,
-                       clientConnectivity: OCConnectivityType_Ct_Default,
-                       String ipAddress: "0.0.0.0",
-                       int port: 0}) {
-
+  DartivityIotivityCfg(
+      {int qos: QualityOfService_NaQos,
+      clientConnectivity: OCConnectivityType_Ct_Default,
+      String ipAddress: "0.0.0.0",
+      int port: 0}) {
     this.qualityOfService = qos;
     this.clientConnectivity = clientConnectivity;
     this.ip = ipAddress;

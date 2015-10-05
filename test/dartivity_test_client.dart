@@ -31,11 +31,10 @@ Future main() async {
     print("Oops Initialse Status is false - ERROR");
     exit(badExitCode);
   }
+  print("Dartivity Test Harness >>> client id is ${dartivity.id}");
 
   // Message monitoring
   var subscription = dartivity.nextMessage.listen((DartivityMessage message) {
-    print(" <<<< Message received ${message.toString()}");
+    print("Dartivity Test Harness >>> Message received ${message.toString()}");
   });
-
-
 }

@@ -36,10 +36,5 @@ enum Mode {
 
 /// Message types
 enum Type {
-  whoHas,
-  iHave,
-  resourceDetails,
-  clientInfo,
-  unknown
+  whoHas, iHave, resourceDetails, clientInfo, unknown
 }
-

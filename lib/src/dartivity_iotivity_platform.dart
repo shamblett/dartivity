@@ -56,7 +56,9 @@ class DartivityIotivityPlatform {
     var completer = new Completer();
 
     // Check the arguments before calling the extension
-    if ((host == null) || (resourceName == null) || (connectivity == null)) return completer.complete(null);
+    if ((host == null) ||
+    (resourceName == null) ||
+    (connectivity == null)) return completer.complete(null);
 
     var replyPort = new RawReceivePort();
     var args = new List(5);

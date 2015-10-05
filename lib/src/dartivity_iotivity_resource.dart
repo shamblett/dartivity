@@ -8,7 +8,6 @@
 part of dartivity;
 
 class DartivityIotivityResource {
-
   /// Native proxy object pointer
   int _ptr;
 
@@ -34,6 +33,7 @@ class DartivityIotivityResource {
 
   /// Uri
   String _uri;
+
   String get uri => _uri;
 
   /// Server identifier
@@ -41,6 +41,7 @@ class DartivityIotivityResource {
   /// a string representation of the resource's server ID.
   /// This is unique per- server independent on how it was discovered.
   String _sid;
+
   String get sid => _sid;
 
   /// Resource types
@@ -110,9 +111,7 @@ class DartivityIotivityResource {
 
   /// toJson
   String toJson() {
-
     jsonobject.JsonObject temp = new jsonobject.JsonObject.fromMap(toMap());
     return temp.toString();
-
   }
 }
