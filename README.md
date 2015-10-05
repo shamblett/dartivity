@@ -56,5 +56,5 @@ Please inspect the various files in the test directory for API usage and client 
 
 Next to do is a simple web site to show the IOT devices and allow on demand device discovery, its then a simple!!
 matter of expanding the client facilities to add other IOT interfaces(MQTT et al), control and finally device observability
-and presence monitoring
+and presence monitoring. Also documentation is needed on client usage and configuration.
 
