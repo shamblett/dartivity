@@ -1,8 +1,8 @@
 name: dartivity
-description: A starting point for Dart libraries or applications.
+description: An iot client library for Dart
 version: 0.0.1
-#author: Your Name <email@example.com>
-#homepage: https://www.example.com
+author: Steve Hamblett<steve.hamblett@linux.com>
+homepage: https://github.com/shamblett/dartivity
 
 environment:
   sdk: '>=1.0.0 <2.0.0'
