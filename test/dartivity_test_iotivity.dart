@@ -39,55 +39,60 @@ Future main() async {
 
   // None found
   String requestUri = "/oic11/res";
-  DartivityIotivityResource foundResource =
+  List<DartivityIotivityResource> foundResourceList =
   await dartivity.findResource("", requestUri);
-  if (foundResource != null) {
-    print(foundResource.toString());
+  if (foundResourceList != null) {
+    print(foundResourceList.toString());
   } else {
     print("Dartivity - Dartivity Test Harness >> - No resource found OK PASS");
   }
 
   // Should find one
   requestUri = "/oic/res";
-  foundResource = await dartivity.findResource("", requestUri);
-  if (foundResource == null) {
+  foundResourceList = await dartivity.findResource("", requestUri);
+  if (foundResourceList == null) {
     print("Dartivity - Dartivity Test Harness >> - No resource found FAIL");
   }
 
-  // Unique Id
-  String id = foundResource.identifier;
-  print("Dartivity - Dartivity Test Harness >> Resource unique id is ${id} ");
+  foundResourceList.forEach((foundResource) {
+    // Unique Id
+    String id = foundResource.identifier;
+    print("Dartivity - Dartivity Test Harness >> Resource unique id is ${id} ");
 
-  // Sid
-  String sid = foundResource.sid;
-  print("Dartivity - Dartivity Test Harness >> Resource sid is ${sid} ");
+    // Sid
+    String sid = foundResource.sid;
+    print("Dartivity - Dartivity Test Harness >> Resource sid is ${sid} ");
 
-  // Host
-  String host = foundResource.host;
-  print("Dartivity - Dartivity Test Harness >> Resource host is ${host} ");
+    // Host
+    String host = foundResource.host;
+    print("Dartivity - Dartivity Test Harness >> Resource host is ${host} ");
 
-  // URI
-  String uri = foundResource.uri;
-  print("Dartivity - Dartivity Test Harness >> Resource uri is ${uri} ");
+    // URI
+    String uri = foundResource.uri;
+    print("Dartivity - Dartivity Test Harness >> Resource uri is ${uri} ");
 
-  // Resource types
-  List<String> resTypes = foundResource.resourceTypes;
-  print(
-      "Dartivity - Dartivity Test Harness >> Resource Types are ${resTypes.toString()} ");
+    // Resource types
+    List<String> resTypes = foundResource.resourceTypes;
+    print(
+        "Dartivity - Dartivity Test Harness >> Resource Types are ${resTypes
+            .toString()} ");
 
-  // Interface types
-  List<String> intTypes = foundResource.interfaceTypes;
-  print(
-      "Dartivity - Dartivity Test Harness >> Interface Types are ${intTypes.toString()} ");
+    // Interface types
+    List<String> intTypes = foundResource.interfaceTypes;
+    print(
+        "Dartivity - Dartivity Test Harness >> Interface Types are ${intTypes
+            .toString()} ");
 
-  // Observable
-  bool observable = foundResource.observable;
-  print(
-      "Dartivity - Dartivity Test Harness >> is resource observable ${observable.toString()}");
+    // Observable
+    bool observable = foundResource.observable;
+    print(
+        "Dartivity - Dartivity Test Harness >> is resource observable ${observable
+            .toString()}");
 
-  // To Json
-  String json = foundResource.toJson();
-  print("Dartivity - Dartivity Test Harness >> As JSON ${json}");
+    // To Json
+    String json = foundResource.toJson();
+    print("Dartivity - Dartivity Test Harness >> As JSON ${json}");
+  });
 
   // Close down
   dartivity.close();

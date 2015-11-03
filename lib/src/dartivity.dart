@@ -155,16 +155,18 @@ class Dartivity {
 
         // Default processing for whoHas messages
         if (filteredMessage.type == Type.whoHas) {
-          DartivityIotivityResource resource = await findResource(
+          List<DartivityIotivityResource> resourceList = await findResource(
               filteredMessage.host, filteredMessage.resourceName);
-          if (resource != null) {
-            DartivityMessage iHave = new DartivityMessage.iHave(
-                id,
-                filteredMessage.source,
-                resource.identifier,
-                resource.toMap(),
-                "");
-            await send(iHave);
+          if (resourceList != null) {
+            resourceList.forEach((resource) async {
+              DartivityMessage iHave = new DartivityMessage.iHave(
+                  id,
+                  filteredMessage.source,
+                  resource.identifier,
+                  resource.toMap(),
+                  "");
+              await send(iHave);
+            });
             return completer.complete();
           }
         }
@@ -174,7 +176,7 @@ class Dartivity {
   }
 
   /// findResource
-  Future<DartivityIotivityResource> findResource(
+  Future<List<DartivityIotivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
       DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {

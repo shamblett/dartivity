@@ -50,15 +50,15 @@ class DartivityIotivityPlatform {
   }
 
   /// findResource
-  Future<DartivityIotivityResource> findResource(
+  Future<List<DartivityIotivityResource>> findResource(
       String host, String resourceName,
       [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
     var completer = new Completer();
 
     // Check the arguments before calling the extension
     if ((host == null) ||
-    (resourceName == null) ||
-    (connectivity == null)) return completer.complete(null);
+        (resourceName == null) ||
+        (connectivity == null)) return completer.complete(null);
 
     var replyPort = new RawReceivePort();
     var args = new List(5);
@@ -73,17 +73,22 @@ class DartivityIotivityPlatform {
       replyPort.close();
       if (result != null) {
         if (result is List) {
-          // A resource, passed back are ptr, unique id, uri, host, resource types
-          // interface types and observable
-          DartivityIotivityResource resource = new DartivityIotivityResource(
-              result[0],
-              result[1],
-              result[2],
-              result[3],
-              result[4],
-              result[5],
-              result[6]);
-          completer.complete(resource);
+          List<DartivityIotivityResource> resList =
+          new List<DartivityIotivityResource>();
+          result.forEach((entry) {
+            // A resource, passed back are ptr, unique id, uri, host, resource types
+            // interface types and observable
+            DartivityIotivityResource resource = new DartivityIotivityResource(
+                entry[0],
+                entry[1],
+                entry[2],
+                entry[3],
+                entry[4],
+                entry[5],
+                entry[6]);
+            resList.add(resource);
+          });
+          completer.complete(resList);
         } else {
           // Anything else means not found
           completer.complete(null);

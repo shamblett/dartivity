@@ -36,7 +36,7 @@ class DartivityIotivity {
   }
 
   /// findResource
-  Future<DartivityIotivityResource> findResource(
+  Future<List<DartivityIotivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
       DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
@@ -44,6 +44,5 @@ class DartivityIotivity {
   }
 
   /// close
-  void close() {
-  }
+  void close() {}
 }
