@@ -36,13 +36,8 @@ class DartivityIotivityResource {
 
   String get uri => _uri;
 
-  /// Server identifier
-  ///
-  /// a string representation of the resource's server ID.
-  /// This is unique per- server independent on how it was discovered.
-  String _sid;
-
-  String get sid => _sid;
+  /// Provider
+  final String provider = DartivityMessage.PROVIDER_IOTIVITY;
 
   /// Resource types
   List<String> _resourceTypes;
@@ -61,9 +56,9 @@ class DartivityIotivityResource {
 
   /// Construction
   DartivityIotivityResource(int ptr, String id, String uri, String host,
-                            List<String> resTypes, List<String> intTypes, bool observable) {
+      List<String> resTypes, List<String> intTypes, bool observable) {
     if (ptr ==
-    null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
+        null) throw new DartivityException(DartivityException.NULL_NATIVE_PTR);
 
     _ptr = ptr;
     _identifier = id;
@@ -72,10 +67,6 @@ class DartivityIotivityResource {
     _observable = observable;
     _resourceTypes = resTypes;
     _interfaceTypes = intTypes;
-
-    // Create the sid from the id
-    var tmp = _identifier.split("/");
-    _sid = tmp[0];
   }
 
   /// toString
@@ -91,6 +82,7 @@ class DartivityIotivityResource {
   static const String MAP_IDENTIFIER = "Identifier";
   static const String MAP_URI = "Uri";
   static const String MAP_HOST = "Host";
+  static const String MAP_PROVIDER = "Provider";
   static const String MAP_OBSERVABLE = "Observeable";
   static const String MAP_RESOURCE_TYPES = "ResTypes";
   static const String MAP_INTERFACE_TYPES = "IntTypes";
@@ -102,6 +94,7 @@ class DartivityIotivityResource {
     returnMap[MAP_IDENTIFIER] = this._identifier;
     returnMap[MAP_URI] = this._uri;
     returnMap[MAP_HOST] = this._host;
+    returnMap[MAP_PROVIDER] = this.provider;
     returnMap[MAP_OBSERVABLE] = this._observable;
     returnMap[MAP_RESOURCE_TYPES] = this._resourceTypes;
     returnMap[MAP_INTERFACE_TYPES] = this._interfaceTypes;

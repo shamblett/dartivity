@@ -81,7 +81,7 @@ void main() {
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_WHOHAS_MESSAGE);
+                DartivityException.INVALID_WHOHAS_MESSAGE);
       }
     });
 
@@ -93,7 +93,7 @@ void main() {
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_WHOHAS_MESSAGE);
+                DartivityException.INVALID_WHOHAS_MESSAGE);
       }
     });
 
@@ -106,7 +106,7 @@ void main() {
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_WHOHAS_MESSAGE);
+                DartivityException.INVALID_WHOHAS_MESSAGE);
       }
     });
 
@@ -114,99 +114,114 @@ void main() {
       DartivityMessage message = new DartivityMessage.whoHas(
           DartivityMessage.ADDRESS_WEB_SERVER, "oic/res", "localhost");
       expect(message.toJSON(),
-      '{"type":0,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost"}');
+          '{"type":0,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost","provider":"Unknown"}');
     });
 
     test("Who Has  - fromJSON", () {
       DartivityMessage message = new DartivityMessage.fromJSON(
-          '{"type":0,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost"}');
+          '{"type":0,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost", "provider":"Unknown"}');
       expect(message.host, "localhost");
       expect(message.destination, DartivityMessage.ADDRESS_GLOBAL);
       expect(message.source, DartivityMessage.ADDRESS_WEB_SERVER);
       expect(message.resourceDetails, {});
       expect(message.resourceName, "oic/res");
+      expect(message.provider, DartivityMessage.PROVIDER_UNKNOWN);
     });
 
     test("Who Has  - fromJSONObject", () {
       jsonobject.JsonObject job = new jsonobject.JsonObject.fromJsonString(
-          '{"type":0,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost"}');
+          '{"type":0,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost", "provider":"Unknown"}');
       DartivityMessage message = new DartivityMessage.fromJSONObject(job);
       expect(message.host, "localhost");
       expect(message.destination, DartivityMessage.ADDRESS_GLOBAL);
       expect(message.source, DartivityMessage.ADDRESS_WEB_SERVER);
       expect(message.resourceDetails, {});
       expect(message.resourceName, "oic/res");
+      expect(message.provider, DartivityMessage.PROVIDER_UNKNOWN);
     });
 
     test("Who Has - toString", () {
       DartivityMessage message = new DartivityMessage.whoHas(
           DartivityMessage.ADDRESS_WEB_SERVER, "oic/res", "localhost");
       expect(message.toString(),
-      "Type : Type.whoHas, Host : localhost, Source : web-server, Destination : global, Resource Name : oic/res, Resource Details : {}");
+          "Type : Type.whoHas, Provider : Unknown, Host : localhost, Source : web-server, Destination : global, Resource Name : oic/res, Resource Details : {}");
     });
 
     test("I Have  - invalid source", () {
       try {
         DartivityMessage message =
-        new DartivityMessage.iHave(null, "", "", {}, "");
+        new DartivityMessage.iHave(null, "", "", {}, "", "");
       } catch (e) {
         expect(e.runtimeType.toString(), 'DartivityException');
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_IHAVE_MESSAGE);
+                DartivityException.INVALID_IHAVE_MESSAGE);
       }
     });
 
     test("I Have  - invalid destination", () {
       try {
         DartivityMessage message =
-        new DartivityMessage.iHave("", null, "", {}, "");
+        new DartivityMessage.iHave("", null, "", {}, "", "");
       } catch (e) {
         expect(e.runtimeType.toString(), 'DartivityException');
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_IHAVE_MESSAGE);
+                DartivityException.INVALID_IHAVE_MESSAGE);
       }
     });
 
     test("I Have  - invalid resource name", () {
       try {
         DartivityMessage message =
-        new DartivityMessage.iHave("", "", null, {}, "");
+        new DartivityMessage.iHave("", "", null, {}, "", "");
       } catch (e) {
         expect(e.runtimeType.toString(), 'DartivityException');
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_IHAVE_MESSAGE);
+                DartivityException.INVALID_IHAVE_MESSAGE);
       }
     });
 
     test("I Have  - invalid resource details", () {
       try {
         DartivityMessage message =
-        new DartivityMessage.iHave("", "", "", null, "");
+        new DartivityMessage.iHave("", "", "", null, "", "");
       } catch (e) {
         expect(e.runtimeType.toString(), 'DartivityException');
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_IHAVE_MESSAGE);
+                DartivityException.INVALID_IHAVE_MESSAGE);
       }
     });
 
     test("I Have  - invalid host", () {
       try {
         DartivityMessage message =
-        new DartivityMessage.iHave("", "", "", {}, null);
+        new DartivityMessage.iHave("", "", "", {}, null, "");
       } catch (e) {
         expect(e.runtimeType.toString(), 'DartivityException');
         expect(
             e.toString(),
             DartivityException.HEADER +
-            DartivityException.INVALID_IHAVE_MESSAGE);
+                DartivityException.INVALID_IHAVE_MESSAGE);
+      }
+    });
+
+    test("I Have  - invalid provider", () {
+      try {
+        DartivityMessage message =
+        new DartivityMessage.iHave("", "", "", {}, "", null);
+      } catch (e) {
+        expect(e.runtimeType.toString(), 'DartivityException');
+        expect(
+            e.toString(),
+            DartivityException.HEADER +
+                DartivityException.INVALID_IHAVE_MESSAGE);
       }
     });
 
@@ -216,30 +231,33 @@ void main() {
           DartivityMessage.ADDRESS_GLOBAL,
           "oic/res",
           {},
-          "localhost");
+          "localhost",
+          DartivityMessage.PROVIDER_IOTIVITY);
       expect(message.toJSON(),
-      '{"type":1,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost"}');
+          '{"type":1,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost","provider":"Iotivity"}');
     });
 
     test("I Have  - fromJSON", () {
       DartivityMessage message = new DartivityMessage.fromJSON(
-          '{"type":1,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost"}');
+          '{"type":1,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost","provider":"Iotivity"}');
       expect(message.host, "localhost");
       expect(message.destination, DartivityMessage.ADDRESS_GLOBAL);
       expect(message.source, DartivityMessage.ADDRESS_WEB_SERVER);
       expect(message.resourceDetails, {});
       expect(message.resourceName, "oic/res");
+      expect(message.provider, DartivityMessage.PROVIDER_IOTIVITY);
     });
 
     test("I Have  - fromJSONObject", () {
       jsonobject.JsonObject job = new jsonobject.JsonObject.fromJsonString(
-          '{"type":1,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost"}');
+          '{"type":1,"source":"web-server","destination":"global","resourceName":"oic/res","resourceDetails":{},"host":"localhost", "provider":"Iotivity"}');
       DartivityMessage message = new DartivityMessage.fromJSONObject(job);
       expect(message.host, "localhost");
       expect(message.destination, DartivityMessage.ADDRESS_GLOBAL);
       expect(message.source, DartivityMessage.ADDRESS_WEB_SERVER);
       expect(message.resourceDetails, {});
       expect(message.resourceName, "oic/res");
+      expect(message.provider, DartivityMessage.PROVIDER_IOTIVITY);
     });
 
     test("I Have  - toString", () {
@@ -248,9 +266,10 @@ void main() {
           DartivityMessage.ADDRESS_GLOBAL,
           "oic/res",
           {},
-          "localhost");
+          "localhost",
+          DartivityMessage.PROVIDER_UNKNOWN);
       expect(message.toString(),
-      "Type : Type.iHave, Host : localhost, Source : web-server, Destination : global, Resource Name : oic/res, Resource Details : {}");
+          "Type : Type.iHave, Provider : Unknown, Host : localhost, Source : web-server, Destination : global, Resource Name : oic/res, Resource Details : {}");
     });
   });
 
@@ -258,28 +277,63 @@ void main() {
     test("Construction - null native pointer", () {
       try {
         DartivityIotivityResource resource =
-        new DartivityIotivityResource(null, "", "", "", [], [], true);
+        new DartivityIotivityResource(
+            null,
+            "",
+            "",
+            "",
+            [],
+            [],
+            true);
       } catch (e) {
         expect(e.runtimeType.toString(), 'DartivityException');
         expect(e.toString(),
-        DartivityException.HEADER + DartivityException.NULL_NATIVE_PTR);
+            DartivityException.HEADER + DartivityException.NULL_NATIVE_PTR);
       }
     });
 
     test("To String", () {
       DartivityIotivityResource resource =
-      new DartivityIotivityResource(0, "theId", "", "", [], [], true);
+      new DartivityIotivityResource(
+          0,
+          "theId",
+          "",
+          "",
+          [],
+          [],
+          true);
       expect(resource.toString(), "theId");
     });
 
     test("Equality", () {
       DartivityIotivityResource resource1 =
-      new DartivityIotivityResource(0, "theId", "", "", [], [], true);
+      new DartivityIotivityResource(
+          0,
+          "theId",
+          "",
+          "",
+          [],
+          [],
+          true);
       DartivityIotivityResource resource2 =
-      new DartivityIotivityResource(0, "theId", "", "", [], [], true);
+      new DartivityIotivityResource(
+          0,
+          "theId",
+          "",
+          "",
+          [],
+          [],
+          true);
       expect(resource1 == resource2, true);
       DartivityIotivityResource resource3 =
-      new DartivityIotivityResource(0, "theId3", "", "", [], [], true);
+      new DartivityIotivityResource(
+          0,
+          "theId3",
+          "",
+          "",
+          [],
+          [],
+          true);
       expect(resource1 == resource3, false);
     });
 
@@ -293,6 +347,25 @@ void main() {
       expect(resMap[DartivityIotivityResource.MAP_RESOURCE_TYPES], ['bulb']);
       expect(resMap[DartivityIotivityResource.MAP_INTERFACE_TYPES], ['tcp']);
       expect(resMap[DartivityIotivityResource.MAP_OBSERVABLE], true);
+      expect(resMap[DartivityIotivityResource.MAP_PROVIDER],
+          DartivityMessage.PROVIDER_IOTIVITY);
+    });
+  });
+
+  group("Dartvity Resource Tests", () {
+    test("To String", () {
+      DartivityIotivityResource iotivityResource =
+      new DartivityIotivityResource(
+          0,
+          "aaaa",
+          "",
+          "",
+          [],
+          [],
+          true);
+      DartivityResource dartivityRes =
+      new DartivityResource.fromIotivity(iotivityResource, "bbbbb");
+      expect(dartivityRes.toString(), "Id : bbbbb-aaaa, Provider : Iotivity");
     });
   });
 }

@@ -39,7 +39,7 @@ class DartivityMessage {
 
   /// Provider , eg Iotivity
   static const String PROVIDER_UNKNOWN = "Unknown";
-  static const String PROVIDER_IOTIVITY = "Unknown";
+  static const String PROVIDER_IOTIVITY = "Iotivity";
   String _provider = PROVIDER_UNKNOWN;
 
   String get provider => _provider;
@@ -91,7 +91,7 @@ class DartivityMessage {
       _type = jsonobj.containsKey('type') ? types[jsonobj.type] : Type.unknown;
       _host = jsonobj.containsKey('host') ? jsonobj.host : "";
       _provider =
-      jsonobj.containsKey('provider') ? jsonobj.host : PROVIDER_UNKNOWN;
+      jsonobj.containsKey('provider') ? jsonobj.provider : PROVIDER_UNKNOWN;
       _source = jsonobj.containsKey('source') ? jsonobj.source : "";
       _destination =
       jsonobj.containsKey('destination') ? jsonobj.destination : "";
@@ -116,7 +116,8 @@ class DartivityMessage {
       _resourceDetails =
       input.containsKey('resourceDetails') ? input.resourceDetails : "{}";
       _host = input.containsKey('host') ? input.host : "";
-      _provider = input.containsKey('provider') ? input.host : PROVIDER_UNKNOWN;
+      _provider =
+      input.containsKey('provider') ? input.provider : PROVIDER_UNKNOWN;
     }
   }
 
@@ -135,7 +136,8 @@ class DartivityMessage {
 
   /// toString
   String toString() {
-    return "Type : ${type}, Host : ${host}, Source : ${source}, Destination : ${destination}, Resource Name : ${resourceName}, Resource Details : ${resourceDetails.toString()}";
+    return "Type : ${type}, Provider : ${provider}, Host : ${host}, Source : ${source}, Destination : ${destination}, Resource Name : ${resourceName}, Resource Details : ${resourceDetails
+        .toString()}";
   }
 
   /// equals ovverride

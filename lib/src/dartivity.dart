@@ -15,17 +15,17 @@ class Dartivity {
 
   /// State
   bool _messagerInitialised = false;
-  bool _iotClientInitialised = false;
+  bool _iotivityClientInitialised = false;
 
   /// Initialised
   bool get initialised {
     switch (_mode) {
       case Mode.both:
-        return _messagerInitialised && _iotClientInitialised;
+        return _messagerInitialised && _iotivityClientInitialised;
       case Mode.messagingOnly:
         return _messagerInitialised;
       case Mode.iotOnly:
-        return _iotClientInitialised;
+        return _iotivityClientInitialised;
     }
   }
 
@@ -39,7 +39,7 @@ class Dartivity {
   String get id => hostname + '-' + _uuid;
 
   /// Iotivity client
-  DartivityIotivity _iotClient;
+  DartivityIotivity _iotivityClient;
 
   /// Messaging client
   DartivityMessaging _messager;
@@ -111,13 +111,13 @@ class Dartivity {
       if (iotCfg == null) {
         throw new DartivityException(DartivityException.NO_IOT_CFG_SPECIFIED);
       }
-      _iotClient = new DartivityIotivity();
-      await _iotClient.initialise(iotCfg);
-      if (!_iotClient.ready) {
+      _iotivityClient = new DartivityIotivity();
+      await _iotivityClient.initialise(iotCfg);
+      if (!_iotivityClient.ready) {
         throw new DartivityException(
             DartivityException.FAILED_TO_INITIALISE_IOTCLIENT);
       }
-      _iotClientInitialised = true;
+      _iotivityClientInitialised = true;
     }
 
     // Start our housekeeping timer
@@ -155,19 +155,20 @@ class Dartivity {
 
         // Default processing for whoHas messages
         if (filteredMessage.type == Type.whoHas) {
-          List<DartivityIotivityResource> resourceList = await findResource(
+          List<DartivityResource> resourceList = await findResource(
               filteredMessage.host, filteredMessage.resourceName);
           if (resourceList != null) {
             resourceList.forEach((resource) async {
               DartivityMessage iHave = new DartivityMessage.iHave(
                   id,
                   filteredMessage.source,
-                  resource.identifier,
-                  resource.toMap(),
-                  "");
+                  resource.id,
+                  resource.resource.toMap(),
+                  "",
+                  resource.provider);
               await send(iHave);
             });
-            return completer.complete();
+            completer.complete();
           }
         }
       }
@@ -176,13 +177,26 @@ class Dartivity {
   }
 
   /// findResource
-  Future<List<DartivityIotivityResource>> findResource(
-      String host, String resourceName,
+  Future<List<DartivityResource>> findResource(String host, String resourceName,
       [int connectivity =
       DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     var completer = new Completer();
-    if (!_iotClientInitialised) return completer.complete(null);
-    return await _iotClient.findResource(host, resourceName, connectivity);
+    List<DartivityResource> dartivityResources = new List<DartivityResource>();
+    // Iotivity
+    if (!_iotivityClientInitialised) return completer.complete(null);
+    List<DartivityIotivityResource> iotivityResources =
+    await _iotivityClient.findResource(host, resourceName, connectivity);
+    if (iotivityResources != null) {
+      await iotivityResources.forEach((listResource) {
+        DartivityResource res =
+        new DartivityResource.fromIotivity(listResource, id);
+        dartivityResources.add(res);
+      });
+      completer.complete(dartivityResources);
+    } else {
+      completer.complete(null);
+    }
+    return completer.future;
   }
 
   /// House keeping
@@ -206,8 +220,8 @@ class Dartivity {
       _messager.close();
     }
 
-    if (_iotClientInitialised) {
-      _iotClient.close();
+    if (_iotivityClientInitialised) {
+      _iotivityClient.close();
     }
 
     _housekeepTimer.cancel();

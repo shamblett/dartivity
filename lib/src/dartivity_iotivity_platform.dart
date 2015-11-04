@@ -52,13 +52,14 @@ class DartivityIotivityPlatform {
   /// findResource
   Future<List<DartivityIotivityResource>> findResource(
       String host, String resourceName,
-      [int connectivity = DartivityIotivityCfg.OCConnectivityType_Ct_Default]) {
+      [int connectivity =
+      DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     var completer = new Completer();
 
     // Check the arguments before calling the extension
     if ((host == null) ||
         (resourceName == null) ||
-        (connectivity == null)) return completer.complete(null);
+        (connectivity == null)) completer.complete(null);
 
     var replyPort = new RawReceivePort();
     var args = new List(5);

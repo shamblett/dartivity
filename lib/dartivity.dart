@@ -28,6 +28,8 @@ part 'src/dartivity_iotivity_cfg.dart';
 part 'src/dartivity_iotivity_platform.dart';
 part 'src/dartivity_iotivity_resource.dart';
 
+part 'src/dartivity_resource.dart';
+
 /// Mode enumeration
 /// Supports only iotivity server, messaging or both
 enum Mode {
