@@ -11,6 +11,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
+import 'package:dartivity_messaging/dartivity_messaging.dart';
 
 Future main() async {
   final int badExitCode = -1;
@@ -23,7 +24,8 @@ Future main() async {
       qos: DartivityIotivityCfg.QualityOfService_LowQos);
 
   await dartivity.initialise(
-      DartivityCfg.MESS_CRED_PATH, DartivityCfg.MESS_PROJECT_ID, iotCfg);
+      DartivityCfg.MESS_CRED_PATH, DartivityCfg.MESS_PROJECT_ID,
+      DartivityCfg.MESS_TOPIC, iotCfg);
 
   if (dartivity.initialised) {
     print("Initialse Status is true - OK");

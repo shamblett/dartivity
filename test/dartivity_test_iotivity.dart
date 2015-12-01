@@ -23,7 +23,7 @@ Future main() async {
   DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
       qos: DartivityIotivityCfg.QualityOfService_LowQos);
 
-  await dartivity.initialise("", "", iotCfg);
+  await dartivity.initialise("", "", DartivityCfg.MESS_TOPIC, iotCfg);
 
   if (dartivity.initialised) {
     print("Initialse Status is true - OK");

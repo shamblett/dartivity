@@ -42,7 +42,7 @@ class Dartivity {
   DartivityIotivity _iotivityClient;
 
   /// Messaging client
-  DartivityMessaging _messager;
+  mess.DartivityMessaging _messager;
 
   /// Receive timer duration
   final Duration _housekeepDuration =
@@ -84,6 +84,7 @@ class Dartivity {
   Future<bool> initialise(
       [String credentialsPath,
       String projectName,
+      String topic,
       DartivityIotivityCfg iotCfg]) async {
     // Initialise depending on mode
     if (_mode == Mode.both || _mode == Mode.messagingOnly) {
@@ -96,8 +97,8 @@ class Dartivity {
         throw new DartivityException(
             DartivityException.NO_PROJECTNAME_SPECIFIED);
       }
-      _messager = new DartivityMessaging(id);
-      await _messager.initialise(credentialsPath, projectName);
+      _messager = new mess.DartivityMessaging(id);
+      await _messager.initialise(credentialsPath, projectName, topic);
       if (!_messager.ready) {
         throw new DartivityException(
             DartivityException.FAILED_TO_INITIALISE_MESSAGER);
@@ -128,11 +129,10 @@ class Dartivity {
   /// send
   ///
   /// Send a Dartivity Message
-  DartivityMessage send(DartivityMessage message) {
+  mess.DartivityMessage send(mess.DartivityMessage message) {
     if (!initialised) return null;
     if (message == null) return null;
-    String jsonMessage = message.toJSON();
-    _messager.send(jsonMessage);
+    _messager.send(message);
     return message;
   }
 
@@ -141,25 +141,22 @@ class Dartivity {
   /// Message receive method
   Future _receive() async {
     var completer = new Completer();
-    pubsub.Message message = await _messager.receive();
+    mess.DartivityMessage message = await _messager.receive();
     if (message != null) {
-      String messageString = message.asString;
-      DartivityMessage dartivityMessage =
-      new DartivityMessage.fromJSON(messageString);
 
       // Filter ones we don't want to process, always add to the message
       // event stream for external listeners.
-      DartivityMessage filteredMessage = _filter(dartivityMessage);
+      mess.DartivityMessage filteredMessage = _filter(message);
       if (filteredMessage != null) {
         _messageRxed.add(filteredMessage);
 
         // Default processing for whoHas messages
-        if (filteredMessage.type == Type.whoHas) {
+        if (filteredMessage.type == mess.MessageType.whoHas) {
           List<DartivityResource> resourceList = await findResource(
               filteredMessage.host, filteredMessage.resourceName);
           if (resourceList != null) {
             resourceList.forEach((resource) async {
-              DartivityMessage iHave = new DartivityMessage.iHave(
+              mess.DartivityMessage iHave = new mess.DartivityMessage.iHave(
                   id,
                   filteredMessage.source,
                   resource.id,
@@ -230,10 +227,10 @@ class Dartivity {
   ///_filter
   ///
   /// Filter out messages that are not for us
-  DartivityMessage _filter(DartivityMessage message) {
+  mess.DartivityMessage _filter(mess.DartivityMessage message) {
     // Who has is for all, the others we only respond to if we are
     // the destination.
-    if (message.type == Type.whoHas) return message;
+    if (message.type == mess.MessageType.whoHas) return message;
     if (message.destination != id) {
       return null;
     } else {

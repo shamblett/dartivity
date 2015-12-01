@@ -1,13 +1,13 @@
 name: dartivity
-version: 0.0.1
+version: 0.1.0
 author: Steve Hamblett<steve.hamblett@linux.com>
 description: An iot client library for Dart
 homepage: https://github.com/shamblett/dartivity
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
-  gcloud: '>0.2.0'
-  googleapis_auth: any
+  dartivity_messaging: '<1.0.0'
+  dartivity_database: '<1.0.0'
   json_object: '>=1.0.19'
   uuid: '>=0.5.0'
 dev_dependencies:

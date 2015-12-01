@@ -10,6 +10,7 @@ library dartivity.test;
 import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
+import 'package:dartivity_messaging/dartivity_messaging.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart' as uuid;
 import 'package:json_object/json_object.dart' as jsonobject;

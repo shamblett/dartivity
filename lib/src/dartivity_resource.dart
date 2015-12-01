@@ -14,7 +14,7 @@ class DartivityResource {
   String get id => _id;
 
   /// Provider
-  String _provider = DartivityMessage.PROVIDER_UNKNOWN;
+  String _provider = mess.DartivityMessage.PROVIDER_UNKNOWN;
 
   String get provider => _provider;
 

@@ -37,7 +37,7 @@ class DartivityIotivityResource {
   String get uri => _uri;
 
   /// Provider
-  final String provider = DartivityMessage.PROVIDER_IOTIVITY;
+  final String provider = mess.DartivityMessage.PROVIDER_IOTIVITY;
 
   /// Resource types
   List<String> _resourceTypes;

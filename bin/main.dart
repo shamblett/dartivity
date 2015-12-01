@@ -9,7 +9,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
-
+import 'package:dartivity_messaging/dartivity_messaging.dart' as mess;
 
 Future main() async {
   final int badExitCode = -1;
@@ -22,7 +22,8 @@ Future main() async {
       qos: DartivityIotivityCfg.QualityOfService_LowQos);
 
   await dartivity.initialise(
-      DartivityCfg.MESS_CRED_PATH, DartivityCfg.MESS_PROJECT_ID, iotCfg);
+      DartivityCfg.MESS_CRED_PATH, DartivityCfg.MESS_PROJECT_ID,
+      DartivityCfg.MESS_TOPIC, iotCfg);
 
   if (dartivity.initialised) {
     print("Dartivity Main - Initialse Status is true - OK");
@@ -33,7 +34,8 @@ Future main() async {
   print("Dartivity Main - client id is ${dartivity.id}");
 
   // Message monitoring
-  var subscription = dartivity.nextMessage.listen((DartivityMessage message) {
+  var subscription = dartivity.nextMessage.listen((
+      mess.DartivityMessage message) {
     print("Dartivity Main - Message received ${message.toString()}");
   });
 

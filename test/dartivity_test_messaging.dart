@@ -11,6 +11,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
+import 'package:dartivity_messaging/dartivity_messaging.dart';
 
 Future main() async {
   final int badExitCode = -1;
@@ -20,7 +21,7 @@ Future main() async {
   Dartivity dartivity = new Dartivity(Mode.messagingOnly);
 
   // Send before ready
-  DartivityMessage noSend = new DartivityMessage.iHave("", "", "", {}, "");
+  DartivityMessage noSend = new DartivityMessage.iHave("", "", "", {}, "", "");
   var result = dartivity.send(noSend);
   if (result == null) {
     print("Message not sent not ready - OK");
@@ -62,13 +63,13 @@ Future main() async {
   // Followed by a I Have
   Map<String, String> myDevice = {'iama': 'thermostat', 'url': 'here.com/ami'};
   DartivityMessage iHave = new DartivityMessage.iHave(
-      dartivity.id, dartivity.id, '/core/therm/1', myDevice, "");
+      dartivity.id, dartivity.id, '/core/therm/1', myDevice, "", "");
   dartivity.send(iHave);
 
   // Followed by a I Have but not for us
   Map<String, String> myDevice1 = {'iama': 'thermostat', 'url': 'here.com/ami'};
   DartivityMessage iHave1 = new DartivityMessage.iHave(
-      dartivity.id, 'not us', '/core/therm/1', myDevice1, "");
+      dartivity.id, 'not us', '/core/therm/1', myDevice1, "", "");
   dartivity.send(iHave1);
 
   // Listen for our messages until our timer pops
