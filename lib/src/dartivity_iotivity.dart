@@ -13,10 +13,14 @@ class DartivityIotivity {
 
   bool get ready => _ready;
 
+  /// Client id
+  String _clientId;
+
   /// Platform
   DartivityIotivityPlatform _platform;
 
-  DartivityIotivity() {
+  DartivityIotivity(String clientId) {
+    _clientId = clientId;
     _platform = new DartivityIotivityPlatform();
   }
 
@@ -36,11 +40,24 @@ class DartivityIotivity {
   }
 
   /// findResource
-  Future<List<DartivityIotivityResource>> findResource(
+  Future<List<db.DartivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
       DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
-    return await _platform.findResource(host, resourceName, connectivity);
+    Completer completer = new Completer();
+    var res = await _platform.findResource(host, resourceName, connectivity);
+    if (res != null) {
+      List<db.DartivityResource> resList = new List<db.DartivityResource>();
+      res.forEach((resource) {
+        db.DartivityResource tmp = new db.DartivityResource.fromIotivity(
+            resource, _clientId);
+        resList.add(tmp);
+      });
+      completer.complete(resList);
+    } else {
+      completer.complete(null);
+    }
+    return completer.future;
   }
 
   /// close

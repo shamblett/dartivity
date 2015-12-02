@@ -24,9 +24,8 @@ part 'src/dartivity_exception.dart';
 part 'src/dartivity_cfg.dart';
 part 'src/dartivity_iotivity_cfg.dart';
 part 'src/dartivity_iotivity_platform.dart';
-part 'src/dartivity_iotivity_resource.dart';
 
-part 'src/dartivity_resource.dart';
+part 'src/dartivity_client_iotivity_resource.dart';
 
 /// Mode enumeration
 /// Supports only local iot resources, messaging or both.

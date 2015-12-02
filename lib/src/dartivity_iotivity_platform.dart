@@ -50,7 +50,7 @@ class DartivityIotivityPlatform {
   }
 
   /// findResource
-  Future<List<DartivityIotivityResource>> findResource(
+  Future<List<db.DartivityIotivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
       DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
@@ -74,20 +74,23 @@ class DartivityIotivityPlatform {
       replyPort.close();
       if (result != null) {
         if (result is List) {
-          List<DartivityIotivityResource> resList =
-          new List<DartivityIotivityResource>();
+          List<DartivityClientIotivityResource> resList =
+          new List<DartivityClientIotivityResource>();
           result.forEach((entry) {
             // A resource, passed back are ptr, unique id, uri, host, resource types
-            // interface types and observable
-            DartivityIotivityResource resource = new DartivityIotivityResource(
-                entry[0],
+            // interface types and observable. Ptr is not stored in the IotivityResource
+            // but in the DartivityClientIotivityResource class
+            db.DartivityIotivityResource resource = new db
+                .DartivityIotivityResource(
                 entry[1],
                 entry[2],
                 entry[3],
                 entry[4],
                 entry[5],
                 entry[6]);
-            resList.add(resource);
+            DartivityClientIotivityResource iotres = new DartivityClientIotivityResource(
+                entry[0], resource);
+            resList.add(iotres);
           });
           completer.complete(resList);
         } else {

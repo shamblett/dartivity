@@ -122,7 +122,7 @@ class Dartivity {
               throw new DartivityException(
                   DartivityException.NO_IOT_CFG_SPECIFIED);
             }
-            _iotivityClient = new DartivityIotivity();
+            _iotivityClient = new DartivityIotivity(id);
             await _iotivityClient.initialise(iotCfg);
             if (!_iotivityClient.ready) {
               throw new DartivityException(
@@ -166,7 +166,7 @@ class Dartivity {
 
         // Default processing for whoHas messages
         if (filteredMessage.type == mess.MessageType.whoHas) {
-          List<DartivityResource> resourceList = await findResource(
+          List<db.DartivityResource> resourceList = await findResource(
               filteredMessage.host, filteredMessage.resourceName);
           if (resourceList != null) {
             resourceList.forEach((resource) async {
@@ -188,22 +188,20 @@ class Dartivity {
   }
 
   /// findResource
-  Future<List<DartivityResource>> findResource(String host, String resourceName,
+  Future<List<db.DartivityResource>> findResource(String host,
+      String resourceName,
       [int connectivity =
           DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     var completer = new Completer();
-    List<DartivityResource> dartivityResources = new List<DartivityResource>();
     // Iotivity
-    if (!_iotivityClientInitialised) return completer.complete(null);
-    List<DartivityIotivityResource> iotivityResources =
-    await _iotivityClient.findResource(host, resourceName, connectivity);
-    if (iotivityResources != null) {
-      await iotivityResources.forEach((listResource) {
-        DartivityResource res =
-        new DartivityResource.fromIotivity(listResource, id);
-        dartivityResources.add(res);
-      });
-      completer.complete(dartivityResources);
+    if (_iotivityClientInitialised) {
+      List<db.DartivityResource> iotivityResources =
+      await _iotivityClient.findResource(host, resourceName, connectivity);
+      if (iotivityResources != null) {
+        completer.complete(iotivityResources);
+      } else {
+        completer.complete(null);
+      }
     } else {
       completer.complete(null);
     }
