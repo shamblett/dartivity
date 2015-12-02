@@ -19,9 +19,13 @@ class DartivityIotivity {
   /// Platform
   DartivityIotivityPlatform _platform;
 
+  /// Client resource cache
+  db.DartivityCache _cache;
+
   DartivityIotivity(String clientId) {
     _clientId = clientId;
     _platform = new DartivityIotivityPlatform();
+    _cache = new db.DartivityCache();
   }
 
   /// initialise
@@ -45,13 +49,15 @@ class DartivityIotivity {
       [int connectivity =
       DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     Completer completer = new Completer();
-    var res = await _platform.findResource(host, resourceName, connectivity);
+    List<DartivityClientIotivityResource> res = await _platform.findResource(
+        host, resourceName, connectivity);
     if (res != null) {
       List<db.DartivityResource> resList = new List<db.DartivityResource>();
       res.forEach((resource) {
         db.DartivityResource tmp = new db.DartivityResource.fromIotivity(
-            resource, _clientId);
+            resource.resource, _clientId);
         resList.add(tmp);
+        _cache.put(tmp.id, resource);
       });
       completer.complete(resList);
     } else {

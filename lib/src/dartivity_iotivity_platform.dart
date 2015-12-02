@@ -50,7 +50,7 @@ class DartivityIotivityPlatform {
   }
 
   /// findResource
-  Future<List<db.DartivityIotivityResource>> findResource(
+  Future<List<DartivityClientIotivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
       DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
