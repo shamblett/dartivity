@@ -68,11 +68,13 @@ class Dartivity {
   /// Resource database
   db.DartivityResourceDatabase _database;
 
+  /// Configuration
+  DartivityCfg _cfg;
+
   /// Dartivity
   /// mode - the operational mode of the client, defaults to both
   /// client - the clients to use
-  Dartivity(Mode mode, List<Client> clients, String dbName, String dbUser,
-      String dbPass) {
+  Dartivity(Mode mode, List<Client> clients, DartivityCfg cfg) {
     if (mode == null) {
       _mode = Mode.both;
     } else {
@@ -82,8 +84,8 @@ class Dartivity {
 
     // Generate our namespaced uuid
     uuid.Uuid myUuid = new uuid.Uuid();
-    _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
-    if (DartivityCfg.tailedUuid) {
+    _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, cfg.clientIdURL);
+    if (cfg.tailedUuid) {
       Random rnd = new Random();
       int rand = rnd.nextInt(1000);
       _uuid += "%${rand.toString()}";
@@ -93,31 +95,33 @@ class Dartivity {
     _cache = new db.DartivityCache();
 
     // Resource database
-    _database = new db.DartivityResourceDatabase(dbName, dbUser, dbPass);
+    _database =
+    new db.DartivityResourceDatabase(cfg.dbHost, cfg.dbUser, cfg.dbPass);
+
+    // Configuration
+    _cfg = cfg;
   }
 
   /// initialise
   ///
   /// credentialsPath - path to a valid credentials file for messaging
   /// projectName - project name for messaging.
-  Future<bool> initialise(
-      [String credentialsPath,
-      String projectName,
-      String topic,
+  Future<bool> initialise([
       DartivityIotivityCfg iotCfg]) async {
     // Initialise depending on mode
     if (_mode == Mode.both || _mode == Mode.messagingOnly) {
       // Must have a credentials path for messaging
-      if (credentialsPath == null) {
+      if (_cfg.credPath == null) {
         throw new DartivityException(DartivityException.NO_CREDPATH_SPECIFIED);
       }
       // Must have a project name for messaging
-      if (credentialsPath == null) {
+      if (_cfg.projectId == null) {
         throw new DartivityException(
             DartivityException.NO_PROJECTNAME_SPECIFIED);
       }
+
       _messager = new mess.DartivityMessaging(id);
-      await _messager.initialise(credentialsPath, projectName, topic);
+      await _messager.initialise(_cfg.credPath, _cfg.projectId, _cfg.topic);
       if (!_messager.ready) {
         throw new DartivityException(
             DartivityException.FAILED_TO_INITIALISE_MESSAGER);

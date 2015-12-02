@@ -9,21 +9,27 @@ part of dartivity;
 
 class DartivityCfg {
   /// Package name
-  static const String MESS_PACKAGE_NAME = 'dartivity';
+  static const String packageName = 'dartivity';
 
   /// Pubsub project id
-  static const String MESS_PROJECT_ID = 'warm-actor-356';
+  String _projectId;
+
+  String get projectId => _projectId;
 
   /// Topic for pubsub
-  static const String MESS_TOPIC =
-  "projects/${MESS_PROJECT_ID}/topics/${MESS_PACKAGE_NAME}";
+  String _topic;
+
+  String get topic => _topic;
 
   /// Client id URL
-  static const String CLIENT_ID_URL = '${MESS_PACKAGE_NAME}.com';
+  String _clientIdURL = '${packageName}.com';
+
+  String get clientIdURL => _clientIdURL;
 
   /// Pubsub credentials path
-  static const String MESS_CRED_PATH =
-  '/home/steve/Development/google/dart/projects/${MESS_PACKAGE_NAME}/credentials/Development-87fde7970997.json';
+  String _credPath;
+
+  String get credPath => _credPath;
 
   /// Time between message pull requests
   static const int MESS_PULL_TIME_INTERVAL = 10;
@@ -38,5 +44,26 @@ class DartivityCfg {
   /// Use tailed uuid
   /// Adds a unique prefix to a uuid to allow more than one client on the same
   /// platform to generate different subscriptions.
-  static bool tailedUuid = true;
+  bool tailedUuid = true;
+
+  /// Database credentials
+  String _dbUser;
+
+  String get dbUser => _dbUser;
+  String _dbHost;
+
+  String get dbHost => _dbHost;
+  String _dbPass;
+
+  String get dbPass => _dbPass;
+
+  DartivityCfg(String projectId, String credPath, String dbHost, String dbUser,
+      String dbPass) {
+    _projectId = projectId;
+    _credPath = credPath;
+    _topic = "projects/${projectId}/topics/${packageName}";
+    _dbHost = dbHost;
+    _dbUser = dbUser;
+    _dbPass = dbPass;
+  }
 }

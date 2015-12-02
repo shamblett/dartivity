@@ -11,19 +11,22 @@ import 'dart:io';
 import 'package:dartivity/dartivity.dart';
 import 'package:dartivity_messaging/dartivity_messaging.dart' as mess;
 
+import '../configuration/local.dart';
+
 Future main() async {
   final int badExitCode = -1;
 
   // Instantiate a Dartivity client and initialise for
   // both messaging and iotivity, ie a normal client configuration.
-  Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity]);
+  DartivityCfg cfg = new DartivityCfg(DartivityLocalConf.PROJECT_ID,
+      DartivityLocalConf.CRED_PATH, DartivityLocalConf.DBHOST,
+      DartivityLocalConf.DBUSER, DartivityLocalConf.DBPASS);
+  Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity], cfg);
 
   DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
       qos: DartivityIotivityCfg.QualityOfService_LowQos);
 
-  await dartivity.initialise(
-      DartivityCfg.MESS_CRED_PATH, DartivityCfg.MESS_PROJECT_ID,
-      DartivityCfg.MESS_TOPIC, iotCfg);
+  await dartivity.initialise(iotCfg);
 
   if (dartivity.initialised) {
     print("Dartivity Main - Initialse Status is true - OK");
