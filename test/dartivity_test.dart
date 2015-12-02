@@ -38,7 +38,8 @@ void main() {
 
     test("Iotivity client", () {
       Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity], cfg);
-      expect(dartivity.supports, Mode.iotOnly);
+      expect(dartivity.supports, Mode.both);
+      expect(dartivity.clientList[0], Client.iotivity);
     });
 
     test("Hostname", () {
@@ -61,6 +62,36 @@ void main() {
   });
 
   group("Initialisation", () {
+    test("Initialise - No credentials path", () {
+      try {
+        DartivityCfg cfg = new DartivityCfg(DartivityLocalConf.PROJECT_ID,
+            null, DartivityLocalConf.DBHOST,
+            DartivityLocalConf.DBUSER, DartivityLocalConf.DBPASS);
+        Dartivity dartivity = new Dartivity(Mode.messagingOnly, null, cfg);
+      } catch (e) {
+        expect(e.runtimeType.toString(), 'DartivityException');
+        expect(
+            e.toString(),
+            DartivityException.HEADER +
+                DartivityException.NO_CREDPATH_SPECIFIED);
+      }
+    });
+
+    test("Initialise - No project id", () {
+      try {
+        DartivityCfg cfg = new DartivityCfg(null,
+            DartivityLocalConf.CRED_PATH, DartivityLocalConf.DBHOST,
+            DartivityLocalConf.DBUSER, DartivityLocalConf.DBPASS);
+        Dartivity dartivity = new Dartivity(Mode.messagingOnly, null, cfg);
+      } catch (e) {
+        expect(e.runtimeType.toString(), 'DartivityException');
+        expect(
+            e.toString(),
+            DartivityException.HEADER +
+                DartivityException.NO_PROJECTNAME_SPECIFIED);
+      }
+    });
+
     test("Initialise state", () {
       Dartivity dartivity = new Dartivity(null, null, cfg);
       expect(dartivity.initialised, false);

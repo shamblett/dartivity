@@ -16,6 +16,8 @@ class Dartivity {
   /// Client
   List<Client> _client;
 
+  List<Client> get clientList => _client;
+
   /// State
   bool _messagerInitialised = false;
   bool _iotivityClientInitialised = false;
@@ -106,8 +108,7 @@ class Dartivity {
   ///
   /// credentialsPath - path to a valid credentials file for messaging
   /// projectName - project name for messaging.
-  Future<bool> initialise([
-      DartivityIotivityCfg iotCfg]) async {
+  Future<bool> initialise([DartivityIotivityCfg iotCfg]) async {
     // Initialise depending on mode
     if (_mode == Mode.both || _mode == Mode.messagingOnly) {
       // Must have a credentials path for messaging
