@@ -245,16 +245,20 @@ class Dartivity {
   ///
   /// Close the client
   void close() {
+    _messagerInitialised = false;
+    _iotivityClientInitialised = false;
+    _housekeepTimer.cancel();
+
     // Messaging
     if (_messagerInitialised) {
       _messager.close();
-    }
 
+    }
+    // Iotivity
     if (_iotivityClientInitialised) {
       _iotivityClient.close();
     }
 
-    _housekeepTimer.cancel();
   }
 
   ///_filter

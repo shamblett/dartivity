@@ -5,6 +5,8 @@
  * Copyright :  S.Hamblett 2015
  */
 
+@TestOn("vm")
+
 library dartivity.test;
 
 import 'dart:io';
@@ -16,6 +18,7 @@ import 'package:uuid/uuid.dart' as uuid;
 import '../configuration/local.dart';
 
 void main() {
+  // Configuration
   DartivityCfg cfg = new DartivityCfg(DartivityLocalConf.PROJECT_ID,
       DartivityLocalConf.CRED_PATH, DartivityLocalConf.DBHOST,
       DartivityLocalConf.DBUSER, DartivityLocalConf.DBPASS);
