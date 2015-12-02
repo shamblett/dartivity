@@ -62,10 +62,17 @@ class Dartivity {
 
   get nextMessage => _messageRxed.stream;
 
+  /// Resource cache
+  db.DartivityCache _cache;
+
+  /// Resource database
+  db.DartivityResourceDatabase _database;
+
   /// Dartivity
   /// mode - the operational mode of the client, defaults to both
   /// client - the clients to use
-  Dartivity(Mode mode, List<Client> clients) {
+  Dartivity(Mode mode, List<Client> clients, String dbName, String dbUser,
+      String dbPass) {
     if (mode == null) {
       _mode = Mode.both;
     } else {
@@ -81,6 +88,12 @@ class Dartivity {
       int rand = rnd.nextInt(1000);
       _uuid += "%${rand.toString()}";
     }
+
+    // Cache
+    _cache = new db.DartivityCache();
+
+    // Resource database
+    _database = new db.DartivityResourceDatabase(dbName, dbUser, dbPass);
   }
 
   /// initialise
@@ -198,6 +211,9 @@ class Dartivity {
       List<db.DartivityResource> iotivityResources =
       await _iotivityClient.findResource(host, resourceName, connectivity);
       if (iotivityResources != null) {
+        // Cache and database
+        _cache.bulk(iotivityResources);
+        await _database.putMany(iotivityResources);
         completer.complete(iotivityResources);
       } else {
         completer.complete(null);
