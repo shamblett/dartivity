@@ -13,12 +13,18 @@ import 'dart:io';
 import 'package:dartivity/dartivity.dart';
 import 'package:dartivity_messaging/dartivity_messaging.dart';
 
+import '../configuration/local.dart';
+
 Future main() async {
   final int badExitCode = -1;
 
+  DartivityCfg cfg = new DartivityCfg(DartivityLocalConf.PROJECT_ID,
+      DartivityLocalConf.CRED_PATH, DartivityLocalConf.DBHOST,
+      DartivityLocalConf.DBUSER, DartivityLocalConf.DBPASS);
+
   // Instantiate a Dartivity client and initialise for
   // messaging only
-  Dartivity dartivity = new Dartivity(Mode.messagingOnly, null);
+  Dartivity dartivity = new Dartivity(Mode.messagingOnly, null, cfg);
 
   // Send before ready
   DartivityMessage noSend = new DartivityMessage.iHave("", "", "", {}, "", "");
@@ -31,8 +37,7 @@ Future main() async {
   }
 
   // Initialise
-  await dartivity.initialise(
-      DartivityCfg.MESS_CRED_PATH, DartivityCfg.MESS_PROJECT_ID);
+  await dartivity.initialise();
 
   if (dartivity.initialised) {
     print("Initialse Status is true - OK");
@@ -74,6 +79,7 @@ Future main() async {
 
   // Listen for our messages until our timer pops
   var subscription;
+  Timer timer;
   int messCount = 0;
 
   void timerCallback() {
@@ -85,6 +91,7 @@ Future main() async {
       exit(badExitCode);
     }
     subscription.cancel();
+    timer.cancel();
     try {
       dartivity.close();
     } catch (e) {
@@ -92,7 +99,7 @@ Future main() async {
     // Good exit
     exit(0);
   }
-  Timer timer = new Timer(
+  timer = new Timer(
       new Duration(seconds: (DartivityCfg.MESS_PULL_TIME_INTERVAL * 7 + 2)),
       timerCallback);
 

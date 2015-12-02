@@ -13,7 +13,6 @@ import 'dart:isolate';
 import 'dart:math';
 
 import 'package:uuid/uuid.dart' as uuid;
-import 'package:json_object/json_object.dart' as jsonobject;
 import 'dart-ext:native/dartivity_extension';
 import 'package:dartivity_database/dartivity_database.dart' as db;
 import 'package:dartivity_messaging/dartivity_messaging.dart' as mess;

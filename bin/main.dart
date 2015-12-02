@@ -37,7 +37,7 @@ Future main() async {
   print("Dartivity Main - client id is ${dartivity.id}");
 
   // Message monitoring
-  var subscription = dartivity.nextMessage.listen((
+  dartivity.nextMessage.listen((
       mess.DartivityMessage message) {
     print("Dartivity Main - Message received ${message.toString()}");
   });
