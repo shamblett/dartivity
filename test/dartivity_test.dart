@@ -18,32 +18,32 @@ import 'package:json_object/json_object.dart' as jsonobject;
 void main() {
   group("Construction and configuration", () {
     test("No mode supplied", () {
-      Dartivity dartivity = new Dartivity(null);
+      Dartivity dartivity = new Dartivity(null, null);
       expect(dartivity.supports, Mode.both);
     });
 
     test("Both mode", () {
-      Dartivity dartivity = new Dartivity(Mode.both);
+      Dartivity dartivity = new Dartivity(Mode.both, null);
       expect(dartivity.supports, Mode.both);
     });
 
     test("Messaging only mode", () {
-      Dartivity dartivity = new Dartivity(Mode.messagingOnly);
+      Dartivity dartivity = new Dartivity(Mode.messagingOnly, null);
       expect(dartivity.supports, Mode.messagingOnly);
     });
 
-    test("IOT only mode", () {
-      Dartivity dartivity = new Dartivity(Mode.iotOnly);
+    test("Iotivity client", () {
+      Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity]);
       expect(dartivity.supports, Mode.iotOnly);
     });
 
     test("Hostname", () {
-      Dartivity dartivity = new Dartivity(Mode.both);
+      Dartivity dartivity = new Dartivity(Mode.both, null);
       expect(dartivity.hostname, Platform.localHostname);
     });
 
     test("Id generation check", () {
-      Dartivity dartivity = new Dartivity(Mode.both);
+      Dartivity dartivity = new Dartivity(Mode.both, null);
       uuid.Uuid myUuid = new uuid.Uuid();
       var uuid1 =
       myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
@@ -58,17 +58,17 @@ void main() {
 
   group("Initialisation", () {
     test("Initialise state", () {
-      Dartivity dartivity = new Dartivity(null);
+      Dartivity dartivity = new Dartivity(null, null);
       expect(dartivity.initialised, false);
     });
 
     test("No send until initialised", () {
-      Dartivity dartivity = new Dartivity(Mode.both);
+      Dartivity dartivity = new Dartivity(Mode.both, null);
       expect(dartivity.send(null), null);
     });
 
     test("No find resource until initialised", () async {
-      Dartivity dartivity = new Dartivity(Mode.both);
+      Dartivity dartivity = new Dartivity(Mode.both, null);
       expect(await dartivity.findResource(null, null), null);
     });
   });

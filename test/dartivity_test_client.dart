@@ -18,7 +18,7 @@ Future main() async {
 
   // Instantiate a Dartivity client and initialise for
   // both messaging and iotivity, ie a normal client configuration.
-  Dartivity dartivity = new Dartivity(Mode.both);
+  Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity]);
 
   DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
       qos: DartivityIotivityCfg.QualityOfService_LowQos);

@@ -13,6 +13,9 @@ class Dartivity {
 
   Mode get supports => _mode;
 
+  /// Client
+  List<Client> _client;
+
   /// State
   bool _messagerInitialised = false;
   bool _iotivityClientInitialised = false;
@@ -61,12 +64,15 @@ class Dartivity {
 
   /// Dartivity
   /// mode - the operational mode of the client, defaults to both
-  Dartivity(Mode mode) {
+  /// client - the clients to use
+  Dartivity(Mode mode, List<Client> clients) {
     if (mode == null) {
       _mode = Mode.both;
     } else {
       _mode = mode;
     }
+    _client = clients;
+
     // Generate our namespaced uuid
     uuid.Uuid myUuid = new uuid.Uuid();
     _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, DartivityCfg.CLIENT_ID_URL);
@@ -108,19 +114,28 @@ class Dartivity {
     }
 
     if (_mode == Mode.both || _mode == Mode.iotOnly) {
-      // Must have a configuration for iotivity
-      if (iotCfg == null) {
-        throw new DartivityException(DartivityException.NO_IOT_CFG_SPECIFIED);
-      }
-      _iotivityClient = new DartivityIotivity();
-      await _iotivityClient.initialise(iotCfg);
-      if (!_iotivityClient.ready) {
-        throw new DartivityException(
-            DartivityException.FAILED_TO_INITIALISE_IOTCLIENT);
-      }
-      _iotivityClientInitialised = true;
-    }
+      for (Client client in _client) {
+        switch (client) {
+          case Client.iotivity:
+          // Must have a configuration for iotivity
+            if (iotCfg == null) {
+              throw new DartivityException(
+                  DartivityException.NO_IOT_CFG_SPECIFIED);
+            }
+            _iotivityClient = new DartivityIotivity();
+            await _iotivityClient.initialise(iotCfg);
+            if (!_iotivityClient.ready) {
+              throw new DartivityException(
+                  DartivityException.FAILED_TO_INITIALISE_IOTCLIENT);
+            }
+            _iotivityClientInitialised = true;
+            break;
 
+          default:
+            break;
+        }
+      }
+    }
     // Start our housekeeping timer
     _housekeepTimer = new Timer.periodic(_housekeepDuration, _houseKeep);
     return initialised;
@@ -143,7 +158,6 @@ class Dartivity {
     var completer = new Completer();
     mess.DartivityMessage message = await _messager.receive();
     if (message != null) {
-
       // Filter ones we don't want to process, always add to the message
       // event stream for external listeners.
       mess.DartivityMessage filteredMessage = _filter(message);
@@ -176,7 +190,7 @@ class Dartivity {
   /// findResource
   Future<List<DartivityResource>> findResource(String host, String resourceName,
       [int connectivity =
-      DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
+          DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     var completer = new Completer();
     List<DartivityResource> dartivityResources = new List<DartivityResource>();
     // Iotivity

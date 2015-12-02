@@ -18,7 +18,7 @@ Future main() async {
 
   // Instantiate a Dartivity client and initialise for
   // messaging only
-  Dartivity dartivity = new Dartivity(Mode.messagingOnly);
+  Dartivity dartivity = new Dartivity(Mode.messagingOnly, null);
 
   // Send before ready
   DartivityMessage noSend = new DartivityMessage.iHave("", "", "", {}, "", "");

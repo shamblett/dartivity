@@ -37,6 +37,6 @@ enum Mode {
 }
 
 /// Iot client support
-enum Client { iotivity, mqtt, all }
+enum Client { iotivity, mqtt }
 
 
