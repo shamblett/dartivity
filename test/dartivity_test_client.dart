@@ -8,39 +8,57 @@
 library dartivity.test;
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
-import 'package:dartivity_messaging/dartivity_messaging.dart';
+import 'package:dartivity_database/dartivity_database.dart';
+import 'package:test/test.dart';
 
 import '../configuration/local.dart';
 
 Future main() async {
-  final int badExitCode = -1;
+  // Configuration
+  DartivityCfg cfg = new DartivityCfg(
+      DartivityLocalConf.PROJECT_ID,
+      DartivityLocalConf.CRED_PATH,
+      DartivityLocalConf.DBHOST,
+      DartivityLocalConf.DBUSER,
+      DartivityLocalConf.DBPASS);
 
-  DartivityCfg cfg = new DartivityCfg(DartivityLocalConf.PROJECT_ID,
-      DartivityLocalConf.CRED_PATH, DartivityLocalConf.DBHOST,
-      DartivityLocalConf.DBUSER, DartivityLocalConf.DBPASS);
+  // Client
+  Dartivity dartivity;
 
-  // Instantiate a Dartivity client and initialise for
-  // both messaging and iotivity, ie a normal client configuration.
-  Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity], cfg);
+  test("Initialise", () async {
+    // Instantiate a Dartivity client and initialise for
+    // both messaging and iotivity, ie a normal client configuration.
+    dartivity = new Dartivity(Mode.both, [Client.iotivity], cfg);
 
-  DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
-      qos: DartivityIotivityCfg.QualityOfService_LowQos);
+    DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
+        qos: DartivityIotivityCfg.QualityOfService_LowQos);
 
-  await dartivity.initialise(iotCfg);
+    bool res = await dartivity.initialise(iotCfg);
+    expect(res, true);
+    expect(dartivity.initialised, true);
+    expect(dartivity.supports, Mode.both);
+  });
 
-  if (dartivity.initialised) {
-    print("Initialse Status is true - OK");
-  } else {
-    print("Oops Initialse Status is false - ERROR");
-    exit(badExitCode);
-  }
-  print("Dartivity Test Harness >>> client id is ${dartivity.id}");
-
-  // Message monitoring
-  dartivity.nextMessage.listen((DartivityMessage message) {
-    print("Dartivity Test Harness >>> Message received ${message.toString()}");
+  // Start the iotovity Simple Server now!!!
+  test("Find Resources", () async {
+    List<DartivityResource> resList =
+    await dartivity.findResource('', '/oic/res');
+    expect(resList, isNotNull);
+    expect(resList.length, 1);
+    DartivityResource res = resList[0];
+    expect(res.clientId, dartivity.id);
+    expect(res.id, isNotNull);
+    expect(res.provider, providerIotivity);
+    DateTime now = new DateTime.now();
+    expect(
+        res.updated.millisecondsSinceEpoch <= now.millisecondsSinceEpoch, true);
+    expect(res.resource, isNotNull);
+    DartivityIotivityResource iotRes = res.resource;
+    expect(iotRes.uri, '/a/light');
+    expect(iotRes.id, '/a/light');
+    expect(iotRes.host, 'coap://[fe80::21e:4fff:fe20:45a3]:39450');
+    expect(iotRes.observable, true);
   });
 }
