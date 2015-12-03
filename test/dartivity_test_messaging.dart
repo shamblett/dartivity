@@ -70,7 +70,8 @@ Future main() async {
       'url': 'here.com/ami'
     };
     DartivityMessage iHave = new DartivityMessage.iHave(
-        dartivity.id, dartivity.id, '/core/therm/1', myDevice, "", "");
+        dartivity.id, dartivity.id, '/core/therm/1', myDevice, "",
+        DartivityMessage.PROVIDER_IOTIVITY);
     DartivityMessage result3 = dartivity.send(iHave);
     expect(result3, isNotNull);
     expect(result3.type, MessageType.iHave);
@@ -80,7 +81,8 @@ Future main() async {
       'url': 'here.com/ami'
     };
     DartivityMessage iHave1 = new DartivityMessage.iHave(
-        dartivity.id, 'not us', '/core/therm/1', myDevice1, "", "");
+        dartivity.id, 'not us', '/core/therm/1', myDevice1, "",
+        DartivityMessage.PROVIDER_IOTIVITY);
     DartivityMessage result4 = dartivity.send(iHave1);
     expect(result4, isNotNull);
     expect(result4.type, MessageType.iHave);
