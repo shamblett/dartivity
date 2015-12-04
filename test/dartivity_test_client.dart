@@ -30,6 +30,7 @@ Future main() async {
   // Client
   Dartivity dartivity;
   DartivityResource res;
+  DateTime resUpdated;
 
   // Database
   DartivityResourceDatabase db = new DartivityResourceDatabase(
@@ -54,7 +55,7 @@ Future main() async {
   // Start the iotovity Simple Server now!!!
   test("Find Resources", () async {
     List<DartivityResource> resList =
-    await dartivity.findResource('', '/oic/res');
+    await dartivity.findResource('', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
     expect(resList, isNotNull);
     expect(resList.length, 1);
     res = resList[0];
@@ -70,11 +71,12 @@ Future main() async {
     expect(iotRes.id, '/a/light');
     expect(iotRes.host.contains('coap'), true);
     expect(iotRes.observable, true);
+    resUpdated = res.updated;
   });
 
-  test("Find Resources - from cache", () async {
+  /*test("Find Resources - from cache", () async {
     List<DartivityResource> resList =
-    await dartivity.findResource('', '/oic/res');
+    await dartivity.findResource('', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
     expect(resList, isNotNull);
     expect(resList.length, 1);
     res = resList[0];
@@ -90,7 +92,8 @@ Future main() async {
     expect(iotRes.id, '/a/light');
     expect(iotRes.host.contains('coap'), true);
     expect(iotRes.observable, true);
-  });
+    expect(res.updated.millisecondsSinceEpoch, resUpdated.millisecondsSinceEpoch);
+  });*/
 
   test("Check database", () async {
     DartivityResource dbRes = await db.get(res.id);
@@ -101,10 +104,12 @@ Future main() async {
     expect(iotRes.id, '/a/light');
     expect(iotRes.host.contains('coap'), true);
     expect(iotRes.observable, true);
-    bool done = await db.delete(res);
+    expect(
+        res.updated.millisecondsSinceEpoch, resUpdated.millisecondsSinceEpoch);
+    /*bool done = await db.delete(res);
     expect(done, true);
     dbRes = await db.get(res.id);
-    expect(dbRes, isNull);
+    expect(dbRes, isNull);*/
   });
   test("Close", () {
     dartivity.close();
