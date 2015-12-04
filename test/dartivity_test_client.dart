@@ -23,9 +23,19 @@ Future main() async {
       DartivityLocalConf.DBHOST,
       DartivityLocalConf.DBUSER,
       DartivityLocalConf.DBPASS);
+  // Dont tail uuids for testing, we will then always generate the
+  // same resource id's for the host we are on.
+  cfg.tailedUuid = false;
 
   // Client
   Dartivity dartivity;
+  DartivityResource res;
+
+  // Database
+  DartivityResourceDatabase db = new DartivityResourceDatabase(
+      DartivityLocalConf.DBHOST,
+      DartivityLocalConf.DBUSER,
+      DartivityLocalConf.DBPASS);
 
   test("Initialise", () async {
     // Instantiate a Dartivity client and initialise for
@@ -47,7 +57,7 @@ Future main() async {
     await dartivity.findResource('', '/oic/res');
     expect(resList, isNotNull);
     expect(resList.length, 1);
-    DartivityResource res = resList[0];
+    res = resList[0];
     expect(res.clientId, dartivity.id);
     expect(res.id, isNotNull);
     expect(res.provider, providerIotivity);
@@ -58,7 +68,46 @@ Future main() async {
     DartivityIotivityResource iotRes = res.resource;
     expect(iotRes.uri, '/a/light');
     expect(iotRes.id, '/a/light');
-    expect(iotRes.host, 'coap://[fe80::21e:4fff:fe20:45a3]:39450');
+    expect(iotRes.host.contains('coap'), true);
     expect(iotRes.observable, true);
+  });
+
+  test("Find Resources - from cache", () async {
+    List<DartivityResource> resList =
+    await dartivity.findResource('', '/oic/res');
+    expect(resList, isNotNull);
+    expect(resList.length, 1);
+    res = resList[0];
+    expect(res.clientId, dartivity.id);
+    expect(res.id, isNotNull);
+    expect(res.provider, providerIotivity);
+    DateTime now = new DateTime.now();
+    expect(
+        res.updated.millisecondsSinceEpoch <= now.millisecondsSinceEpoch, true);
+    expect(res.resource, isNotNull);
+    DartivityIotivityResource iotRes = res.resource;
+    expect(iotRes.uri, '/a/light');
+    expect(iotRes.id, '/a/light');
+    expect(iotRes.host.contains('coap'), true);
+    expect(iotRes.observable, true);
+  });
+
+  test("Check database", () async {
+    DartivityResource dbRes = await db.get(res.id);
+    expect(dbRes, isNotNull);
+    expect(dbRes.provider, providerIotivity);
+    DartivityIotivityResource iotRes = res.resource;
+    expect(iotRes.uri, '/a/light');
+    expect(iotRes.id, '/a/light');
+    expect(iotRes.host.contains('coap'), true);
+    expect(iotRes.observable, true);
+    bool done = await db.delete(res);
+    expect(done, true);
+    dbRes = await db.get(res.id);
+    expect(dbRes, isNull);
+  });
+  test("Close", () {
+    dartivity.close();
+    expect(dartivity.initialised, false);
   });
 }

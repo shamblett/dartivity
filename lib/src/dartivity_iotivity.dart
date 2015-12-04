@@ -22,6 +22,9 @@ class DartivityIotivity {
   /// Client resource cache
   db.DartivityCache _cache;
 
+  /// Iotivity specific constants
+  static const String OC_RSRVD_WELL_KNOWN_URI = '/oic/res';
+
   DartivityIotivity(String clientId) {
     _clientId = clientId;
     _platform = new DartivityIotivityPlatform();
@@ -47,21 +50,46 @@ class DartivityIotivity {
   Future<List<db.DartivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
-      DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
+          DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
     Completer completer = new Completer();
-    List<DartivityClientIotivityResource> res = await _platform.findResource(
-        host, resourceName, connectivity);
-    if (res != null) {
-      List<db.DartivityResource> resList = new List<db.DartivityResource>();
-      res.forEach((resource) {
-        db.DartivityResource tmp = new db.DartivityResource.fromIotivity(
-            resource.resource, _clientId);
-        resList.add(tmp);
-        _cache.put(tmp.id, resource);
-      });
-      completer.complete(resList);
+    // Check the cache first
+    List<db.DartivityResource> ret = new List<db.DartivityResource>();
+    if (resourceName == OC_RSRVD_WELL_KNOWN_URI) {
+      List<DartivityClientIotivityResource> resList = _cache
+          .all()
+          .values
+          .toList();
+      if (resList.length != 0) {
+        resList.forEach((res) {
+          ret.add(
+              new db.DartivityResource.fromIotivity(res.resource, _clientId));
+        });
+        completer.complete(ret);
+      }
     } else {
-      completer.complete(null);
+      db.DartivityResource res = _cache.get(resourceName);
+      if (res != null) {
+        ret.add(new db.DartivityResource.fromIotivity(res.resource, _clientId));
+        completer.complete(ret);
+      }
+    }
+
+    // If nothing in the cache try and find the resource
+    if (!completer.isCompleted) {
+      List<DartivityClientIotivityResource> res =
+      await _platform.findResource(host, resourceName, connectivity);
+      if (res != null) {
+        List<db.DartivityResource> resList = new List<db.DartivityResource>();
+        res.forEach((resource) {
+          db.DartivityResource tmp = new db.DartivityResource.fromIotivity(
+              resource.resource, _clientId);
+          resList.add(tmp);
+          _cache.put(tmp.id, resource);
+        });
+        completer.complete(resList);
+      } else {
+        completer.complete(null);
+      }
     }
     return completer.future;
   }

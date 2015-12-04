@@ -17,7 +17,12 @@ class DartivityClientIotivityResource {
 
   int get ptr => _ptr;
 
-  /// The Dartivity Iotivty resource
+  /// Id, this is needed by the cache
+  String _id;
+
+  String get id => _id;
+
+  /// The Dartivity Iotivity resource
   db.DartivityIotivityResource _resource;
 
   db.DartivityIotivityResource get resource => _resource;
@@ -26,5 +31,6 @@ class DartivityClientIotivityResource {
       db.DartivityIotivityResource resource) {
     _ptr = ptr;
     _resource = resource;
+    _id = resource.id;
   }
 }
