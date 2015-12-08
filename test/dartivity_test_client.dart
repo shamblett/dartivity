@@ -74,7 +74,7 @@ Future main() async {
     resUpdated = res.updated;
   });
 
-  /*test("Find Resources - from cache", () async {
+  test("Find Resources - from cache", () async {
     List<DartivityResource> resList =
     await dartivity.findResource('', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
     expect(resList, isNotNull);
@@ -93,7 +93,7 @@ Future main() async {
     expect(iotRes.host.contains('coap'), true);
     expect(iotRes.observable, true);
     expect(res.updated.millisecondsSinceEpoch, resUpdated.millisecondsSinceEpoch);
-  });*/
+  });
 
   test("Check database", () async {
     DartivityResource dbRes = await db.get(res.id);
@@ -106,10 +106,10 @@ Future main() async {
     expect(iotRes.observable, true);
     expect(
         res.updated.millisecondsSinceEpoch, resUpdated.millisecondsSinceEpoch);
-    /*bool done = await db.delete(res);
+    bool done = await db.delete(res);
     expect(done, true);
     dbRes = await db.get(res.id);
-    expect(dbRes, isNull);*/
+    expect(dbRes, isNull);
   });
   test("Close", () {
     dartivity.close();

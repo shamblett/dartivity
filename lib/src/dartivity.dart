@@ -213,15 +213,35 @@ class Dartivity {
     var completer = new Completer();
     // Iotivity
     if (_iotivityClientInitialised) {
-      List<db.DartivityResource> iotivityResources =
-      await _iotivityClient.findResource(host, resourceName, connectivity);
-      if (iotivityResources != null) {
-        // Cache and database
-        _cache.bulk(iotivityResources);
-        await _database.putMany(iotivityResources);
-        completer.complete(iotivityResources);
+      // Check the cache
+      List<db.DartivityResource> iotivityCacheRes =
+      _getAllProviderFromCache(db.providerIotivity);
+      if (iotivityCacheRes.length != 0) {
+        if (resourceName == DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI) {
+          completer.complete(iotivityCacheRes);
+        } else {
+          db.DartivityResource retRes = _cache.get(resourceName);
+          if (retRes != null) {
+            List<db.DartivityResource> retList =
+            new List<db.DartivityResource>();
+            retList.add(retRes);
+            completer.complete(retList);
+          } else {
+            completer.complete(null);
+          }
+        }
       } else {
-        completer.complete(null);
+        // Get the resources from iotivity
+        List<db.DartivityResource> iotivityResources = await _iotivityClient
+            .findResource(host, resourceName, connectivity);
+        if (iotivityResources != null) {
+          // Cache and database
+          _cache.bulk(iotivityResources);
+          await _database.putMany(iotivityResources);
+          completer.complete(iotivityResources);
+        } else {
+          completer.complete(null);
+        }
       }
     } else {
       completer.complete(null);
@@ -252,13 +272,11 @@ class Dartivity {
     // Messaging
     if (_messagerInitialised) {
       _messager.close();
-
     }
     // Iotivity
     if (_iotivityClientInitialised) {
       _iotivityClient.close();
     }
-
   }
 
   ///_filter
@@ -273,5 +291,21 @@ class Dartivity {
     } else {
       return message;
     }
+  }
+
+  /// getAllProviderFromCache
+  ///
+  /// Gets all cache entries for the specified provider
+  List<db.DartivityResource> _getAllProviderFromCache(String provider) {
+    List<db.DartivityResource> allRes = _cache
+        .all()
+        .values
+        .toList();
+    if (allRes == null) return null;
+    List<db.DartivityResource> retRes = new List<db.DartivityResource>();
+    allRes.forEach((res) {
+      if (res.provider == provider) retRes.add(res);
+    });
+    return retRes;
   }
 }
