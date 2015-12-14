@@ -184,6 +184,7 @@ class Dartivity {
 
         // Default processing for whoHas messages
         if (filteredMessage.type == mess.MessageType.whoHas) {
+          if (filteredMessage.refreshCache) clearCache();
           List<db.DartivityResource> resourceList = await findResource(
               filteredMessage.host, filteredMessage.resourceName);
           if (resourceList != null) {
@@ -307,5 +308,12 @@ class Dartivity {
       if (res.provider == provider) retRes.add(res);
     });
     return retRes;
+  }
+
+  /// clearCache
+  ///
+  /// Clears the cache
+  void clearCache() {
+    _cache.clear();
   }
 }
