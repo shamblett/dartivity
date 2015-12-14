@@ -16,6 +16,9 @@ supported, device control(PUT/GET) will be added in a later release.
 The package depends on an async native extension that binds to the C/C++ API's of these clients where needed, this
 extension is developed separatley and can be found [here](https://github.com/shamblett/dartivity_extension).
 
+The package also depends on other members of the dartivity suite such as dartivity_messaging for the messaging component
+and dartivity_database for the database and resource management component.
+
 ## Design
 
 The client is designed to run all the time, i.e. it is an active client with its own housekeeping heartbeat, the
@@ -35,7 +38,8 @@ this facility will be added in later releases.
 and perform local device discovery, any clients that find the requested devices reply with a 'Ihave' message containing
 the device details
 
-3. The web site then populates a web page/database backend with this information.
+3. The web site then populates a web page/database backend with this information either from the received
+messages(live mode) or form the database(historic mode).
 
 4. Once devices have been discovered control operations can be performed, such as set temperature, switch on/off etc.
 (Not yet, see above). Also platform information is harvesetd, what the client id is(unique to the client), what platform
