@@ -54,8 +54,8 @@ Future main() async {
 
   // Start the iotovity Simple Server now!!!
   test("Find Resources", () async {
-    List<DartivityResource> resList =
-    await dartivity.findResource('', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
+    List<DartivityResource> resList = await dartivity.findResource(
+        '', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
     expect(resList, isNotNull);
     expect(resList.length, 1);
     res = resList[0];
@@ -75,8 +75,8 @@ Future main() async {
   });
 
   test("Find Resources - from cache", () async {
-    List<DartivityResource> resList =
-    await dartivity.findResource('', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
+    List<DartivityResource> resList = await dartivity.findResource(
+        '', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
     expect(resList, isNotNull);
     expect(resList.length, 1);
     res = resList[0];
@@ -92,7 +92,30 @@ Future main() async {
     expect(iotRes.id, '/a/light');
     expect(iotRes.host.contains('coap'), true);
     expect(iotRes.observable, true);
-    expect(res.updated.millisecondsSinceEpoch, resUpdated.millisecondsSinceEpoch);
+    expect(
+        res.updated.millisecondsSinceEpoch, resUpdated.millisecondsSinceEpoch);
+  });
+
+  test("Find Resources - clear cache", () async {
+    dartivity.clearCache();
+    List<DartivityResource> resList = await dartivity.findResource(
+        '', DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI);
+    expect(resList, isNotNull);
+    expect(resList.length, 1);
+    res = resList[0];
+    expect(res.clientId, dartivity.id);
+    expect(res.id, isNotNull);
+    expect(res.provider, providerIotivity);
+    DateTime now = new DateTime.now();
+    expect(
+        res.updated.millisecondsSinceEpoch <= now.millisecondsSinceEpoch, true);
+    expect(res.resource, isNotNull);
+    DartivityIotivityResource iotRes = res.resource;
+    expect(iotRes.uri, '/a/light');
+    expect(iotRes.id, '/a/light');
+    expect(iotRes.host.contains('coap'), true);
+    expect(iotRes.observable, true);
+    resUpdated = res.updated;
   });
 
   test("Check database", () async {
@@ -111,6 +134,7 @@ Future main() async {
     dbRes = await db.get(res.id);
     expect(dbRes, isNull);
   });
+
   test("Close", () {
     dartivity.close();
     expect(dartivity.initialised, false);
