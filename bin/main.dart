@@ -9,22 +9,23 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
-import 'package:dartivity_messaging/dartivity_messaging.dart' as mess;
-
-import '../configuration/local.dart';
+import '../configuration/dartivity_local_conf.dart';
 
 Future main() async {
   final int badExitCode = -1;
 
   // Instantiate a Dartivity client and initialise for
   // both messaging and iotivity, ie a normal client configuration.
-  DartivityCfg cfg = new DartivityCfg(DartivityLocalConf.PROJECT_ID,
-      DartivityLocalConf.CRED_PATH, DartivityLocalConf.DBHOST,
-      DartivityLocalConf.DBUSER, DartivityLocalConf.DBPASS);
-  Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity], cfg);
+  final DartivityCfg cfg = new DartivityCfg(
+      DartivityLocalConf.projectid,
+      DartivityLocalConf.credentialsPath,
+      DartivityLocalConf.dbHost,
+      DartivityLocalConf.dbUser,
+      DartivityLocalConf.dbPassword);
+  final Dartivity dartivity = new Dartivity(Mode.both, [Client.iotivity], cfg);
 
-  DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
-      qos: DartivityIotivityCfg.QualityOfService_LowQos);
+  final DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
+      qos: DartivityIotivityCfg.qualityOfServiceLowQos);
 
   await dartivity.initialise(iotCfg);
 
@@ -37,9 +38,7 @@ Future main() async {
   print("Dartivity Main - client id is ${dartivity.id}");
 
   // Message monitoring
-  dartivity.nextMessage.listen((
-      mess.DartivityMessage message) {
+  dartivity.nextMessage.listen((message) {
     print("Dartivity Main - Message received ${message.toString()}");
   });
-
 }

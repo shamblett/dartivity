@@ -8,6 +8,12 @@
 part of dartivity;
 
 class DartivityIotivity {
+  DartivityIotivity(String clientId) {
+    _clientId = clientId;
+    _platform = new DartivityIotivityPlatform();
+    _cache = new db.DartivityCache();
+  }
+
   /// Ready, as in to use
   bool _ready = false;
 
@@ -23,13 +29,7 @@ class DartivityIotivity {
   db.DartivityCache _cache;
 
   /// Iotivity specific constants
-  static const String OC_RSRVD_WELL_KNOWN_URI = '/oic/res';
-
-  DartivityIotivity(String clientId) {
-    _clientId = clientId;
-    _platform = new DartivityIotivityPlatform();
-    _cache = new db.DartivityCache();
-  }
+  static const String ocRsrvdWellKnownUri = '/oic/res';
 
   /// initialise
   /// Initialises the messaging class.
@@ -50,15 +50,17 @@ class DartivityIotivity {
   Future<List<db.DartivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
-          DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
-    Completer completer = new Completer();
-    List<DartivityClientIotivityResource> res =
-    await _platform.findResource(host, resourceName, connectivity);
+          DartivityIotivityCfg.ocConnectivityTypeCtDefault]) async {
+    final Completer<List<db.DartivityResource>> completer =
+        new Completer<List<db.DartivityResource>>();
+    final List<DartivityClientIotivityResource> res =
+        await _platform.findResource(host, resourceName, connectivity);
     if (res != null) {
-      List<db.DartivityResource> resList = new List<db.DartivityResource>();
+      final List<db.DartivityResource> resList =
+          new List<db.DartivityResource>();
       res.forEach((resource) {
-        db.DartivityResource tmp =
-        new db.DartivityResource.fromIotivity(resource.resource, _clientId);
+        final db.DartivityResource tmp =
+            new db.DartivityResource.fromIotivity(resource.resource, _clientId);
         resList.add(tmp);
         _cache.put(tmp.id, resource);
       });

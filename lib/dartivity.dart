@@ -30,11 +30,7 @@ part 'src/dartivity_client_iotivity_resource.dart';
 /// Supports only local iot resources, messaging or both.
 /// Note iotOnly includes database support, messaging only
 /// doesn't.
-enum Mode {
-  iotOnly, messagingOnly, both
-}
+enum Mode { iotOnly, messagingOnly, both }
 
 /// Iot client support
 enum Client { iotivity, mqtt }
-
-

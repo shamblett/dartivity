@@ -8,6 +8,16 @@
 part of dartivity;
 
 class DartivityCfg {
+  DartivityCfg(String projectId, String credPath, String dbHost, String dbUser,
+      String dbPass) {
+    _projectId = projectId;
+    _credPath = credPath;
+    _topic = "projects/${projectId}/topics/${packageName}";
+    _dbHost = dbHost;
+    _dbUser = dbUser;
+    _dbPass = dbPass;
+  }
+
   /// Package name
   static const String packageName = 'dartivity';
 
@@ -32,12 +42,12 @@ class DartivityCfg {
   String get credPath => _credPath;
 
   /// Time between message pull requests
-  static const int MESS_PULL_TIME_INTERVAL = 10;
+  static const int messPullTimeInterval = 10;
 
   // seconds
 
   /// Housekeeping timer
-  static const int HOUSEKEEPING_TIME_INTERVAL = 1;
+  static const int bookkeepingTimeInterval = 1;
 
   // seconds
 
@@ -56,14 +66,4 @@ class DartivityCfg {
   String _dbPass;
 
   String get dbPass => _dbPass;
-
-  DartivityCfg(String projectId, String credPath, String dbHost, String dbUser,
-      String dbPass) {
-    _projectId = projectId;
-    _credPath = credPath;
-    _topic = "projects/${projectId}/topics/${packageName}";
-    _dbHost = dbHost;
-    _dbUser = dbUser;
-    _dbPass = dbPass;
-  }
 }

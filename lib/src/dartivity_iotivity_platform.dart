@@ -8,9 +8,11 @@
 part of dartivity;
 
 class DartivityIotivityPlatform {
+  DartivityIotivityPlatform();
+
   /// Function identifiers
-  static const int _CFG = 1;
-  static const int _FIND_RESOURCE = 2;
+  static const int _cfg = 1;
+  static const int _findResource = 2;
 
   /// Send port
   static SendPort _port;
@@ -19,14 +21,12 @@ class DartivityIotivityPlatform {
 
   SendPort get _servicePort => _port == null ? _newServicePort() : _port;
 
-  DartivityIotivityPlatform();
-
   /// Configure
   Future configure(DartivityIotivityCfg cfg) {
-    var completer = new Completer();
-    var replyPort = new RawReceivePort();
-    var args = new List(10);
-    args[0] = _CFG;
+    final completer = new Completer();
+    final replyPort = new RawReceivePort();
+    final args = new List(10);
+    args[0] = _cfg;
     args[1] = replyPort.sendPort;
     args[2] = cfg.serviceType;
     args[3] = cfg.mode;
@@ -42,7 +42,7 @@ class DartivityIotivityPlatform {
         completer.complete(result);
       } else {
         completer.completeError(
-            new DartivityException(DartivityException.IOT_PLATFORM_CFG_FAILED));
+            new DartivityException(DartivityException.iotPlatformCfgFailed));
       }
     };
 
@@ -53,17 +53,16 @@ class DartivityIotivityPlatform {
   Future<List<DartivityClientIotivityResource>> findResource(
       String host, String resourceName,
       [int connectivity =
-      DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
-    var completer = new Completer();
+          DartivityIotivityCfg.ocConnectivityTypeCtDefault]) async {
+    final completer = new Completer();
 
     // Check the arguments before calling the extension
-    if ((host == null) ||
-        (resourceName == null) ||
-        (connectivity == null)) completer.complete(null);
+    if ((host == null) || (resourceName == null) || (connectivity == null))
+      completer.complete(null);
 
-    var replyPort = new RawReceivePort();
-    var args = new List(5);
-    args[0] = _FIND_RESOURCE;
+    final replyPort = new RawReceivePort();
+    final args = new List(5);
+    args[0] = _findResource;
     args[1] = replyPort.sendPort;
     args[2] = host;
     args[3] = resourceName;
@@ -74,22 +73,17 @@ class DartivityIotivityPlatform {
       replyPort.close();
       if (result != null) {
         if (result is List) {
-          List<DartivityClientIotivityResource> resList =
-          new List<DartivityClientIotivityResource>();
+          final List<DartivityClientIotivityResource> resList =
+              new List<DartivityClientIotivityResource>();
           result.forEach((entry) {
             // A resource, passed back are ptr, unique id, uri, host, resource types
             // interface types and observable. Ptr is not stored in the IotivityResource
             // but in the DartivityClientIotivityResource class
-            db.DartivityIotivityResource resource = new db
-                .DartivityIotivityResource(
-                entry[1],
-                entry[2],
-                entry[3],
-                entry[4],
-                entry[5],
-                entry[6]);
-            DartivityClientIotivityResource iotres = new DartivityClientIotivityResource(
-                entry[0], resource);
+            final db.DartivityIotivityResource resource =
+                new db.DartivityIotivityResource(
+                    entry[1], entry[2], entry[3], entry[4], entry[5], entry[6]);
+            final DartivityClientIotivityResource iotres =
+                new DartivityClientIotivityResource(entry[0], resource);
             resList.add(iotres);
           });
           completer.complete(resList);

@@ -17,5 +17,5 @@ packages
 pubspec.lock
 /.idea
 
-# Config
-configuration
+# Dart 2 additions
+.dart_tool/

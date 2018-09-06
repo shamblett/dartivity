@@ -10,33 +10,30 @@
 library dartivity.test;
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dartivity/dartivity.dart';
 import 'package:dartivity_messaging/dartivity_messaging.dart';
 import 'package:test/test.dart';
 
-import '../configuration/local.dart';
+import '../configuration/dartivity_local_conf.dart';
 
 Future main() async {
-  final int badExitCode = -1;
-
   // Configuration
-  DartivityCfg cfg = new DartivityCfg(
-      DartivityLocalConf.PROJECT_ID,
-      DartivityLocalConf.CRED_PATH,
-      DartivityLocalConf.DBHOST,
-      DartivityLocalConf.DBUSER,
-      DartivityLocalConf.DBPASS);
+  final DartivityCfg cfg = new DartivityCfg(
+      DartivityLocalConf.projectid,
+      DartivityLocalConf.credentialsPath,
+      DartivityLocalConf.dbHost,
+      DartivityLocalConf.dbUser,
+      DartivityLocalConf.dbPassword);
 
   // Instantiate a Dartivity client and initialise for
   // messaging only
-  Dartivity dartivity = new Dartivity(Mode.messagingOnly, null, cfg);
+  final Dartivity dartivity = new Dartivity(Mode.messagingOnly, null, cfg);
 
   test("Send before ready", () {
-    DartivityMessage noSend =
-    new DartivityMessage.iHave("", "", "", {}, "", "");
-    var result = dartivity.send(noSend);
+    final DartivityMessage noSend =
+        new DartivityMessage.iHave("", "", "", {}, "", "");
+    final result = dartivity.send(noSend);
     expect(result, isNull);
   });
 
@@ -46,44 +43,51 @@ Future main() async {
   });
 
   test("Send null message", () async {
-    DartivityMessage result1 = dartivity.send(null);
+    final DartivityMessage result1 = await dartivity.send(null);
     expect(result1, isNull);
   });
 
   test("Message exchange scenario", () async {
-    Completer completer = new Completer();
+    final Completer completer = new Completer();
     // Send a couple of whoHas messages
-    DartivityMessage whoHas1 =
-    new DartivityMessage.whoHas(dartivity.id, '/core/light');
-    String whoHas1Json = whoHas1.toJSON();
-    DartivityMessage result1 = dartivity.send(whoHas1);
+    final DartivityMessage whoHas1 =
+        new DartivityMessage.whoHas(dartivity.id, '/core/light');
+    final DartivityMessage result1 = await dartivity.send(whoHas1);
     expect(result1, isNotNull);
     expect(result1.type, MessageType.whoHas);
-    DartivityMessage whoHas2 =
-    new DartivityMessage.whoHas(dartivity.id, '/core/thermostat');
-    DartivityMessage result2 = dartivity.send(whoHas2);
+    final DartivityMessage whoHas2 =
+        new DartivityMessage.whoHas(dartivity.id, '/core/thermostat');
+    final DartivityMessage result2 = await dartivity.send(whoHas2);
     expect(result2, isNotNull);
     expect(result2.type, MessageType.whoHas);
     // Followed by a I Have
-    Map<String, String> myDevice = {
+    final Map<String, String> myDevice = {
       'iama': 'thermostat',
       'url': 'here.com/ami'
     };
-    DartivityMessage iHave = new DartivityMessage.iHave(
-        dartivity.id, dartivity.id, '/core/therm/1', myDevice, "",
-        DartivityMessage.PROVIDER_IOTIVITY);
-    DartivityMessage result3 = dartivity.send(iHave);
+    final DartivityMessage iHave = new DartivityMessage.iHave(
+        dartivity.id,
+        dartivity.id,
+        '/core/therm/1',
+        myDevice,
+        "",
+        DartivityMessage.providerIotivity);
+    final DartivityMessage result3 = await dartivity.send(iHave);
     expect(result3, isNotNull);
     expect(result3.type, MessageType.iHave);
     // Followed by a I Have but not for us
-    Map<String, String> myDevice1 = {
+    final Map<String, String> myDevice1 = {
       'iama': 'thermostat',
       'url': 'here.com/ami'
     };
-    DartivityMessage iHave1 = new DartivityMessage.iHave(
-        dartivity.id, 'not us', '/core/therm/1', myDevice1, "",
-        DartivityMessage.PROVIDER_IOTIVITY);
-    DartivityMessage result4 = dartivity.send(iHave1);
+    final DartivityMessage iHave1 = new DartivityMessage.iHave(
+        dartivity.id,
+        'not us',
+        '/core/therm/1',
+        myDevice1,
+        "",
+        DartivityMessage.providerIotivity);
+    final DartivityMessage result4 = await dartivity.send(iHave1);
     expect(result4, isNotNull);
     expect(result4.type, MessageType.iHave);
 
@@ -99,13 +103,13 @@ Future main() async {
       timer.cancel();
       dartivity.close();
       completer.complete(true);
-
     }
+
     timer = new Timer(
-        new Duration(seconds: (DartivityCfg.MESS_PULL_TIME_INTERVAL * 7 + 2)),
+        new Duration(seconds: (DartivityCfg.messPullTimeInterval * 7 + 2)),
         timerCallback);
 
-    subscription = dartivity.nextMessage.listen((DartivityMessage message) {
+    subscription = dartivity.nextMessage.listen((message) {
       print("Message received ${message.toString()}");
       messCount++;
 

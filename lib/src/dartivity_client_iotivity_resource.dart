@@ -12,6 +12,13 @@
 part of dartivity;
 
 class DartivityClientIotivityResource {
+  DartivityClientIotivityResource(
+      int ptr, db.DartivityIotivityResource resource) {
+    _ptr = ptr;
+    _resource = resource;
+    _id = resource.id;
+  }
+
   /// Class pointer for the C++ extension
   int _ptr;
 
@@ -26,11 +33,4 @@ class DartivityClientIotivityResource {
   db.DartivityIotivityResource _resource;
 
   db.DartivityIotivityResource get resource => _resource;
-
-  DartivityClientIotivityResource(int ptr,
-      db.DartivityIotivityResource resource) {
-    _ptr = ptr;
-    _resource = resource;
-    _id = resource.id;
-  }
 }

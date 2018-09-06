@@ -8,6 +8,37 @@
 part of dartivity;
 
 class Dartivity {
+  /// Dartivity
+  /// mode - the operational mode of the client, defaults to both
+  /// client - the clients to use
+  Dartivity(Mode mode, List<Client> clients, DartivityCfg cfg) {
+    if (mode == null) {
+      _mode = Mode.both;
+    } else {
+      _mode = mode;
+    }
+    _client = clients;
+
+    // Generate our namespaced uuid
+    final uuid.Uuid myUuid = new uuid.Uuid();
+    _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, cfg.clientIdURL);
+    if (cfg.tailedUuid) {
+      final Random rnd = new Random();
+      final int rand = rnd.nextInt(1000);
+      _uuid += "%${rand.toString()}";
+    }
+
+    // Cache
+    _cache = new db.DartivityCache();
+
+    // Resource database
+    _database =
+        new db.DartivityResourceDatabase(cfg.dbHost, cfg.dbUser, cfg.dbPass);
+
+    // Configuration
+    _cfg = cfg;
+  }
+
   /// Mode
   Mode _mode = Mode.both;
 
@@ -32,6 +63,7 @@ class Dartivity {
       case Mode.iotOnly:
         return _iotivityClientInitialised;
     }
+    return false;
   }
 
   /// Uuid
@@ -51,7 +83,7 @@ class Dartivity {
 
   /// Receive timer duration
   final Duration _housekeepDuration =
-  const Duration(seconds: DartivityCfg.HOUSEKEEPING_TIME_INTERVAL);
+      const Duration(seconds: DartivityCfg.bookkeepingTimeInterval);
 
   /// Housekeep timer
   Timer _housekeepTimer;
@@ -62,7 +94,7 @@ class Dartivity {
   /// Received message stream
   final _messageRxed = new StreamController.broadcast();
 
-  get nextMessage => _messageRxed.stream;
+  Stream get nextMessage => _messageRxed.stream;
 
   /// Resource cache
   db.DartivityCache _cache;
@@ -73,37 +105,6 @@ class Dartivity {
   /// Configuration
   DartivityCfg _cfg;
 
-  /// Dartivity
-  /// mode - the operational mode of the client, defaults to both
-  /// client - the clients to use
-  Dartivity(Mode mode, List<Client> clients, DartivityCfg cfg) {
-    if (mode == null) {
-      _mode = Mode.both;
-    } else {
-      _mode = mode;
-    }
-    _client = clients;
-
-    // Generate our namespaced uuid
-    uuid.Uuid myUuid = new uuid.Uuid();
-    _uuid = myUuid.v5(uuid.Uuid.NAMESPACE_URL, cfg.clientIdURL);
-    if (cfg.tailedUuid) {
-      Random rnd = new Random();
-      int rand = rnd.nextInt(1000);
-      _uuid += "%${rand.toString()}";
-    }
-
-    // Cache
-    _cache = new db.DartivityCache();
-
-    // Resource database
-    _database =
-    new db.DartivityResourceDatabase(cfg.dbHost, cfg.dbUser, cfg.dbPass);
-
-    // Configuration
-    _cfg = cfg;
-  }
-
   /// initialise
   ///
   /// credentialsPath - path to a valid credentials file for messaging
@@ -113,19 +114,18 @@ class Dartivity {
     if (_mode == Mode.both || _mode == Mode.messagingOnly) {
       // Must have a credentials path for messaging
       if (_cfg.credPath == null) {
-        throw new DartivityException(DartivityException.NO_CREDPATH_SPECIFIED);
+        throw new DartivityException(DartivityException.noCredpathSpecified);
       }
       // Must have a project name for messaging
       if (_cfg.projectId == null) {
-        throw new DartivityException(
-            DartivityException.NO_PROJECTNAME_SPECIFIED);
+        throw new DartivityException(DartivityException.noProjectnameSpecified);
       }
 
       _messager = new mess.DartivityMessaging(id);
       await _messager.initialise(_cfg.credPath, _cfg.projectId, _cfg.topic);
       if (!_messager.ready) {
         throw new DartivityException(
-            DartivityException.FAILED_TO_INITIALISE_MESSAGER);
+            DartivityException.failedToInitialiseMessager);
       }
 
       _messagerInitialised = true;
@@ -135,16 +135,16 @@ class Dartivity {
       for (Client client in _client) {
         switch (client) {
           case Client.iotivity:
-          // Must have a configuration for iotivity
+            // Must have a configuration for iotivity
             if (iotCfg == null) {
               throw new DartivityException(
-                  DartivityException.NO_IOT_CFG_SPECIFIED);
+                  DartivityException.noIotCfgSpecified);
             }
             _iotivityClient = new DartivityIotivity(id);
             await _iotivityClient.initialise(iotCfg);
             if (!_iotivityClient.ready) {
               throw new DartivityException(
-                  DartivityException.FAILED_TO_INITIALISE_IOTCLIENT);
+                  DartivityException.failedToInitialiseIotclient);
             }
             _iotivityClientInitialised = true;
             break;
@@ -162,40 +162,45 @@ class Dartivity {
   /// send
   ///
   /// Send a Dartivity Message
-  mess.DartivityMessage send(mess.DartivityMessage message) {
-    if (!initialised) return null;
-    if (message == null) return null;
-    _messager.send(message);
-    return message;
+  Future<mess.DartivityMessage> send(mess.DartivityMessage message) async {
+    final Completer<mess.DartivityMessage> completer =
+        new Completer<mess.DartivityMessage>();
+    mess.DartivityMessage sentMessage;
+    if (initialised && message != null) {
+      sentMessage = await _messager.send(message);
+    }
+    completer.complete(sentMessage);
+    return completer.future;
   }
 
   /// _receive
   ///
   /// Message receive method
   Future _receive() async {
-    var completer = new Completer();
-    mess.DartivityMessage message = await _messager.receive();
+    final completer = new Completer();
+    final mess.DartivityMessage message = await _messager.receive();
     if (message != null) {
       // Filter ones we don't want to process, always add to the message
       // event stream for external listeners.
-      mess.DartivityMessage filteredMessage = _filter(message);
+      final mess.DartivityMessage filteredMessage = _filter(message);
       if (filteredMessage != null) {
         _messageRxed.add(filteredMessage);
 
         // Default processing for whoHas messages
         if (filteredMessage.type == mess.MessageType.whoHas) {
           if (filteredMessage.refreshCache) clearCache();
-          List<db.DartivityResource> resourceList = await findResource(
+          final List<db.DartivityResource> resourceList = await findResource(
               filteredMessage.host, filteredMessage.resourceName);
           if (resourceList != null) {
             resourceList.forEach((resource) async {
-              mess.DartivityMessage iHave = new mess.DartivityMessage.iHave(
-                  id,
-                  filteredMessage.source,
-                  resource.id,
-                  resource.resource.toMap(),
-                  "",
-                  resource.provider);
+              final mess.DartivityMessage iHave =
+                  new mess.DartivityMessage.iHave(
+                      id,
+                      filteredMessage.source,
+                      resource.id,
+                      resource.resource.toMap(),
+                      "",
+                      resource.provider);
               await send(iHave);
             });
             completer.complete();
@@ -207,24 +212,24 @@ class Dartivity {
   }
 
   /// findResource
-  Future<List<db.DartivityResource>> findResource(String host,
-      String resourceName,
+  Future<List<db.DartivityResource>> findResource(
+      String host, String resourceName,
       [int connectivity =
-          DartivityIotivityCfg.OCConnectivityType_Ct_Default]) async {
-    var completer = new Completer();
+          DartivityIotivityCfg.ocConnectivityTypeCtDefault]) async {
+    final completer = new Completer();
     // Iotivity
     if (_iotivityClientInitialised) {
       // Check the cache
-      List<db.DartivityResource> iotivityCacheRes =
-      _getAllProviderFromCache(db.providerIotivity);
+      final List<db.DartivityResource> iotivityCacheRes =
+          _getAllProviderFromCache(db.providerIotivity);
       if (iotivityCacheRes.length != 0) {
-        if (resourceName == DartivityIotivity.OC_RSRVD_WELL_KNOWN_URI) {
+        if (resourceName == DartivityIotivity.ocRsrvdWellKnownUri) {
           completer.complete(iotivityCacheRes);
         } else {
-          db.DartivityResource retRes = _cache.get(resourceName);
+          final db.DartivityResource retRes = _cache.get(resourceName);
           if (retRes != null) {
-            List<db.DartivityResource> retList =
-            new List<db.DartivityResource>();
+            final List<db.DartivityResource> retList =
+                new List<db.DartivityResource>();
             retList.add(retRes);
             completer.complete(retList);
           } else {
@@ -233,8 +238,9 @@ class Dartivity {
         }
       } else {
         // Get the resources from iotivity
-        List<db.DartivityResource> iotivityResources = await _iotivityClient
-            .findResource(host, resourceName, connectivity);
+        final List<db.DartivityResource> iotivityResources =
+            await _iotivityClient.findResource(
+                host, resourceName, connectivity);
         if (iotivityResources != null) {
           // Cache and database
           _cache.bulk(iotivityResources);
@@ -255,7 +261,7 @@ class Dartivity {
     if (!initialised) return;
     if (_mode == Mode.both || _mode == Mode.messagingOnly) {
       // Check for message rx time
-      if (_housekeepPulse % DartivityCfg.MESS_PULL_TIME_INTERVAL == 0) {
+      if (_housekeepPulse % DartivityCfg.messPullTimeInterval == 0) {
         await _receive();
       }
     }
@@ -298,12 +304,9 @@ class Dartivity {
   ///
   /// Gets all cache entries for the specified provider
   List<db.DartivityResource> _getAllProviderFromCache(String provider) {
-    List<db.DartivityResource> allRes = _cache
-        .all()
-        .values
-        .toList();
+    final List<db.DartivityResource> allRes = _cache.all().values.toList();
     if (allRes == null) return null;
-    List<db.DartivityResource> retRes = new List<db.DartivityResource>();
+    final List<db.DartivityResource> retRes = new List<db.DartivityResource>();
     allRes.forEach((res) {
       if (res.provider == provider) retRes.add(res);
     });
