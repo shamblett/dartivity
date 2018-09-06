@@ -111,9 +111,9 @@ void main() {
       expect(dartivity.initialised, false);
     });
 
-    test("No send until initialised", () {
+    test("No send until initialised", () async {
       final Dartivity dartivity = new Dartivity(Mode.both, null, cfg);
-      expect(dartivity.send(null), null);
+      expect(await dartivity.send(null), null);
     });
 
     test("No find resource until initialised", () async {

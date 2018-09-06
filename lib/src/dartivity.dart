@@ -216,7 +216,8 @@ class Dartivity {
       String host, String resourceName,
       [int connectivity =
           DartivityIotivityCfg.ocConnectivityTypeCtDefault]) async {
-    final completer = new Completer();
+    final Completer<List<db.DartivityResource>> completer =
+        new Completer<List<db.DartivityResource>>();
     // Iotivity
     if (_iotivityClientInitialised) {
       // Check the cache

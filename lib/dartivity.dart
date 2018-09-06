@@ -9,11 +9,9 @@ library dartivity;
 
 import 'dart:io';
 import 'dart:async';
-import 'dart:isolate';
 import 'dart:math';
 
 import 'package:uuid/uuid.dart' as uuid;
-import 'dart-ext:native/dartivity_extension';
 import 'package:dartivity_database/dartivity_database.dart' as db;
 import 'package:dartivity_messaging/dartivity_messaging.dart' as mess;
 
