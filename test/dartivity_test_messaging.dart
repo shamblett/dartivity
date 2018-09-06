@@ -30,10 +30,10 @@ Future main() async {
   // messaging only
   final Dartivity dartivity = new Dartivity(Mode.messagingOnly, null, cfg);
 
-  test("Send before ready", () {
+  test("Send before ready", () async {
     final DartivityMessage noSend =
         new DartivityMessage.iHave("", "", "", {}, "", "");
-    final result = dartivity.send(noSend);
+    final result = await dartivity.send(noSend);
     expect(result, isNull);
   });
 
