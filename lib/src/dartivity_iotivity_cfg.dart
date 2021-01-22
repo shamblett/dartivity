@@ -1,26 +1,26 @@
 /*
- * Package : dartivity
- * Author : S. Hamblett <steve.hamblett@linux.com>
- * Date   : 28/09/2015
- * Copyright :  S.Hamblett 2015
+ * Package  = dartivity
+ * Author  = S. Hamblett <steve.hamblett@linux.com>
+ * Date    = 28/09/2015
+ * Copyright  =  S.Hamblett 2015
  */
 
 part of dartivity;
 
 class DartivityIotivityCfg {
   DartivityIotivityCfg(
-      {int qos: qualityOfServiceNaQos,
-      clientConnectivity: ocConnectivityTypeCtDefault,
-      String ipAddress: "0.0.0.0",
-      int port: 0}) {
-    this.qualityOfService = qos;
+      {int qos = qualityOfServiceNaQos,
+      clientConnectivity = ocConnectivityTypeCtDefault,
+      String ipAddress = '0.0.0.0',
+      int port = 0}) {
+    qualityOfService = qos;
     this.clientConnectivity = clientConnectivity;
-    this.ip = ipAddress;
+    ip = ipAddress;
     this.port = port;
   }
 
   /// Service type, always ServiceType_InProc
-  int _serviceType = serviceTypeInProc;
+  final int _serviceType = serviceTypeInProc;
 
   int get serviceType => _serviceType;
 
@@ -28,7 +28,7 @@ class DartivityIotivityCfg {
   static const int serviceTypeOutOfProc = 1;
 
   /// Host Mode of Operation, always ModeType_Client
-  int _mode = modeTypeClient;
+  final int _mode = modeTypeClient;
 
   int get mode => _mode;
 
@@ -73,7 +73,7 @@ class DartivityIotivityCfg {
   static const int ocConnectivityTypeCtScopeGlobal = 0xE;
 
   /// IP address
-  String ip = "0.0.0.0";
+  String ip = '0.0.0.0';
 
   /// Port
   int port = 0;

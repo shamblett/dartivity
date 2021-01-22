@@ -8,11 +8,11 @@
 part of dartivity;
 
 class DartivityCfg {
-  DartivityCfg(String? projectId, String? credPath, String dbHost, String dbUser,
-      String dbPass) {
+  DartivityCfg(String? projectId, String? credPath, String dbHost,
+      String dbUser, String dbPass) {
     _projectId = projectId;
     _credPath = credPath;
-    _topic = "projects/${projectId}/topics/${packageName}";
+    _topic = 'projects/${projectId}/topics/${packageName}';
     _dbHost = dbHost;
     _dbUser = dbUser;
     _dbPass = dbPass;
@@ -32,7 +32,7 @@ class DartivityCfg {
   String? get topic => _topic;
 
   /// Client id URL
-  String _clientIdURL = '${packageName}.com';
+  final _clientIdURL = '${packageName}.com';
 
   String get clientIdURL => _clientIdURL;
 

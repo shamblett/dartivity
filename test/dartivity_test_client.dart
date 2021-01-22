@@ -16,7 +16,7 @@ import '../configuration/dartivity_local_conf.dart';
 
 Future main() async {
   // Configuration
-  final DartivityCfg cfg = new DartivityCfg(
+  final cfg = DartivityCfg(
       DartivityLocalConf.projectid,
       DartivityLocalConf.credentialsPath,
       DartivityLocalConf.dbHost,
@@ -29,21 +29,21 @@ Future main() async {
   // Client
   late Dartivity dartivity;
 
-  test("Initialise", () async {
+  test('Initialise ', () async {
     // Instantiate a Dartivity client and initialise for
     // both messaging and iotivity, ie a normal client configuration.
-    dartivity = new Dartivity(Mode.both, [Client.iotivity], cfg);
+    dartivity = Dartivity(Mode.both, [Client.iotivity], cfg);
 
-    final DartivityIotivityCfg iotCfg = new DartivityIotivityCfg(
-        qos: DartivityIotivityCfg.qualityOfServiceLowQos);
+    final iotCfg =
+        DartivityIotivityCfg(qos: DartivityIotivityCfg.qualityOfServiceLowQos);
 
-    final bool res = await dartivity.initialise(iotCfg);
+    final res = await dartivity.initialise(iotCfg);
     expect(res, true);
     expect(dartivity.initialised, true);
     expect(dartivity.supports, Mode.both);
   });
 
-  test("Close", () {
+  test('Close ', () {
     dartivity.close();
     expect(dartivity.initialised, false);
   });

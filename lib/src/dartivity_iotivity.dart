@@ -10,8 +10,8 @@ part of dartivity;
 class DartivityIotivity {
   DartivityIotivity(String clientId) {
     _clientId = clientId;
-    _platform = new DartivityIotivityPlatform();
-    _cache = new db.DartivityCache();
+    _platform = DartivityIotivityPlatform();
+    _cache = db.DartivityCache();
   }
 
   /// Ready, as in to use
@@ -51,23 +51,17 @@ class DartivityIotivity {
       String? host, String? resourceName,
       [int connectivity =
           DartivityIotivityCfg.ocConnectivityTypeCtDefault]) async {
-    final Completer<List<db.DartivityResource>> completer =
-        new Completer<List<db.DartivityResource>>();
-    final List<DartivityClientIotivityResource> res =
-        await _platform.findResource(host, resourceName, connectivity);
-    if (res != null) {
-      final List<db.DartivityResource> resList =
-          new List<db.DartivityResource>();
-      res.forEach((resource) {
-        final db.DartivityResource tmp =
-            new db.DartivityResource.fromIotivity(resource.resource!, _clientId);
-        resList.add(tmp);
-        _cache.put(tmp.id, resource);
-      });
+    final completer = Completer<List<db.DartivityResource>>();
+    final res = await _platform.findResource(host, resourceName, connectivity);
+    final resList = <db.DartivityResource>[];
+    res.forEach((resource) {
+      final tmp =
+          db.DartivityResource.fromIotivity(resource.resource!, _clientId);
+      resList.add(tmp);
+      _cache.put(tmp.id, resource);
       completer.complete(resList);
-    } else {
-      completer.complete(null);
-    }
+    });
+
     return completer.future;
   }
 

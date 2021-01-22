@@ -17,7 +17,7 @@ class DartivityLocalConf {
 
   /// Topic for pubsub
   static const String messageTopic =
-      "projects/${projectid}/topics/${packageName}";
+      'projects/${projectid}/topics/${packageName}';
 
   /// Pubsub credentials path
   static const String credentialsPath =
