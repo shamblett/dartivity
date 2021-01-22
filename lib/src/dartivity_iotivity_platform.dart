@@ -22,11 +22,11 @@ class DartivityIotivityPlatform {
 
   /// findResource
   Future<List<DartivityClientIotivityResource>> findResource(
-      String host, String resourceName,
+      String? host, String? resourceName,
       [int connectivity =
           DartivityIotivityCfg.ocConnectivityTypeCtDefault]) async {
     final completer = new Completer();
     completer.complete(null);
-    return completer.future;
+    return completer.future as FutureOr<List<DartivityClientIotivityResource>>;
   }
 }

@@ -20,13 +20,13 @@ class DartivityIotivity {
   bool get ready => _ready;
 
   /// Client id
-  String _clientId;
+  late String _clientId;
 
   /// Platform
-  DartivityIotivityPlatform _platform;
+  late DartivityIotivityPlatform _platform;
 
   /// Client resource cache
-  db.DartivityCache _cache;
+  late db.DartivityCache _cache;
 
   /// Iotivity specific constants
   static const String ocRsrvdWellKnownUri = '/oic/res';
@@ -48,7 +48,7 @@ class DartivityIotivity {
 
   /// findResource
   Future<List<db.DartivityResource>> findResource(
-      String host, String resourceName,
+      String? host, String? resourceName,
       [int connectivity =
           DartivityIotivityCfg.ocConnectivityTypeCtDefault]) async {
     final Completer<List<db.DartivityResource>> completer =
@@ -60,7 +60,7 @@ class DartivityIotivity {
           new List<db.DartivityResource>();
       res.forEach((resource) {
         final db.DartivityResource tmp =
-            new db.DartivityResource.fromIotivity(resource.resource, _clientId);
+            new db.DartivityResource.fromIotivity(resource.resource!, _clientId);
         resList.add(tmp);
         _cache.put(tmp.id, resource);
       });

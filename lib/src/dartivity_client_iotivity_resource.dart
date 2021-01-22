@@ -20,17 +20,17 @@ class DartivityClientIotivityResource {
   }
 
   /// Class pointer for the C++ extension
-  int _ptr;
+  int? _ptr;
 
-  int get ptr => _ptr;
+  int? get ptr => _ptr;
 
   /// Id, this is needed by the cache
-  String _id;
+  String? _id;
 
-  String get id => _id;
+  String? get id => _id;
 
   /// The Dartivity Iotivity resource
-  db.DartivityIotivityResource _resource;
+  db.DartivityIotivityResource? _resource;
 
-  db.DartivityIotivityResource get resource => _resource;
+  db.DartivityIotivityResource? get resource => _resource;
 }

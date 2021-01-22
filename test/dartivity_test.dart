@@ -46,7 +46,7 @@ void main() {
       final Dartivity dartivity =
           new Dartivity(Mode.both, [Client.iotivity], cfg);
       expect(dartivity.supports, Mode.both);
-      expect(dartivity.clientList[0], Client.iotivity);
+      expect(dartivity.clientList![0], Client.iotivity);
     });
 
     test("Hostname", () {

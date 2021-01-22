@@ -92,8 +92,8 @@ Future main() async {
     expect(result4.type, MessageType.iHave);
 
     // Listen for our messages until our timer pops
-    var subscription;
-    Timer timer;
+    late var subscription;
+    late Timer timer;
     int messCount = 0;
 
     void timerCallback() {

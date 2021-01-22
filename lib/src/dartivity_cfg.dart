@@ -8,7 +8,7 @@
 part of dartivity;
 
 class DartivityCfg {
-  DartivityCfg(String projectId, String credPath, String dbHost, String dbUser,
+  DartivityCfg(String? projectId, String? credPath, String dbHost, String dbUser,
       String dbPass) {
     _projectId = projectId;
     _credPath = credPath;
@@ -22,14 +22,14 @@ class DartivityCfg {
   static const String packageName = 'dartivity';
 
   /// Pubsub project id
-  String _projectId;
+  String? _projectId;
 
-  String get projectId => _projectId;
+  String? get projectId => _projectId;
 
   /// Topic for pubsub
-  String _topic;
+  String? _topic;
 
-  String get topic => _topic;
+  String? get topic => _topic;
 
   /// Client id URL
   String _clientIdURL = '${packageName}.com';
@@ -37,9 +37,9 @@ class DartivityCfg {
   String get clientIdURL => _clientIdURL;
 
   /// Pubsub credentials path
-  String _credPath;
+  String? _credPath;
 
-  String get credPath => _credPath;
+  String? get credPath => _credPath;
 
   /// Time between message pull requests
   static const int messPullTimeInterval = 10;
@@ -57,13 +57,13 @@ class DartivityCfg {
   bool tailedUuid = true;
 
   /// Database credentials
-  String _dbUser;
+  String? _dbUser;
 
-  String get dbUser => _dbUser;
-  String _dbHost;
+  String? get dbUser => _dbUser;
+  String? _dbHost;
 
-  String get dbHost => _dbHost;
-  String _dbPass;
+  String? get dbHost => _dbHost;
+  String? _dbPass;
 
-  String get dbPass => _dbPass;
+  String? get dbPass => _dbPass;
 }

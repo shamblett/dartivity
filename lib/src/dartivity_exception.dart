@@ -33,7 +33,7 @@ class DartivityException implements Exception {
   static const String nullNativePtr =
       'You must supply a native pointer for this class';
   static const String iotResourceCallFailed = 'Failed to get resource data';
-  String _message = 'No Message Supplied';
+  String? _message = 'No Message Supplied';
 
   /// Dartivity exception
   DartivityException([this._message]);

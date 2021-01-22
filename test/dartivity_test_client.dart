@@ -27,7 +27,7 @@ Future main() async {
   cfg.tailedUuid = false;
 
   // Client
-  Dartivity dartivity;
+  late Dartivity dartivity;
 
   test("Initialise", () async {
     // Instantiate a Dartivity client and initialise for
